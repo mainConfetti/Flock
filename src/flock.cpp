@@ -64,7 +64,7 @@ void Flock::setNeighbours(int x)
 
     for(int i=0; i < flock.size(); i++)
     {
-        flock[i].setDistance(flock[x]);
+        flock[i].setDistance(&flock[x]);
     }
     for(int i=0; i < flock.size(); i++)
     {
@@ -89,6 +89,7 @@ void Flock::queryNeighbours(int i)
     flock[i].getNeighbours();
     flock[i].calcCohesion();
     flock[i].calcAlign();
+    flock[i].calcSeparation();
 }
 
 

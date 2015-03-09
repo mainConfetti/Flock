@@ -68,11 +68,11 @@ int Boid::getId()
     return id;
 }
 
-void Boid::setDistance(Boid boid)
+void Boid::setDistance(Boid *const boid)
 {
-    float xd = m_Position.m_x - boid.getXPos();
-    float yd = m_Position.m_y - boid.getYPos();
-    float zd = m_Position.m_z - boid.getZPos();
+    float xd = m_Position.m_x - boid->getXPos();
+    float yd = m_Position.m_y - boid->getYPos();
+    float zd = m_Position.m_z - boid->getZPos();
     distance = sqrt(xd*xd + yd*yd + zd*zd);
 }
 
@@ -126,13 +126,34 @@ void Boid::calcAlign()
     m_Align.normalize();
 }
 
+void Boid::calcSeparation()
+{
+    ngl::Vec3 pos1(neighbours[0].getXPos(), neighbours[0].getYPos(), neighbours[0].getZPos());
+    ngl::Vec3 pos2(neighbours[1].getXPos(), neighbours[1].getYPos(), neighbours[1].getZPos());
+    ngl::Vec3 pos3(neighbours[2].getXPos(), neighbours[2].getYPos(), neighbours[2].getZPos());
+    neighbours[0].setDistance(this);
+    neighbours[1].setDistance(this);
+    neighbours[2].setDistance(this);
+    float weight1 = (1.0/neighbours[0].getDistance());
+    float weight2 = (1.0/neighbours[1].getDistance());
+    float weight3 = (1.0/neighbours[2].getDistance());
+    ngl::Vec3 target1 = (pos1-m_Position.toVec3())*weight1;
+    ngl::Vec3 target2 = (pos2-m_Position.toVec3())*weight2;
+    ngl::Vec3 target3 = (pos3-m_Position.toVec3())*weight3;
+    m_Separation = (target1+target2+target3)/3.0;
+    m_Separation.normalize();
+    m_Separation = -m_Separation;
+
+}
+
 void Boid::Info()
 {
     std::cout<<"Pos: "<<m_Position.m_x<<", "<<m_Position.m_y<<", "<<m_Position.m_z<<std::endl;
     std::cout<<"Vel: "<<m_Velocity.m_x<<", "<<m_Velocity.m_y<<", "<<m_Velocity.m_z<<std::endl;
     std::cout<<"cetroid: "<<m_Centroid.m_x<<", "<<m_Centroid.m_y<<", "<<m_Centroid.m_z<<std::endl;
-    std::cout<<"cohesion target: "<<m_Cohesion.m_x<<", "<<m_Cohesion.m_y<<", "<<m_Cohesion.m_z<<std::endl;
-    std::cout<<"align target: "<<m_Align.m_x<<", "<<m_Align.m_y<<", "<<m_Align.m_z<<std::endl;
+    std::cout<<"cohesion target: "<<m_Cohesion.m_x<<", "<<m_Cohesion.m_y<<", "<<m_Cohesion.m_z<<" : "<<m_Cohesion.length()<<std::endl;
+    std::cout<<"align target: "<<m_Align.m_x<<", "<<m_Align.m_y<<", "<<m_Align.m_z<<" : "<<m_Align.length()<<std::endl;
+    std::cout<<"separation target: "<<m_Separation.m_x<<", "<<m_Separation.m_y<<", "<<m_Separation.m_z<<" : "<<m_Separation.length()<<std::endl;
 
 }
 

@@ -24,13 +24,14 @@ public:
     void setNeighbour(Boid boid);
     void clearNeighbour();
     void getNeighbours();
-    void setDistance(Boid boid);
+    void setDistance(Boid * const boid);
     float getDistance();
     void calcCentroid();
     void calcCohesion();
     void Info();
     void setVelocity(float _x, float _y, float _z);
     void calcAlign();
+    void calcSeparation();
 
 private:
     ngl::Vec4 m_Position;
@@ -41,6 +42,7 @@ private:
     ngl::Vec3 m_Velocity;
     ngl::Vec3 m_Cohesion;
     ngl::Vec3 m_Align;
+    ngl::Vec3 m_Separation;
 
 
 };
