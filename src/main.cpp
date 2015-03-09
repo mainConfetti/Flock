@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <boid.h>
 #include <flock.h>
+#include <ngl/Vec3.h>
+#include <ngl/Vec4.h>
 
 int main()
 {
@@ -20,6 +22,7 @@ int main()
     flock.printBoid(9);
     flock.setNeighbours(6);
     flock.queryNeighbours(6);
+    flock.flock[6].Info();
 
 
     return 0;

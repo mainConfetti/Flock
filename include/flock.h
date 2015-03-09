@@ -20,7 +20,6 @@ public:
     int getSize();
     void queryNeighbours(int i);
 
-private:
     std::vector<Boid> flock;
 
 };

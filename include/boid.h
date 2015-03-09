@@ -16,6 +16,9 @@ public:
     float getXPos();
     float getYPos();
     float getZPos();
+    float getXVel();
+    float getYVel();
+    float getZVel();
     void setId(int _id);
     int getId();
     void setNeighbour(Boid boid);
@@ -23,12 +26,22 @@ public:
     void getNeighbours();
     void setDistance(Boid boid);
     float getDistance();
+    void calcCentroid();
+    void calcCohesion();
+    void Info();
+    void setVelocity(float _x, float _y, float _z);
+    void calcAlign();
 
 private:
     ngl::Vec4 m_Position;
     std::vector<Boid> neighbours;
     int id;
     float distance;
+    ngl::Vec3 m_Centroid;
+    ngl::Vec3 m_Velocity;
+    ngl::Vec3 m_Cohesion;
+    ngl::Vec3 m_Align;
+
 
 };
 

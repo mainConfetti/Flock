@@ -23,6 +23,7 @@ Flock::Flock(int numBoids)
     {
         flock[i].setPos((rand()%10+1), (rand()%10+1), (rand()%10+1));
         std::cout << "boid" << flock[i].getId() << "at: (" << flock[i].getXPos() << "," << flock[i].getYPos() << "," << flock[i].getZPos() << ")" << std::endl;
+        flock[i].setVelocity((((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)));
 
     }
 
@@ -86,6 +87,8 @@ void Flock::setNeighbours(int x)
 void Flock::queryNeighbours(int i)
 {
     flock[i].getNeighbours();
+    flock[i].calcCohesion();
+    flock[i].calcAlign();
 }
 
 
