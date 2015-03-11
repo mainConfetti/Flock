@@ -1,17 +1,17 @@
 #include <QMouseEvent>
 #include <QGuiApplication>
-
 #include "NGLScene.h"
 #include <ngl/Camera.h>
 #include <ngl/Light.h>
 #include <ngl/NGLInit.h>
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
+#include <flock.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for x/y translation with mouse movement
 //----------------------------------------------------------------------------------------------------------------------
-//const static float INCREMENT=0.01f;
+const static float INCREMENT=0.01f;
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //----------------------------------------------------------------------------------------------------------------------
@@ -93,15 +93,13 @@ void NGLScene::initialize()
   (*shader)["Phong"]->use();
   // load values (temp)
   shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
-  //GLint objectColourLoc = glGetUniformLocation(shader->getProgramID("Phong"), "objectColour");
-  //glUniform3f(objectColourLoc, 1.0, 0.5, 0.31);
 
-  //GLint lightColourLoc = glGetUniformLocation(shader->getProgramID("Phong"), "lightColour");
-  //glUniform3f(lightColourLoc, 1.0, 1.0, 1.0);
+  // initialise the flock
+  m_Flock = new Flock(10);
 
 
   // Camera position values
-  ngl::Vec3 from(0,5,5);
+  ngl::Vec3 from(0,1,30);
   ngl::Vec3 to(0,0,0);
   ngl::Vec3 up(0,1,0);
   //load camera
@@ -111,7 +109,7 @@ void NGLScene::initialize()
   // create a light
   ngl::Mat4 iv=m_cam->getViewMatrix();
   iv.transpose();
-  m_light = new ngl::Light(ngl::Vec3(5,10,6),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
+  m_light = new ngl::Light(ngl::Vec3(15,20,70),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
   m_light->setTransform(iv);
   //load light values to shader
   m_light->loadToShader("light");
@@ -121,7 +119,7 @@ void NGLScene::initialize()
 
 }
 
-void NGLScene::loadMatricesToShader()
+void NGLScene::loadMatricesToShader(int boidId)
 {
     // create an instance of the shader lib
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
@@ -131,6 +129,7 @@ void NGLScene::loadMatricesToShader()
     ngl::Mat4 MVP;
     ngl::Mat3 normalMatrix;
     M=m_mouseGlobalTX;
+    M.translate(m_Flock->flock[boidId].getXPos(), m_Flock->flock[boidId].getYPos(), m_Flock->flock[boidId].getZPos());
     MV = M*m_cam->getViewMatrix();
     MVP = M*m_cam->getVPMatrix();
     normalMatrix = MV;
@@ -166,11 +165,13 @@ void NGLScene::render()
 
   ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
   //draw cube
-  loadMatricesToShader();
-  prim->draw("cube");
-
-
+  for(int i=0; i<m_Flock->getSize(); ++i)
+  {
+    loadMatricesToShader(i);
+    prim->draw("icosahedron");
+  }
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 void NGLScene::mouseMoveEvent (QMouseEvent * _event)
@@ -185,7 +186,7 @@ void NGLScene::mouseMoveEvent (QMouseEvent * _event)
         m_origY=_event->y();
         renderLater();
     }
-   /* else if(m_translate && _event->buttons() == Qt::RightButton)
+    else if(m_translate && _event->buttons() == Qt::RightButton)
     {
         int diffX = (int)(_event->x() - m_origXPos);
         int diffY = (int)(_event->y() - m_origYPos);
@@ -194,7 +195,7 @@ void NGLScene::mouseMoveEvent (QMouseEvent * _event)
         m_modelPos.m_x += INCREMENT * diffX;
         m_modelPos.m_y -= INCREMENT * diffY;
         renderLater();
-    }*/
+    }
 
 }
 
@@ -210,12 +211,12 @@ void NGLScene::mousePressEvent ( QMouseEvent * _event)
         m_rotate = true;
     }
     // right button translates
-   /* if(_event->button() == Qt::RightButton)
+    if(_event->button() == Qt::RightButton)
     {
-        m_origX = _event->x();
-        m_origY = _event->y();
+        m_origXPos = _event->x();
+        m_origYPos = _event->y();
         m_translate = true;
-    }*/
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -228,10 +229,10 @@ void NGLScene::mouseReleaseEvent ( QMouseEvent * _event )
       m_rotate=false;
     }
           // right mouse translate mode
-   /* if (_event->button() == Qt::RightButton)
+    if (_event->button() == Qt::RightButton)
     {
       m_translate=false;
-    }*/
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

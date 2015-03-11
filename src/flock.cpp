@@ -21,7 +21,19 @@ Flock::Flock(int numBoids)
     srand(time(NULL));
     for(int i=0;i<flock.size();i++)
     {
-        flock[i].setPos((rand()%10+1), (rand()%10+1), (rand()%10+1));
+        float lower = -10.0, upper = 10.0;
+        int r;
+        float fraction;
+        r = rand();
+        fraction = ((float) r / RAND_MAX) * (upper - lower);
+        float x = lower + fraction;
+        r = rand();
+        fraction = ((float) r / RAND_MAX) * (upper - lower);
+        float y = lower + fraction;
+        r = rand();
+        fraction = ((float) r / RAND_MAX) * (upper - lower);
+        float z = lower + fraction;
+        flock[i].setPos(x, y, z);
         std::cout << "boid" << flock[i].getId() << "at: (" << flock[i].getXPos() << "," << flock[i].getYPos() << "," << flock[i].getZPos() << ")" << std::endl;
         flock[i].setVelocity((((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)));
 

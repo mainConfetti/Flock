@@ -3,7 +3,6 @@
 //layout (location =0) out vec4 fragColour;
 in vec3 normal;
 in vec3 fragPos;
-in vec3 viewDir;
 
 out vec4 colour;
 
@@ -23,21 +22,27 @@ struct Lights
 // temp colours
 uniform Lights light;
 uniform vec4 objectColour;
+uniform vec3 viewerPos;
 //uniform vec3 lightColour;
 
 void main()
 {
-    float ambientStr = 0.2;
-    vec3 norm = normalize(normal);
     vec3 lightDir = normalize(light.position.xyz - fragPos.xyz);
-    float diffuseStr = max(dot(norm, lightDir), 0.0);
-    float specularStr = 0.5;
-    vec3 reflectDir = reflect(-lightDir, norm);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    vec3 viewDir = normalize(viewerPos - fragPos);
+    float ambientStr = 0.2;
+    float diffuseStr = dot(normal, lightDir);
+    float specularStr = 0.3;
+    // ambient component
+    vec4 ambient = vec4(ambientStr*light.diffuse)*objectColour;
+    //diffuse component
+    vec4 diffuse = diffuseStr*light.diffuse*objectColour;
+    // specular component
     float spec = pow(max(dot(viewDir, reflectDir),0.0),32);
-    vec4 specular = specularStr*spec*light.specular;
-    vec4 diffuse = diffuseStr*light.diffuse;
-    vec4 ambient = vec4(ambientStr*light.diffuse);
+    vec4 specular = specularStr*spec*light.specular*objectColour;
 
-    colour = (diffuse + ambient + specular)*objectColour;
+
+
+    colour = diffuse + ambient + specular;
 }
 
