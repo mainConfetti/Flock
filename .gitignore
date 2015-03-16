@@ -5,11 +5,17 @@
 # qt files
 *.pro.user*
 .qmake*
-Makefile
+Makefile*
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
+*.ilk
+*.pdb
+./moc
+./obj
+./release
+./debug
 
 # Compiled Static libraries
 *.lai
