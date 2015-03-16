@@ -13,7 +13,7 @@ Makefile*
 *.ilk
 *.pdb
 ./moc
-./obj
+obj
 ./release
 ./debug
 
