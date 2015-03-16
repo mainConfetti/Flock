@@ -15,10 +15,10 @@
 
 int main(int argc, char **argv)
 {
-    /*
+
     /// -----------------------------------------------------------------------------------------------------
     // CLASS TESTS and debug
-    std::cout << "Hello World!" << std::endl;
+    /*std::cout << "Hello World!" << std::endl;
     // Test Boid
     Boid bigBird;
     std::cout << "boid pos: ( " << bigBird.getXPos() << ", " << bigBird.getYPos() << ", " << bigBird.getZPos() << " )" << std::endl;
@@ -26,15 +26,32 @@ int main(int argc, char **argv)
     std::cout << "boid new pos: ( " << bigBird.getXPos() << ", " << bigBird.getYPos() << ", " << bigBird.getZPos() << " )" << std::endl;
     // Test Flock
     std::cout << "\n" << "\n";
-    Flock flock(10);
-    flock.addBoid();
-    flock.addBoid();
-    flock.printBoid(8);
-    flock.printBoid(9);
-    flock.setNeighbours(6);
-    flock.queryNeighbours(6);
-    flock.flock[6].Info();
-    ----------------------------------------------------------------------------------------------------------*/
+    Flock flock(5);
+    flock.printBoid(4);
+    flock.printBoid(3);
+    flock.setNeighbours(3);
+    flock.queryNeighbours(3);
+    flock.m_Flock[3].Info();
+    for(int i=0;i<5;++i)
+    {
+        for(int i=0;i<flock.getSize();++i)
+        {
+            std::cout<<"-------------------------------------------------------------------"<<std::endl;
+            std::cout<<"BOID "<<flock.m_Flock[i].getId()<<" INFO:"<<std::endl;
+            flock.setNeighbours(i);
+            flock.queryNeighbours(i);
+            flock.m_Flock[i].Info();
+            flock.m_Flock[i].setFlockCentroid(flock.m_Centroid.m_x, flock.m_Centroid.m_y, flock.m_Centroid.m_z);
+            flock.m_Flock[i].calcCentroid();
+            flock.m_Flock[i].calcSeparation();
+            flock.m_Flock[i].calcAlign();
+            flock.m_Flock[i].calcCohesion();
+            flock.m_Flock[i].updatePosition();
+            std::cout<<"boid "<<i+1<<" new pos: "<<" ("<<flock.m_Flock[i].getXPos()<<","<<flock.m_Flock[i].getYPos()<<","<<flock.m_Flock[i].getZPos()<<")"<<std::endl;
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------------------*/
     // opengl stuff
     QGuiApplication app(argc, argv);
     // create an OpenGL format specifier

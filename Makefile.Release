@@ -3987,13 +3987,13 @@ obj\main.obj: src\main.cpp include\boid.h \
 		C:\NGL\include\ngl\Plane.h \
 		C:\NGL\include\ngl\Colour.h \
 		C:\NGL\include\ngl\Light.h \
+		C:\NGL\include\ngl\Transformation.h \
+		C:\NGL\include\ngl\NGLassert.h \
 		C:\NGL\include\ngl\Text.h \
 		C:\NGL\include\ngl\VertexArrayObject.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QHash \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QFont \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qfont.h \
-		C:\NGL\include\ngl\Transformation.h \
-		C:\NGL\include\ngl\NGLassert.h
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qfont.h
 
 obj\NGLScene.obj: src\NGLScene.cpp C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QMouseEvent \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qevent.h \
@@ -4081,33 +4081,6 @@ obj\NGLScene.obj: src\NGLScene.cpp C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QM
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qcoreapplication.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qeventloop.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qinputmethod.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QFont \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qfont.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qsharedpointer.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qsharedpointer_impl.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtWidgets\QDesktopWidget \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtWidgets\qwidget.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpaintdevice.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpalette.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qcolor.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qrgb.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qbrush.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qmatrix.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpolygon.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qline.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qtransform.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpainterpath.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qimage.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpixelformat.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpixmap.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qfontmetrics.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qfontinfo.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtWidgets\qsizepolicy.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qcursor.h \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QRect \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtWidgets\QApplication \
-		C:\Qt\5.4\msvc2013_64_opengl\include\QtWidgets\qapplication.h \
 		include\NGLScene.h \
 		include\OpenGLWindow.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QWindow \
@@ -4115,9 +4088,24 @@ obj\NGLScene.obj: src\NGLScene.cpp C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QM
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QObject \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QEvent \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QMargins \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QRect \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qsurface.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qsurfaceformat.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qicon.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpixmap.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpaintdevice.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qcolor.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qrgb.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qsharedpointer.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qsharedpointer_impl.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qimage.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qtransform.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qmatrix.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpolygon.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\qline.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpainterpath.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qpixelformat.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qcursor.h \
 		C:\NGL\include\ngl\Camera.h \
 		C:\NGL\include\ngl\Types.h \
 		C:\NGL\include\ngl\glew.h \
@@ -5322,12 +5310,15 @@ obj\NGLScene.obj: src\NGLScene.cpp C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QM
 		C:\NGL\include\ngl\Plane.h \
 		C:\NGL\include\ngl\Colour.h \
 		C:\NGL\include\ngl\Light.h \
+		C:\NGL\include\ngl\Transformation.h \
+		C:\NGL\include\ngl\NGLassert.h \
 		C:\NGL\include\ngl\Text.h \
 		C:\NGL\include\ngl\VertexArrayObject.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QHash \
-		C:\NGL\include\ngl\Transformation.h \
-		C:\NGL\include\ngl\NGLassert.h \
-		C:\NGL\include\ngl\Material.h \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\QFont \
+		C:\Qt\5.4\msvc2013_64_opengl\include\QtGui\qfont.h \
+		include\flock.h \
+		include\boid.h \
 		C:\NGL\include\ngl\NGLInit.h \
 		C:\NGL\include\ngl\Singleton.h \
 		C:\Qt\5.4\msvc2013_64_opengl\include\QtCore\QMutexLocker \

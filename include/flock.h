@@ -19,8 +19,16 @@ public:
     void printBoid(int i);
     int getSize();
     void queryNeighbours(int i);
+    void setCentroid();
+    void updateFlock();
+    void initNArray();
 
-    std::vector<Boid> flock;
+    std::vector<Boid> m_Flock;
+    ngl::Vec3 m_Centroid;
+private:
+
+    // array used for setting boid neighbours
+    std::vector<Boid*> m_NArray;
 
 };
 

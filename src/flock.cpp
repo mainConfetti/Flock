@@ -19,7 +19,7 @@ Flock::Flock(int numBoids)
         addBoid();
     }
     srand(time(NULL));
-    for(int i=0;i<flock.size();i++)
+    for(int i=0;i<m_Flock.size();++i)
     {
         float lower = -10.0, upper = 10.0;
         int r;
@@ -33,11 +33,12 @@ Flock::Flock(int numBoids)
         r = rand();
         fraction = ((float) r / RAND_MAX) * (upper - lower);
         float z = lower + fraction;
-        flock[i].setPos(x, y, z);
-        std::cout << "boid" << flock[i].getId() << "at: (" << flock[i].getXPos() << "," << flock[i].getYPos() << "," << flock[i].getZPos() << ")" << std::endl;
-        flock[i].setVelocity((((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)));
+        m_Flock[i].setPos(x, y, z);
+        std::cout << "boid" << m_Flock[i].getId() << "at: (" << m_Flock[i].getXPos() << "," << m_Flock[i].getYPos() << "," << m_Flock[i].getZPos() << ")" << std::endl;
+        m_Flock[i].setVelocity((((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)));
 
     }
+    setCentroid();
 
     std::cout << "created a flock of " << numBoids << " boids!" << std::endl;
 }
@@ -49,59 +50,98 @@ Flock::~Flock()
 
 void Flock::addBoid()
 {
-    int _id = flock.size() + 1;
+    int _id = m_Flock.size() + 1;
     Boid boid(_id);
-    flock.push_back(boid);
+    m_Flock.push_back(boid);
 }
 
 
 void Flock::printBoid(int i)
 {
-    if(i <= flock.size())
+    if(i <= m_Flock.size())
     {
-        std::cout << "boid: " << flock[i].getId() << std::endl;
+        std::cout << "boid: " << m_Flock[i].getId() << std::endl;
     }
 
 }
 
 int Flock::getSize()
 {
-    return flock.size();
+    return m_Flock.size();
 }
 
+void Flock::initNArray()
+{
+    m_NArray.clear();
+    for(int i=0;i<m_Flock.size();++i)
+        m_NArray.push_back(&m_Flock[i]);
+}
 
 void Flock::setNeighbours(int x)
 {
-    flock[x].clearNeighbour();
+    initNArray();
+    m_Flock[x].clearNeighbour();
 
-    for(int i=0; i < flock.size(); i++)
+    for(int i=0; i < m_Flock.size(); i++)
     {
-        flock[i].setDistance(&flock[x]);
+        m_Flock[i].setDistance(&m_Flock[x]);
     }
-    for(int i=0; i < flock.size(); i++)
+    for(int i=0;i<m_NArray.size();i++)
     {
-        for(int k = 0; k < (flock.size()-1); k++)
+        for(int k=0;k<(m_NArray.size()-1);k++)
         {
-            if(flock[k].getDistance() > flock[k+1].getDistance())
+            if(m_NArray[k]->getDistance()>m_NArray[k+1]->getDistance())
             {
-                Boid temp = flock[k];
-                flock[k] = flock[k+1];
-                flock[k+1] = temp;
+                Boid * temp = m_NArray[k];
+                m_NArray[k] = m_NArray[k+1];
+                m_NArray[k+1] = temp;
             }
         }
 
     }
-    flock[x].setNeighbour(flock[1]);
-    flock[x].setNeighbour(flock[2]);
-    flock[x].setNeighbour(flock[3]);
+    m_Flock[x].setNeighbour(m_NArray[1]);
+    m_Flock[x].setNeighbour(m_NArray[2]);
+    m_Flock[x].setNeighbour(m_NArray[3]);
 }
 
 void Flock::queryNeighbours(int i)
 {
-    flock[i].getNeighbours();
-    flock[i].calcCohesion();
-    flock[i].calcAlign();
-    flock[i].calcSeparation();
+    m_Flock[i].getNeighbours();
+
+    std::cout<<"m_NArray size: "<<m_NArray.size()<<std::endl;
+}
+
+void Flock::setCentroid()
+{
+    for(int i=0;i<m_Flock.size();++i)
+    {
+        m_Centroid.m_x +=  m_Flock[i].getXPos();
+        m_Centroid.m_y += m_Flock[i].getYPos();
+        m_Centroid.m_z += m_Flock[i].getZPos();
+    }
+    m_Centroid /= m_Flock.size();
+}
+
+void Flock::updateFlock()
+{
+    setCentroid();
+    for(int i=0; i<m_Flock.size();++i)
+    {
+        std::cout<<"-------------------------------------------------------------------"<<std::endl;
+        std::cout<<"BOID "<<m_Flock[i].getId()<<" INFO:"<<std::endl;
+        setNeighbours(i);
+        queryNeighbours(i);
+        m_Flock[i].Info();
+        m_Flock[i].setFlockCentroid(m_Centroid.m_x, m_Centroid.m_y, m_Centroid.m_z);
+        m_Flock[i].calcCentroid();
+        m_Flock[i].calcSeparation();
+        m_Flock[i].calcAlign();
+        m_Flock[i].calcCohesion();
+        m_Flock[i].setTarget();
+        m_Flock[i].setSteering();
+        m_Flock[i].updatePosition();
+        std::cout<<"boid "<<i+1<<" new pos: "<<" ("<<m_Flock[i].getXPos()<<","<<m_Flock[i].getYPos()<<","<<m_Flock[i].getZPos()<<")"<<std::endl;
+    }
 }
 
 

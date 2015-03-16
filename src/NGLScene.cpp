@@ -41,11 +41,15 @@ void NGLScene::resizeEvent(QResizeEvent *_event )
 {
   if(isExposed())
   {
-  int w=_event->size().width();
-  int h=_event->size().height();
-  // set the viewport for openGL
-  glViewport(0,0,w,h);
-  renderLater();
+      if(isExposed())
+      {
+      // set the viewport for openGL we need to take into account retina display
+      // etc by using the pixel ratio as a multiplyer
+      glViewport(0,0,width(),height());
+      // now set the camera size values as the screen size has changed
+      m_cam->setShape(45.0f,(float)width()/height(),0.05f,350.0f);
+      renderLater();
+      }
   }
 }
 
@@ -95,11 +99,11 @@ void NGLScene::initialize()
   shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
 
   // initialise the flock
-  m_Flock = new Flock(10);
+  m_Flock = new Flock(7);
 
 
   // Camera position values
-  ngl::Vec3 from(0,1,30);
+  ngl::Vec3 from(0,1,80);
   ngl::Vec3 to(0,0,0);
   ngl::Vec3 up(0,1,0);
   //load camera
@@ -128,13 +132,14 @@ void NGLScene::loadMatricesToShader(int boidId)
     ngl::Mat4 MV;
     ngl::Mat4 MVP;
     ngl::Mat3 normalMatrix;
-    M=m_mouseGlobalTX;
-    M.translate(m_Flock->flock[boidId].getXPos(), m_Flock->flock[boidId].getYPos(), m_Flock->flock[boidId].getZPos());
+    M.scale(0.1,0.1,0.1);
+    M+=m_mouseGlobalTX;
+    M.translate(m_Flock->m_Flock[boidId].getXPos(), m_Flock->m_Flock[boidId].getYPos(), m_Flock->m_Flock[boidId].getZPos());
     MV = M*m_cam->getViewMatrix();
     MVP = M*m_cam->getVPMatrix();
     normalMatrix = MV;
     normalMatrix.inverse();
-    shader->setShaderParamFromMat4("M",M);
+    //shader->setShaderParamFromMat4("M",M);
     shader->setShaderParamFromMat4("MV",MV);
     shader->setShaderParamFromMat4("MVP",MVP);
     shader->setShaderParamFromMat3("normalMatrix",normalMatrix);
@@ -260,6 +265,8 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   {
   // escape key to quite
   case Qt::Key_Escape : QGuiApplication::exit(EXIT_SUCCESS); break;
+  // space to update flock
+  case Qt::Key_U : m_Flock->updateFlock();
   // turn on wirframe rendering
   case Qt::Key_W : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
   // turn off wire frame

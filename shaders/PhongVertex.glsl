@@ -9,7 +9,7 @@ layout (location = 1) in vec2 inUV;
 // eye positio of camera
 
 // model view project matrices
-uniform mat4 M;
+//uniform mat4 M;
 uniform mat4 MV;
 uniform mat4 MVP;
 uniform mat3 normalMatrix;
