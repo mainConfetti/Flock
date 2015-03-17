@@ -1,5 +1,4 @@
-#include "flock.h"
-#include "boid.h"
+#include <flock.h>
 #include <ngl/Mat4.h>
 #include <ngl/Vec4.h>
 #include <cmath>
@@ -19,7 +18,7 @@ Flock::Flock(int numBoids)
         addBoid();
     }
     srand(time(NULL));
-    for(int i=0;i<m_Flock.size();++i)
+    for(int i=0;i<m_flock.size();++i)
     {
         float lower = -10.0, upper = 10.0;
         int r;
@@ -33,9 +32,9 @@ Flock::Flock(int numBoids)
         r = rand();
         fraction = ((float) r / RAND_MAX) * (upper - lower);
         float z = lower + fraction;
-        m_Flock[i].setPos(x, y, z);
-        std::cout << "boid" << m_Flock[i].getId() << "at: (" << m_Flock[i].getXPos() << "," << m_Flock[i].getYPos() << "," << m_Flock[i].getZPos() << ")" << std::endl;
-        m_Flock[i].setVelocity((((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)));
+        m_flock[i].setPos(x, y, z);
+        std::cout << "boid" << m_flock[i].getId() << "at: (" << m_flock[i].getXPos() << "," << m_flock[i].getYPos() << "," << m_flock[i].getZPos() << ")" << std::endl;
+        m_flock[i].setVelocity((((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)));
 
     }
     setCentroid();
@@ -50,97 +49,86 @@ Flock::~Flock()
 
 void Flock::addBoid()
 {
-    int _id = m_Flock.size() + 1;
+    int _id = m_flock.size() + 1;
     Boid boid(_id);
-    m_Flock.push_back(boid);
+    m_flock.push_back(boid);
 }
 
 
 void Flock::printBoid(int i)
 {
-    if(i <= m_Flock.size())
+    if(i <= m_flock.size())
     {
-        std::cout << "boid: " << m_Flock[i].getId() << std::endl;
+        std::cout << "boid: " << m_flock[i].getId() << std::endl;
     }
 
 }
 
 int Flock::getSize()
 {
-    return m_Flock.size();
+    return m_flock.size();
 }
 
 void Flock::initNArray()
 {
-    m_NArray.clear();
-    for(int i=0;i<m_Flock.size();++i)
-        m_NArray.push_back(&m_Flock[i]);
+    m_nArray.clear();
+    for(int i=0;i<m_flock.size();++i)
+        m_nArray.push_back(&m_flock[i]);
 }
 
 void Flock::setNeighbours(int x)
 {
     initNArray();
-    m_Flock[x].clearNeighbour();
+    m_steer->clearNeighbour();
 
-    for(int i=0; i < m_Flock.size(); i++)
+    for(int i=0; i < m_flock.size(); i++)
     {
-        m_Flock[i].setDistance(&m_Flock[x]);
+        m_flock[i].setDistance(&m_flock[x]);
     }
-    for(int i=0;i<m_NArray.size();i++)
+    for(int i=0;i<m_nArray.size();i++)
     {
-        for(int k=0;k<(m_NArray.size()-1);k++)
+        for(int k=0;k<(m_nArray.size()-1);k++)
         {
-            if(m_NArray[k]->getDistance()>m_NArray[k+1]->getDistance())
+            if(m_nArray[k]->getDistance()>m_nArray[k+1]->getDistance())
             {
-                Boid * temp = m_NArray[k];
-                m_NArray[k] = m_NArray[k+1];
-                m_NArray[k+1] = temp;
+                Boid * temp = m_nArray[k];
+                m_nArray[k] = m_nArray[k+1];
+                m_nArray[k+1] = temp;
             }
         }
 
     }
-    m_Flock[x].setNeighbour(m_NArray[1]);
-    m_Flock[x].setNeighbour(m_NArray[2]);
-    m_Flock[x].setNeighbour(m_NArray[3]);
+    m_steer->setNeighbour(m_nArray[1]);
+    m_steer->setNeighbour(m_nArray[2]);
+    m_steer->setNeighbour(m_nArray[3]);
 }
 
 void Flock::queryNeighbours(int i)
 {
-    m_Flock[i].getNeighbours();
-
-    std::cout<<"m_NArray size: "<<m_NArray.size()<<std::endl;
+    m_steer->getNeighbours();
 }
 
 void Flock::setCentroid()
 {
-    for(int i=0;i<m_Flock.size();++i)
+    for(int i=0;i<m_flock.size();++i)
     {
-        m_Centroid.m_x +=  m_Flock[i].getXPos();
-        m_Centroid.m_y += m_Flock[i].getYPos();
-        m_Centroid.m_z += m_Flock[i].getZPos();
+        m_centroid.m_x +=  m_flock[i].getXPos();
+        m_centroid.m_y += m_flock[i].getYPos();
+        m_centroid.m_z += m_flock[i].getZPos();
     }
-    m_Centroid /= m_Flock.size();
+    m_centroid /= m_flock.size();
 }
 
 void Flock::updateFlock()
 {
     setCentroid();
-    for(int i=0; i<m_Flock.size();++i)
+    for(int i=0; i<m_flock.size();++i)
     {
-        std::cout<<"-------------------------------------------------------------------"<<std::endl;
-        std::cout<<"BOID "<<m_Flock[i].getId()<<" INFO:"<<std::endl;
+        m_steer->setBoid(&m_flock[i]);
         setNeighbours(i);
-        queryNeighbours(i);
-        m_Flock[i].Info();
-        m_Flock[i].setFlockCentroid(m_Centroid.m_x, m_Centroid.m_y, m_Centroid.m_z);
-        m_Flock[i].calcCentroid();
-        m_Flock[i].calcSeparation();
-        m_Flock[i].calcAlign();
-        m_Flock[i].calcCohesion();
-        m_Flock[i].setTarget();
-        m_Flock[i].setSteering();
-        m_Flock[i].updatePosition();
-        std::cout<<"boid "<<i+1<<" new pos: "<<" ("<<m_Flock[i].getXPos()<<","<<m_Flock[i].getYPos()<<","<<m_Flock[i].getZPos()<<")"<<std::endl;
+        m_flock[i].setFlockCentroid(m_centroid.m_x, m_centroid.m_y, m_centroid.m_z);
+        m_steer->updateVelocity();
+        m_flock[i].updatePosition();
     }
 }
 

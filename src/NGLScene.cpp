@@ -99,7 +99,7 @@ void NGLScene::initialize()
   shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
 
   // initialise the flock
-  m_Flock = new Flock(7);
+  m_flock = new Flock(10);
 
 
   // Camera position values
@@ -117,6 +117,7 @@ void NGLScene::initialize()
   m_light->setTransform(iv);
   //load light values to shader
   m_light->loadToShader("light");
+  startTimer(10);
   // as re-size is not explicitly called we need to do this.
   glViewport(0,0,width(),height());
 
@@ -134,7 +135,7 @@ void NGLScene::loadMatricesToShader(int boidId)
     ngl::Mat3 normalMatrix;
     M.scale(0.1,0.1,0.1);
     M+=m_mouseGlobalTX;
-    M.translate(m_Flock->m_Flock[boidId].getXPos(), m_Flock->m_Flock[boidId].getYPos(), m_Flock->m_Flock[boidId].getZPos());
+    M.translate(m_flock->m_flock[boidId].getXPos(), m_flock->m_flock[boidId].getYPos(), m_flock->m_flock[boidId].getZPos());
     MV = M*m_cam->getViewMatrix();
     MVP = M*m_cam->getVPMatrix();
     normalMatrix = MV;
@@ -170,7 +171,7 @@ void NGLScene::render()
 
   ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
   //draw cube
-  for(int i=0; i<m_Flock->getSize(); ++i)
+  for(int i=0; i<m_flock->getSize(); ++i)
   {
     loadMatricesToShader(i);
     prim->draw("icosahedron");
@@ -266,7 +267,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   // escape key to quite
   case Qt::Key_Escape : QGuiApplication::exit(EXIT_SUCCESS); break;
   // space to update flock
-  case Qt::Key_U : m_Flock->updateFlock();
+  case Qt::Key_U : m_flock->updateFlock();
   // turn on wirframe rendering
   case Qt::Key_W : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
   // turn off wire frame
@@ -279,5 +280,12 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   }
   // finally update the GLWindow and re-draw
   if (isExposed())
+    renderLater();
+}
+//----------------------------------------------------------------------------------------------------------------------
+
+void NGLScene::timerEvent(QTimerEvent *_e)
+{
+    m_flock->updateFlock();
     renderLater();
 }

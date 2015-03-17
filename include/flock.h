@@ -7,6 +7,7 @@
 #include <ngl/Vec4.h>
 #include <vector>
 #include <boid.h>
+#include <steering.h>
 
 class Flock
 {
@@ -23,12 +24,12 @@ public:
     void updateFlock();
     void initNArray();
 
-    std::vector<Boid> m_Flock;
-    ngl::Vec3 m_Centroid;
+    std::vector<Boid> m_flock;
+    ngl::Vec3 m_centroid;
 private:
-
     // array used for setting boid neighbours
-    std::vector<Boid*> m_NArray;
+    std::vector<Boid*> m_nArray;
+    Steering *m_steer;
 
 };
 
