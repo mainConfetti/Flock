@@ -94,7 +94,6 @@ float Boid::getDistance()
 void Boid::setNeighbour(Boid *boid)
 {
     m_Neighbours.push_back(boid);
-    std::cout<<m_Neighbours.size()<<std::endl;
 }
 
 void Boid::clearNeighbour()
@@ -120,7 +119,6 @@ void Boid::calcCohesion()
 {
     m_Cohesion = m_Centroid-m_Position.toVec3();
     m_Cohesion.normalize();
-    std::cout<<"calced cohesion"<<std::endl;
 }
 
 void Boid::setVelocity(float _x, float _y, float _z)
@@ -136,7 +134,6 @@ void Boid::calcAlign()
     m_Align.m_y=(((m_Neighbours[0]->getYVel())+(m_Neighbours[1]->getYVel())+(m_Neighbours[2]->getYVel()))/3.0);
     m_Align.m_z=(((m_Neighbours[0]->getZVel())+(m_Neighbours[1]->getZVel())+(m_Neighbours[2]->getZVel()))/3.0);
     m_Align.normalize();
-    std::cout<<"calced align"<<std::endl;
 }
 
 void Boid::calcSeparation()
@@ -156,8 +153,6 @@ void Boid::calcSeparation()
     m_Separation = (target1+target2+target3)/3.0;
     m_Separation.normalize();
     m_Separation = -m_Separation;
-    std::cout<<"calced sep"<<std::endl;
-
 }
 
 void Boid::Info()

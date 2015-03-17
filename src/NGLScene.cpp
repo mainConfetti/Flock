@@ -117,6 +117,8 @@ void NGLScene::initialize()
   m_light->setTransform(iv);
   //load light values to shader
   m_light->loadToShader("light");
+
+  startTimer(10);
   // as re-size is not explicitly called we need to do this.
   glViewport(0,0,width(),height());
 
@@ -279,5 +281,11 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   }
   // finally update the GLWindow and re-draw
   if (isExposed())
+    renderLater();
+}
+
+void NGLScene::timerEvent(QTimerEvent *)
+{
+    m_Flock->updateFlock();
     renderLater();
 }

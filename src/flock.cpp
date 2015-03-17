@@ -127,11 +127,7 @@ void Flock::updateFlock()
     setCentroid();
     for(int i=0; i<m_Flock.size();++i)
     {
-        std::cout<<"-------------------------------------------------------------------"<<std::endl;
-        std::cout<<"BOID "<<m_Flock[i].getId()<<" INFO:"<<std::endl;
         setNeighbours(i);
-        queryNeighbours(i);
-        m_Flock[i].Info();
         m_Flock[i].setFlockCentroid(m_Centroid.m_x, m_Centroid.m_y, m_Centroid.m_z);
         m_Flock[i].calcCentroid();
         m_Flock[i].calcSeparation();
@@ -140,7 +136,6 @@ void Flock::updateFlock()
         m_Flock[i].setTarget();
         m_Flock[i].setSteering();
         m_Flock[i].updatePosition();
-        std::cout<<"boid "<<i+1<<" new pos: "<<" ("<<m_Flock[i].getXPos()<<","<<m_Flock[i].getYPos()<<","<<m_Flock[i].getZPos()<<")"<<std::endl;
     }
 }
 
