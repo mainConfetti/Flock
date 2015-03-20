@@ -68,7 +68,7 @@ DEPENDPATH+=include
 # if we are on a mac define DARWIN
 macx:DEFINES += DARWIN
 # this is where to look for includes
-!win32INCLUDEPATH += $$(HOME)/NGL/include/
+!win32:INCLUDEPATH += $$(HOME)/NGL/include/
 
 win32: {
         PRE_TARGETDEPS+=C:/NGL/lib/NGL.lib
