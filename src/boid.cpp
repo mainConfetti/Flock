@@ -282,7 +282,7 @@ void Boid::setFlockCentroid(float _x, float _y, float _z)
 
 float Boid::Distance(ngl::Vec3 a, ngl::Vec3 b)
 {
-    return ((a.m_x - b.m_x)*(a.m_x - b.m_x)+(a.m_y - b.m_y)*(a.m_y - b.m_y) + (a.m_z - b.m_z)*(a.m_z - b.m_z));
+    return sqrt(((a.m_x - b.m_x)*(a.m_x - b.m_x)+(a.m_y - b.m_y)*(a.m_y - b.m_y) + (a.m_z - b.m_z)*(a.m_z - b.m_z)));
 }
 
 bool Boid::lineSphereIntersect(ngl::Vec3 ahead, ngl::Vec3 a, float radius)
