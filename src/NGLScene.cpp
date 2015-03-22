@@ -99,7 +99,7 @@ void NGLScene::initialize()
   shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
 
   // initialise the flock
-  m_Flock = new Flock(7);
+  m_Flock = new Flock(100);
 
 
   // Camera position values
@@ -113,7 +113,7 @@ void NGLScene::initialize()
   // create a light
   ngl::Mat4 iv=m_cam->getViewMatrix();
   iv.transpose();
-  m_light = new ngl::Light(ngl::Vec3(15,20,70),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
+  m_light = new ngl::Light(ngl::Vec3(0,30,70),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
   m_light->setTransform(iv);
   //load light values to shader
   m_light->loadToShader("light");
@@ -129,6 +129,7 @@ void NGLScene::loadMatricesToShader(int boidId)
 {
     // create an instance of the shader lib
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
+    (*shader)["Phong"]->use();
 
     ngl::Mat4 M;
     ngl::Mat4 MV;
@@ -142,7 +143,7 @@ void NGLScene::loadMatricesToShader(int boidId)
     normalMatrix = MV;
     normalMatrix.inverse();
     //shader->setShaderParamFromMat4("M",M);
-    shader->setShaderParamFromMat4("MV",MV);
+    //shader->setShaderParamFromMat4("MV",MV);
     shader->setShaderParamFromMat4("MVP",MVP);
     shader->setShaderParamFromMat3("normalMatrix",normalMatrix);
 

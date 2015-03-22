@@ -99,9 +99,14 @@ void Flock::setNeighbours(int x)
         }
 
     }
-    m_Flock[x].setNeighbour(m_NArray[1]);
-    m_Flock[x].setNeighbour(m_NArray[2]);
-    m_Flock[x].setNeighbour(m_NArray[3]);
+    for(int i=0;i<m_NArray.size();i++)
+    {
+        if(i<3 || m_NArray[i]->getDistance()<5)
+        {
+            m_Flock[x].setNeighbour(m_NArray[i]);
+        }
+    }
+
 }
 
 void Flock::queryNeighbours(int i)
@@ -127,12 +132,15 @@ void Flock::updateFlock()
     setCentroid();
     for(int i=0; i<m_Flock.size();++i)
     {
+        //std::cout<<"Boid: "<<m_Flock[i].getId()<<"-----------------------"<<std::endl;
         setNeighbours(i);
+        //m_Flock[i].getNeighbours();
         m_Flock[i].setFlockCentroid(m_Centroid.m_x, m_Centroid.m_y, m_Centroid.m_z);
         m_Flock[i].calcCentroid();
         m_Flock[i].calcSeparation();
         m_Flock[i].calcAlign();
         m_Flock[i].calcCohesion();
+        m_Flock[i].calcAvoid();
         m_Flock[i].setTarget();
         m_Flock[i].setSteering();
         m_Flock[i].updatePosition();
