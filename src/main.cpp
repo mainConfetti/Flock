@@ -50,7 +50,6 @@ int main(int argc, char **argv)
             std::cout<<"boid "<<i+1<<" new pos: "<<" ("<<flock.m_Flock[i].getXPos()<<","<<flock.m_Flock[i].getYPos()<<","<<flock.m_Flock[i].getZPos()<<")"<<std::endl;
         }
     }
-
     //----------------------------------------------------------------------------------------------------------*/
     // opengl stuff
     QGuiApplication app(argc, argv);
