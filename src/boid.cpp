@@ -115,9 +115,14 @@ void Boid::getNeighbours()
 
 void Boid::calcCentroid()
 {
-    m_Centroid.m_x = ((getXPos()+m_Neighbours[0]->getXPos()+m_Neighbours[1]->getXPos()+m_Neighbours[2]->getXPos())/4);
-    m_Centroid.m_y = ((getYPos()+m_Neighbours[0]->getYPos()+m_Neighbours[1]->getYPos()+m_Neighbours[2]->getYPos())/4);
-    m_Centroid.m_z = ((getZPos()+m_Neighbours[0]->getZPos()+m_Neighbours[1]->getZPos()+m_Neighbours[2]->getZPos())/4);
+    m_Centroid = (getXPos(),getYPos(),getZPos());
+    for(int i=0;i<m_Neighbours.size();++i)
+    {
+        m_Centroid.m_x += m_Neighbours[i]->getXPos();
+        m_Centroid.m_y += m_Neighbours[i]->getYPos();
+        m_Centroid.m_z += m_Neighbours[i]->getZPos();
+    }
+    m_Centroid /= m_Neighbours.size()+1;
 
 }
 
@@ -137,28 +142,28 @@ void Boid::setVelocity(float _x, float _y, float _z)
 
 void Boid::calcAlign()
 {
-    m_Align.m_x=(((m_Neighbours[0]->getXVel())+(m_Neighbours[1]->getXVel())+(m_Neighbours[2]->getXVel()))/3.0);
-    m_Align.m_y=(((m_Neighbours[0]->getYVel())+(m_Neighbours[1]->getYVel())+(m_Neighbours[2]->getYVel()))/3.0);
-    m_Align.m_z=(((m_Neighbours[0]->getZVel())+(m_Neighbours[1]->getZVel())+(m_Neighbours[2]->getZVel()))/3.0);
+    for(int i=0;i<m_Neighbours.size();++i)
+    {
+        m_Align.m_x += m_Neighbours[i]->getXVel();
+        m_Align.m_y += m_Neighbours[i]->getYVel();
+        m_Align.m_z += m_Neighbours[i]->getZVel();
+    }
+    m_Align /= m_Neighbours.size();
     m_Align.normalize();
     m_Align*=m_AlignWeight;
 }
 
 void Boid::calcSeparation()
 {
-    ngl::Vec3 pos1(m_Neighbours[0]->getXPos(), m_Neighbours[0]->getYPos(), m_Neighbours[0]->getZPos());
-    ngl::Vec3 pos2(m_Neighbours[1]->getXPos(), m_Neighbours[1]->getYPos(), m_Neighbours[1]->getZPos());
-    ngl::Vec3 pos3(m_Neighbours[2]->getXPos(), m_Neighbours[2]->getYPos(), m_Neighbours[2]->getZPos());
-    m_Neighbours[0]->setDistance(this);
-    m_Neighbours[1]->setDistance(this);
-    m_Neighbours[2]->setDistance(this);
-    float weight1 = (1.0/m_Neighbours[0]->getDistance());
-    float weight2 = (1.0/m_Neighbours[1]->getDistance());
-    float weight3 = (1.0/m_Neighbours[2]->getDistance());
-    ngl::Vec3 target1 = (pos1-m_Position.toVec3())*weight1;
-    ngl::Vec3 target2 = (pos2-m_Position.toVec3())*weight2;
-    ngl::Vec3 target3 = (pos3-m_Position.toVec3())*weight3;
-    m_Separation = (target1+target2+target3)/3.0;
+    for(int i=0;i<m_Neighbours.size();++i)
+    {
+    ngl::Vec3 pos(m_Neighbours[i]->getXPos(), m_Neighbours[i]->getYPos(), m_Neighbours[i]->getZPos());
+    m_Neighbours[i]->setDistance(this);
+    float weight = (1.0/m_Neighbours[i]->getDistance());
+    ngl::Vec3 target = (pos-m_Position.toVec3())*weight;
+    m_Separation += target;
+    }
+    m_Separation /= m_Neighbours.size();
     m_Separation.normalize();
     m_Separation = -m_Separation;
     m_Separation*=m_SeparationWeight;

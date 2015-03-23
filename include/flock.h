@@ -7,6 +7,7 @@
 #include <ngl/Vec4.h>
 #include <vector>
 #include <boid.h>
+#include <octree.h>
 
 class Flock
 {
@@ -16,6 +17,7 @@ public:
     ~Flock();
     void addBoid();
     void setNeighbours(int i);
+    void setNeighboursOctree(int x);
     void printBoid(int i);
     int getSize();
     void queryNeighbours(int i);
@@ -29,6 +31,8 @@ private:
 
     // array used for setting boid neighbours
     std::vector<Boid*> m_NArray;
+    void updateOctree();
+    Octree *m_octree;
 
 };
 
