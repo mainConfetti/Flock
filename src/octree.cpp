@@ -1,5 +1,5 @@
 #include <octree.h>
-
+#include <iostream>
 #include <ngl/Vec3.h>
 #include <ngl/Vec4.h>
 #include <vector>
@@ -20,7 +20,7 @@ Octree::Octree(ngl::Vec3 _origin, ngl::Vec3 _halfD)
 
 Octree::~Octree()
 {
-    // recursively delete al children
+    // recursively delete all children
     for(int i=0;i<8;++i)
         delete m_children[i];
 }
@@ -62,6 +62,7 @@ void Octree::insert(ngl::Vec4 _data)
         if(m_data==NULL)
         {
             m_data = _data;
+            //std::cout<<m_data.m_x<<", "<<m_data.m_y<<", "<<m_data.m_z<<", "<<m_data.m_w<<std::endl;
             return;
         }
         // If the leaf already has some data assigned; split the
@@ -106,7 +107,11 @@ void Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius)
     if(isLeaf())
     {
         if(sqrt(((m_data.m_x-centre.m_x)*(m_data.m_x-centre.m_x)+(m_data.m_y-centre.m_y)*(m_data.m_y-centre.m_y)+(m_data.m_z-centre.m_z)*(m_data.m_z-centre.m_z)))<=radius)
+        {
             m_results.push_back(m_data);
+            //std::cout<<m_data.m_w<<std::endl;
+            //std::cout<<"added data"<<std::endl;
+        }
     }
     // If we are in and interior node of the tree; check if the query
     // bouding sphere lies outside the octants of this node
@@ -140,4 +145,42 @@ bool Octree::boxIntersectsSphere(ngl::Vec3 bMin, ngl::Vec3 bMax, ngl::Vec3 C, fl
     else if (C.m_z > bMax.m_z)
         dist_squared -= (C.m_z - bMax.m_z)*(C.m_z - bMax.m_z);
     return dist_squared > 0;
+}
+
+
+void Octree::clearTree()
+{
+  if(isLeaf())
+  {
+    m_data=NULL;
+  }
+  else
+  {
+    for(int i=0;i<8;++i)
+    {
+        m_children[i]->clearTree();
+    }
+  }
+}
+
+
+
+//used for debugging
+void Octree::findData(ngl::Vec3 data)
+{
+    if(isLeaf())
+    {
+        if(m_data!=NULL)
+        {
+            std::cout<<"found data here: "<<m_data.m_x<<", "<<m_data.m_y<<", "<<m_data.m_z<<std::endl;
+        }
+    }
+    else
+    {
+        for(int i=0;i<8;++i)
+        {
+            std::cout<<"searching child octant "<<i<<std::endl;
+            m_children[i]->findData(data);
+        }
+    }
 }

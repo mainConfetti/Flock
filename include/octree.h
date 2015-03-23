@@ -60,6 +60,8 @@ public:
     /// @brief array for storing the results of getPointsInsideSphere
     //----------------------------------------------------------------------------------------------------------------------
     std::vector<ngl::Vec4> m_results;
+    void findData(ngl::Vec3 data);
+    void clearTree();
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the physical centre of this node

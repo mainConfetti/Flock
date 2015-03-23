@@ -116,21 +116,28 @@ void Boid::getNeighbours()
 void Boid::calcCentroid()
 {
     m_Centroid = (getXPos(),getYPos(),getZPos());
-    for(int i=0;i<m_Neighbours.size();++i)
+    if(m_Neighbours.size()>0)
     {
-        m_Centroid.m_x += m_Neighbours[i]->getXPos();
-        m_Centroid.m_y += m_Neighbours[i]->getYPos();
-        m_Centroid.m_z += m_Neighbours[i]->getZPos();
+        for(int i=0;i<m_Neighbours.size();++i)
+        {
+            m_Centroid.m_x += m_Neighbours[i]->getXPos();
+            m_Centroid.m_y += m_Neighbours[i]->getYPos();
+            m_Centroid.m_z += m_Neighbours[i]->getZPos();
+        }
+        m_Centroid /= m_Neighbours.size()+1;
     }
-    m_Centroid /= m_Neighbours.size()+1;
-
 }
 
 void Boid::calcCohesion()
 {
-    m_Cohesion = m_Centroid-m_Position.toVec3();
-    m_Cohesion.normalize();
-    m_Cohesion*=m_CohesionWeight;
+    if(m_Neighbours.size()>0)
+    {
+        m_Cohesion = m_Centroid-m_Position.toVec3();
+        if(m_Cohesion!=0)
+            m_Cohesion.normalize();
+        m_Cohesion*=m_CohesionWeight;
+    }
+    else m_Cohesion.set(0,0,0);
 }
 
 void Boid::setVelocity(float _x, float _y, float _z)
@@ -142,31 +149,43 @@ void Boid::setVelocity(float _x, float _y, float _z)
 
 void Boid::calcAlign()
 {
-    for(int i=0;i<m_Neighbours.size();++i)
+    if(m_Neighbours.size()>0)
     {
-        m_Align.m_x += m_Neighbours[i]->getXVel();
-        m_Align.m_y += m_Neighbours[i]->getYVel();
-        m_Align.m_z += m_Neighbours[i]->getZVel();
+        for(int i=0;i<m_Neighbours.size();++i)
+        {
+            m_Align.m_x += m_Neighbours[i]->getXVel();
+            m_Align.m_y += m_Neighbours[i]->getYVel();
+            m_Align.m_z += m_Neighbours[i]->getZVel();
+        }
+        m_Align /= m_Neighbours.size();
+        if(m_Align!=0)
+        m_Align.normalize();
+        m_Align*=m_AlignWeight;
     }
-    m_Align /= m_Neighbours.size();
-    m_Align.normalize();
-    m_Align*=m_AlignWeight;
+    else
+        m_Align.set(0,0,0);
 }
 
 void Boid::calcSeparation()
 {
-    for(int i=0;i<m_Neighbours.size();++i)
+    if(m_Neighbours.size()>0)
     {
-    ngl::Vec3 pos(m_Neighbours[i]->getXPos(), m_Neighbours[i]->getYPos(), m_Neighbours[i]->getZPos());
-    m_Neighbours[i]->setDistance(this);
-    float weight = (1.0/m_Neighbours[i]->getDistance());
-    ngl::Vec3 target = (pos-m_Position.toVec3())*weight;
-    m_Separation += target;
+        for(int i=0;i<m_Neighbours.size();++i)
+        {
+        ngl::Vec3 pos(m_Neighbours[i]->getXPos(), m_Neighbours[i]->getYPos(), m_Neighbours[i]->getZPos());
+        m_Neighbours[i]->setDistance(this);
+        float weight = (1.0/m_Neighbours[i]->getDistance());
+        ngl::Vec3 target = (pos-m_Position.toVec3())*weight;
+        m_Separation += target;
+        }
+        m_Separation /= m_Neighbours.size();
+        if(m_Separation!=0)
+        m_Separation.normalize();
+        m_Separation = -m_Separation;
+        m_Separation*=m_SeparationWeight;
     }
-    m_Separation /= m_Neighbours.size();
-    m_Separation.normalize();
-    m_Separation = -m_Separation;
-    m_Separation*=m_SeparationWeight;
+    else
+        m_Separation.set(0,0,0);
 }
 
 void Boid::calcAvoid()
@@ -259,15 +278,16 @@ int Boid::getMass()
 
 void Boid::setTarget()
 {
-    //m_Target=m_Separation+m_Cohesion+m_Align;
     m_Target=m_Separation+m_Cohesion+m_Align+m_avoid;
-    m_Target.normalize();
+    if(m_Target.length()!=0)
+        m_Target.normalize();
 }
 
 void Boid::setSteering()
 {
     m_Steering = m_Target-m_Velocity;
-    m_Steering.normalize();
+    if(m_Steering.length()!=0)
+        m_Steering.normalize();
 }
 
 void Boid::updatePosition()
