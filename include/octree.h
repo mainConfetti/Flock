@@ -21,8 +21,9 @@ public:
     /// @brief ctor
     /// @param [in] _origin the physical centre of the node
     /// @param [in] _halfD half the width, depth, or height of the node
+    /// @param [in] _height the height of the octree
     //----------------------------------------------------------------------------------------------------------------------
-    Octree(ngl::Vec3 _origin, ngl::Vec3 _halfD);
+    Octree(ngl::Vec3 _origin, ngl::Vec3 _halfD, int _height);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief dtor recursivley destroys octants
     //----------------------------------------------------------------------------------------------------------------------
@@ -55,12 +56,13 @@ public:
     /// @param [in] radius the radius of the bounding sphere
     /// @param [in] results an array of the points inside the bounding sphere
     //----------------------------------------------------------------------------------------------------------------------
-    void getPointsInsideSphere(ngl::Vec3 centre, float radius);
+    void getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<ngl::Vec4> results);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief array for storing the results of getPointsInsideSphere
     //----------------------------------------------------------------------------------------------------------------------
     std::vector<ngl::Vec4> m_results;
     void findData(ngl::Vec3 data);
+    void clearResults();
     void clearTree();
 private:
     //----------------------------------------------------------------------------------------------------------------------
@@ -72,13 +74,17 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     ngl::Vec3 m_halfD;
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the height of the current node
+    //----------------------------------------------------------------------------------------------------------------------
+    int m_height;
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief pointers to child octants
     //----------------------------------------------------------------------------------------------------------------------
     Octree *m_children[8];
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief data point to be stored in tree, has x,y,z position and w Id of data's parent object
+    /// @brief  array of data points to be stored in tree, has x,y,z position and w Id of data's parent object
     //----------------------------------------------------------------------------------------------------------------------
-    ngl::Vec4 m_data;
+    std::vector<ngl::Vec4> m_data;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief query if a box intersects with a sphere
     /// @param [in] Bmin the minimum corner of the box
