@@ -31,6 +31,7 @@ private:
 
     // array used for setting boid neighbours
     std::vector<Boid*> m_NArray;
+    std::vector<ngl::Vec4*> m_NArray1;
     void updateOctree();
     Octree *m_octree;
 

@@ -56,11 +56,11 @@ public:
     /// @param [in] radius the radius of the bounding sphere
     /// @param [in] results an array of the points inside the bounding sphere
     //----------------------------------------------------------------------------------------------------------------------
-    void getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<ngl::Vec4> results);
+    ngl::Vec4 *getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<ngl::Vec4 *> temp);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief array for storing the results of getPointsInsideSphere
     //----------------------------------------------------------------------------------------------------------------------
-    std::vector<ngl::Vec4> m_results;
+    std::vector<ngl::Vec4 *> m_results;
     void findData(ngl::Vec3 data);
     void clearResults();
     void clearTree();
@@ -94,6 +94,11 @@ private:
     /// @return true if box intersects with sphere, false if not
     //----------------------------------------------------------------------------------------------------------------------
     bool boxIntersectsSphere(ngl::Vec3 bMin, ngl::Vec3 bMax, ngl::Vec3 C, float r);
+    int getDataSize();
+    int m_dataIndex;
+    int m_tempDataSize;
+
+    int getTempDataSize();
 };
 
 #endif // OCTREE_H

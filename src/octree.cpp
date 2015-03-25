@@ -16,6 +16,8 @@ Octree::Octree(ngl::Vec3 _origin, ngl::Vec3 _halfD, int _height)
     //initially there are no children
     for(int i=0;i<8;++i)
             m_children[i] = NULL;
+    m_dataIndex = 0;
+    m_tempDataSize = 0;
 }
 
 Octree::~Octree()
@@ -62,8 +64,8 @@ void Octree::insert(ngl::Vec4 _data)
         if(m_data.size()==0 || m_height==1)
         {
             m_data.push_back(_data);
-            //std::cout<<"inserted :"<<m_data.back().m_w<<" at "<<m_height<<std::endl;
-            return;
+            std::cout<<"inserted :"<<m_data.back().m_w<<" at "<<m_height<<std::endl;
+
         }
         // If the leaf already has some data assigned; split the
         // node into 8 children, insert the old data along with
@@ -72,7 +74,7 @@ void Octree::insert(ngl::Vec4 _data)
         {
             // Store old data point
             ngl::Vec4 oldData = m_data[0];
-            m_data[0] = NULL;
+            m_data.clear();
 
             // Split the current node
             for(int i=0;i<8;++i)
@@ -86,7 +88,9 @@ void Octree::insert(ngl::Vec4 _data)
             }
 
             // Re-insert old data and insert new data
+            std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(oldData.toVec3())<<std::endl;
             m_children[getOctantContainingPoint(oldData.toVec3())]->insert(oldData);
+            std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(_data.toVec3())<<std::endl;
             m_children[getOctantContainingPoint(_data.toVec3())]->insert(_data);
         }
     }
@@ -96,32 +100,37 @@ void Octree::insert(ngl::Vec4 _data)
     else
     {
         int octant = getOctantContainingPoint(_data.toVec3());
+        std::cout<<"entering: "<<m_height-1<<" : "<<octant<<std::endl;
         m_children[octant]->insert(_data);
     }
     return;
 }
 
-void Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<ngl::Vec4> results)
+ngl::Vec4* Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<ngl::Vec4 *> temp)
 {
     // If the current node is a leaf, check if the current data point
     // is inside the query bouding sphere
+    int inc;
+    ngl::Vec4 * tempResults=NULL;
     if(isLeaf())
     {
-        for(int i=0;i<m_data.size();++i)
+        std::cout<<"size before: "<<m_results.size()<<std::endl;
+        if(sqrt(((m_data[m_dataIndex].m_x-centre.m_x)*(m_data[m_dataIndex].m_x-centre.m_x)+(m_data[m_dataIndex].m_y-centre.m_y)*(m_data[m_dataIndex].m_y-centre.m_y)+(m_data[m_dataIndex].m_z-centre.m_z)*(m_data[m_dataIndex].m_z-centre.m_z)))<=radius)
         {
-            if(sqrt(((m_data[i].m_x-centre.m_x)*(m_data[i].m_x-centre.m_x)+(m_data[i].m_y-centre.m_y)*(m_data[i].m_y-centre.m_y)+(m_data[i].m_z-centre.m_z)*(m_data[i].m_z-centre.m_z)))<=radius)
-            {
-                results.push_back(m_data[i]);
-                std::cout<<"added neighbour"<<std::endl;
-                //std::cout<<m_data.m_w<<std::endl;
-                //std::cout<<"added data"<<std::endl;
-            }
+            tempResults=&m_data[m_dataIndex];
+            std::cout<<m_data[m_dataIndex].m_w<<" added neighbour: "<<tempResults->m_w<<std::endl;
+            //std::cout<<m_data.m_w<<std::endl;
+            //std::cout<<"added data"<<std::endl;
         }
-        //std::cout<<m_results.size()<<std::endl;
+        ++m_dataIndex;
     }
     // If we are in and interior node of the tree; check if the query
     // bouding sphere lies outside the octants of this node
     else
+    {
+        if(temp.size()!=0)
+            for(int i=0;i<temp.size();++i)
+                m_data[i]=*temp[i];
         for(int i=0;i<8;++i)
         {
             // Compute the min and max corners of this child octant
@@ -131,8 +140,19 @@ void Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<n
             // If the bounding sphere is inside of the child octant
             // then check the child
             if(boxIntersectsSphere(min, max, centre, radius))
-                m_children[i]->getPointsInsideSphere(centre, radius, results);
+                if(m_children[i]->getTempDataSize()!=0)
+                    inc = m_children[i]->getTempDataSize();
+                if(m_children[i]->isLeaf())
+                    inc = m_children[i]->getDataSize();
+                for(int j=0;j<inc;++j)
+                {
+                    temp.push_back(m_children[i]->getPointsInsideSphere(centre, radius, temp));
+                    ++m_tempDataSize;
+                }
         }
+
+    }
+    return tempResults;
 }
 
 bool Octree::boxIntersectsSphere(ngl::Vec3 bMin, ngl::Vec3 bMax, ngl::Vec3 C, float r)
@@ -188,4 +208,14 @@ void Octree::findData(ngl::Vec3 data)
             m_children[i]->findData(data);
         }
     }
+}
+
+int Octree::getDataSize()
+{
+    return m_data.size();
+}
+
+int Octree::getTempDataSize()
+{
+    return m_tempDataSize;
 }
