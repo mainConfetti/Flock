@@ -21,13 +21,13 @@ Boid::Boid(int _id)
     m_Position.m_z = 0.0;
     setVelocity(1.0, 0.0, 0.0);
     setId(_id);
-    m_AlignWeight=5;
-    m_SeparationWeight=12;
-    m_CohesionWeight=15;
+    m_AlignWeight=60;
+    m_SeparationWeight=70;
+    m_CohesionWeight=200;
     m_Speed=0.8;
-    m_Mass=12;
+    m_Mass=7;
     MAX_SEE_AHEAD =0;
-    MAX_AVOID_FORCE = 100;
+    MAX_AVOID_FORCE = 200;
 }
 
 Boid::~Boid()

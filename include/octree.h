@@ -56,7 +56,7 @@ public:
     /// @param [in] radius the radius of the bounding sphere
     /// @param [in] results an array of the points inside the bounding sphere
     //----------------------------------------------------------------------------------------------------------------------
-    ngl::Vec4 *getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<ngl::Vec4 *> temp);
+    ngl::Vec4 *getPointsInsideSphere(ngl::Vec3 centre, float radius);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief array for storing the results of getPointsInsideSphere
     //----------------------------------------------------------------------------------------------------------------------
@@ -64,6 +64,9 @@ public:
     void findData(ngl::Vec3 data);
     void clearResults();
     void clearTree();
+    int m_plusIndex=0;
+    std::vector<ngl::Vec4 *> temp_data;
+    void cleanResults();
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the physical centre of this node
@@ -97,8 +100,13 @@ private:
     int getDataSize();
     int m_dataIndex;
     int m_tempDataSize;
-
+    int m_tempDataIndex;
     int getTempDataSize();
+    int getTempDataIndex();
+    int m_inc;
+
+
+
 };
 
 #endif // OCTREE_H

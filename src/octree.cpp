@@ -5,6 +5,8 @@
 #include <vector>
 #include <stdlib.h>
 #include <math.h>
+#include <algorithm>
+
 
 
 Octree::Octree(ngl::Vec3 _origin, ngl::Vec3 _halfD, int _height)
@@ -18,6 +20,8 @@ Octree::Octree(ngl::Vec3 _origin, ngl::Vec3 _halfD, int _height)
             m_children[i] = NULL;
     m_dataIndex = 0;
     m_tempDataSize = 0;
+    m_tempDataIndex = 0;
+    m_inc=0;
 }
 
 Octree::~Octree()
@@ -64,7 +68,7 @@ void Octree::insert(ngl::Vec4 _data)
         if(m_data.size()==0 || m_height==1)
         {
             m_data.push_back(_data);
-            std::cout<<"inserted :"<<m_data.back().m_w<<" at "<<m_height<<std::endl;
+            //std::cout<<"inserted :"<<m_data.back().m_w<<" at "<<m_height<<std::endl;
 
         }
         // If the leaf already has some data assigned; split the
@@ -72,6 +76,10 @@ void Octree::insert(ngl::Vec4 _data)
         // the new data point
         else
         {
+            // each time we split a node, we will have to itterate over it
+            // one more time to retrieve all data in its chilren when calling
+            // getObjectsInSphere.
+            ++m_tempDataIndex;
             // Store old data point
             ngl::Vec4 oldData = m_data[0];
             m_data.clear();
@@ -88,9 +96,9 @@ void Octree::insert(ngl::Vec4 _data)
             }
 
             // Re-insert old data and insert new data
-            std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(oldData.toVec3())<<std::endl;
+            //std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(oldData.toVec3())<<std::endl;
             m_children[getOctantContainingPoint(oldData.toVec3())]->insert(oldData);
-            std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(_data.toVec3())<<std::endl;
+            //std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(_data.toVec3())<<std::endl;
             m_children[getOctantContainingPoint(_data.toVec3())]->insert(_data);
         }
     }
@@ -100,25 +108,30 @@ void Octree::insert(ngl::Vec4 _data)
     else
     {
         int octant = getOctantContainingPoint(_data.toVec3());
-        std::cout<<"entering: "<<m_height-1<<" : "<<octant<<std::endl;
+        // each time we split a node, we will have to itterate over it
+        // one more time to retrieve all data in its chilren when calling
+        // getObjectsInSphere.
+        ++m_tempDataIndex;
+        //std::cout<<"entering: "<<m_height-1<<" : "<<octant<<std::endl;
         m_children[octant]->insert(_data);
     }
     return;
 }
 
-ngl::Vec4* Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius, std::vector<ngl::Vec4 *> temp)
+ngl::Vec4* Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius)
 {
     // If the current node is a leaf, check if the current data point
     // is inside the query bouding sphere
     int inc;
     ngl::Vec4 * tempResults=NULL;
+    ngl::Vec4 * temp;
     if(isLeaf())
     {
-        std::cout<<"size before: "<<m_results.size()<<std::endl;
+        //std::cout<<"size before: "<<temp.size()<<std::endl;
         if(sqrt(((m_data[m_dataIndex].m_x-centre.m_x)*(m_data[m_dataIndex].m_x-centre.m_x)+(m_data[m_dataIndex].m_y-centre.m_y)*(m_data[m_dataIndex].m_y-centre.m_y)+(m_data[m_dataIndex].m_z-centre.m_z)*(m_data[m_dataIndex].m_z-centre.m_z)))<=radius)
         {
             tempResults=&m_data[m_dataIndex];
-            std::cout<<m_data[m_dataIndex].m_w<<" added neighbour: "<<tempResults->m_w<<std::endl;
+            //std::cout<<m_data[m_dataIndex].m_w<<" added neighbour: "<<tempResults->m_w<<std::endl;
             //std::cout<<m_data.m_w<<std::endl;
             //std::cout<<"added data"<<std::endl;
         }
@@ -128,29 +141,28 @@ ngl::Vec4* Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius, std::ve
     // bouding sphere lies outside the octants of this node
     else
     {
-        if(temp.size()!=0)
-            for(int i=0;i<temp.size();++i)
-                m_data[i]=*temp[i];
-        for(int i=0;i<8;++i)
-        {
-            // Compute the min and max corners of this child octant
-            ngl::Vec3 max = m_children[i]->m_origin + m_children[i]->m_halfD;
-            ngl::Vec3 min = m_children[i]->m_origin - m_children[i]->m_halfD;
-
-            // If the bounding sphere is inside of the child octant
-            // then check the child
-            if(boxIntersectsSphere(min, max, centre, radius))
-                if(m_children[i]->getTempDataSize()!=0)
-                    inc = m_children[i]->getTempDataSize();
-                if(m_children[i]->isLeaf())
-                    inc = m_children[i]->getDataSize();
-                for(int j=0;j<inc;++j)
-                {
-                    temp.push_back(m_children[i]->getPointsInsideSphere(centre, radius, temp));
-                    ++m_tempDataSize;
-                }
-        }
-
+        if(m_inc==0)
+            for(int i=0;i<8;++i)
+            {
+                // Compute the min and max corners of this child octant
+                ngl::Vec3 max = m_children[i]->m_origin + m_children[i]->m_halfD;
+                ngl::Vec3 min = m_children[i]->m_origin - m_children[i]->m_halfD;
+                // If the bounding sphere is inside of the child octant
+                // then check the child
+                if(boxIntersectsSphere(min, max, centre, radius))
+                    inc = m_children[i]->getTempDataIndex()+1;
+                    if(m_children[i]->isLeaf())
+                        inc = m_children[i]->getDataSize();
+                    for(int j=0;j<inc;++j)
+                    {
+                        temp_data.push_back(m_children[i]->getPointsInsideSphere(centre, radius));
+                    }
+            }
+        //int index = m_plusIndex-m_tempDataIndex;
+        //index+=m_inc;
+        tempResults=temp_data[m_inc];
+        ++m_inc;
+        ++m_tempDataSize;
     }
     return tempResults;
 }
@@ -178,16 +190,22 @@ void Octree::clearResults()
 {
     if(isLeaf())
     {
-        m_results.clear();
+        temp_data.clear();
+        m_dataIndex = 0;
+        m_inc = 0;
         return;
     }
     else
     {
+        temp_data.clear();
+        m_dataIndex = 0;
+        m_inc = 0;
         for(int i=0;i<8;++i)
         {
             m_children[i]->clearResults();
         }
     }
+    return;
 }
 
 //used for debugging
@@ -218,4 +236,15 @@ int Octree::getDataSize()
 int Octree::getTempDataSize()
 {
     return m_tempDataSize;
+}
+
+int Octree::getTempDataIndex()
+{
+    return m_tempDataIndex;
+}
+
+void Octree::cleanResults()
+{
+    //temp_data.erase(std::remove(temp_data.begin(), temp_data.end(), NULL), temp_data.end());
+    return;
 }

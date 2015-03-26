@@ -111,7 +111,7 @@ void Flock::setNeighbours(int x)
 }
 void Flock::updateOctree()
 {
-    m_octree=new Octree(ngl::Vec3(0,0,0), 30.0, 4);
+    m_octree=new Octree(ngl::Vec3(0,0,0), 80, 4);
     ngl::Vec4 dataPoint;
     for(int i=0;i<m_Flock.size();++i)
     {
@@ -125,18 +125,18 @@ void Flock::setNeighboursOctree(int x)
     ngl::Vec3 centre = (m_Flock[x].getXPos(),m_Flock[x].getYPos(),m_Flock[x].getZPos());
     float r = 50.0;
     m_Flock[x].clearNeighbour();
-    for(int i=0;i<m_NArray1.size();++i)
-        delete m_octree->m_results[i];
-    m_octree->m_results.clear();
-    ngl::Vec4 * temp(m_octree->getPointsInsideSphere(centre, r, m_octree->m_results));
-    std::cout<<"outside size: "<<m_octree->m_results.size()<<std::endl;
-    for(int i=0;i<m_NArray1.size();++i)
+    m_octree->getPointsInsideSphere(centre, r);
+    m_octree->cleanResults();
+    for(int i=0;i<m_octree->temp_data.size();++i)
     {
-        float id = (m_NArray1[i]->m_w)-1;
-        if((int) id != m_Flock[x].getId())
+        if(m_octree->temp_data[i]!=NULL)
         {
-            m_Flock[x].setNeighbour(&m_Flock[(int)id]);
-            std::cout<<"added: "<<id<<std::endl;
+            float id = (m_octree->temp_data[i]->m_w)-1;
+            if((int) id+1 != m_Flock[x].getId())
+            {
+                m_Flock[x].setNeighbour(&m_Flock[(int)id]);
+                std::cout<<"added: "<<id<<std::endl;
+            }
         }
     }
 }
@@ -163,12 +163,13 @@ void Flock::updateFlock()
 {
     setCentroid();
     updateOctree();
-    for(int i=0; i<1;++i)
+    for(int i=0; i<m_Flock.size();++i)
     {
+        m_octree->clearResults();
         std::cout<<"Boid: "<<m_Flock[i].getId()<<"-----------------------"<<std::endl;
-        //setNeighbours(i);
-        setNeighboursOctree(i);
-        //m_Flock[i].getNeighbours();
+        setNeighbours(i);
+        //setNeighboursOctree(i);
+        m_Flock[i].getNeighbours();
         m_Flock[i].setFlockCentroid(m_Centroid.m_x, m_Centroid.m_y, m_Centroid.m_z);
         m_Flock[i].calcCentroid();
         m_Flock[i].calcSeparation();

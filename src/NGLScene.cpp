@@ -99,7 +99,7 @@ void NGLScene::initialize()
   shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
 
   // initialise the flock
-  m_Flock = new Flock(10);
+  m_Flock = new Flock(100);
 
 
   // Camera position values
@@ -118,7 +118,7 @@ void NGLScene::initialize()
   //load light values to shader
   m_light->loadToShader("light");
 
-  //startTimer(10);
+  startTimer(10);
   // as re-size is not explicitly called we need to do this.
   glViewport(0,0,width(),height());
 
