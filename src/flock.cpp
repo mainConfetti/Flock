@@ -123,7 +123,7 @@ void Flock::updateOctree()
 void Flock::setNeighboursOctree(int x)
 {
     ngl::Vec3 centre = (m_Flock[x].getXPos(),m_Flock[x].getYPos(),m_Flock[x].getZPos());
-    float r = 50.0;
+    float r = 3.0;
     m_Flock[x].clearNeighbour();
     m_octree->getPointsInsideSphere(centre, r);
     m_octree->cleanResults();
@@ -135,7 +135,7 @@ void Flock::setNeighboursOctree(int x)
             if((int) id+1 != m_Flock[x].getId())
             {
                 m_Flock[x].setNeighbour(&m_Flock[(int)id]);
-                std::cout<<"added: "<<id<<std::endl;
+                //std::cout<<"added: "<<id<<std::endl;
             }
         }
     }
@@ -166,10 +166,10 @@ void Flock::updateFlock()
     for(int i=0; i<m_Flock.size();++i)
     {
         m_octree->clearResults();
-        std::cout<<"Boid: "<<m_Flock[i].getId()<<"-----------------------"<<std::endl;
+        //std::cout<<"Boid: "<<m_Flock[i].getId()<<"-----------------------"<<std::endl;
         setNeighbours(i);
         //setNeighboursOctree(i);
-        m_Flock[i].getNeighbours();
+        //m_Flock[i].getNeighbours();
         m_Flock[i].setFlockCentroid(m_Centroid.m_x, m_Centroid.m_y, m_Centroid.m_z);
         m_Flock[i].calcCentroid();
         m_Flock[i].calcSeparation();

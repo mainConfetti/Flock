@@ -190,6 +190,8 @@ void Octree::clearResults()
 {
     if(isLeaf())
     {
+        for(int i=0;i>temp_data.size();++i)
+            delete temp_data[i];
         temp_data.clear();
         m_dataIndex = 0;
         m_inc = 0;
@@ -197,6 +199,8 @@ void Octree::clearResults()
     }
     else
     {
+        for(int i=0;i>temp_data.size();++i)
+            delete temp_data[i];
         temp_data.clear();
         m_dataIndex = 0;
         m_inc = 0;

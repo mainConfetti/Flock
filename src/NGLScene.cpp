@@ -99,21 +99,21 @@ void NGLScene::initialize()
   shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
 
   // initialise the flock
-  m_Flock = new Flock(100);
+  m_Flock = new Flock(80);
 
 
   // Camera position values
-  ngl::Vec3 from(0,1,80);
+  ngl::Vec3 from(0,1,250);
   ngl::Vec3 to(0,0,0);
   ngl::Vec3 up(0,1,0);
   //load camera
   m_cam= new ngl::Camera(from,to,up);
   m_cam->setShape(45.0f, (float)720.0/576.0f,0.05f,350.0f);
-  shader->setShaderParam3f("viewerPos", m_cam->getEye().m_x,m_cam->getEye().m_y,m_cam->getEye().m_z);
+  shader->setRegisteredUniform("viewerPos", m_cam->getEye().toVec3());
   // create a light
   ngl::Mat4 iv=m_cam->getViewMatrix();
   iv.transpose();
-  m_light = new ngl::Light(ngl::Vec3(0,30,70),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
+  m_light = new ngl::Light(ngl::Vec3(0,30,250),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
   m_light->setTransform(iv);
   //load light values to shader
   m_light->loadToShader("light");
@@ -131,15 +131,15 @@ void NGLScene::loadMatricesToShader(int boidId)
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
     (*shader)["Phong"]->use();
 
-    ngl::Mat4 M;
-    ngl::Mat4 MV;
-    ngl::Mat4 MVP;
+    ngl::Mat4 M, MV, MVP, V;
     ngl::Mat3 normalMatrix;
-    M.scale(0.1,0.1,0.1);
-    M+=m_mouseGlobalTX;
-    M.translate(m_Flock->m_Flock[boidId].getXPos(), m_Flock->m_Flock[boidId].getYPos(), m_Flock->m_Flock[boidId].getZPos());
-    MV = M*m_cam->getViewMatrix();
-    MVP = M*m_cam->getVPMatrix();
+    //M.scale(0.5,0.5,0.5);
+    //M=m_transform.getMatrix();
+//    MV=m_transform.getMatrix()
+//       *m_mouseGlobalTX*m_cam->getViewMatrix() ;
+    M=m_transform.getMatrix();
+    MV = m_transform.getMatrix()*m_mouseGlobalTX*m_cam->getViewMatrix();
+    MVP = MV*m_cam->getProjectionMatrix();
     normalMatrix = MV;
     normalMatrix.inverse();
     //shader->setShaderParamFromMat4("M",M);
@@ -175,9 +175,12 @@ void NGLScene::render()
   //draw cube
   for(int i=0; i<m_Flock->getSize(); ++i)
   {
+    m_transform.reset();
+    m_transform.setPosition(m_Flock->m_Flock[i].getXPos(),m_Flock->m_Flock[i].getYPos(),m_Flock->m_Flock[i].getZPos());
     loadMatricesToShader(i);
     prim->draw("icosahedron");
   }
+
 }
 
 

@@ -21,13 +21,13 @@ Boid::Boid(int _id)
     m_Position.m_z = 0.0;
     setVelocity(1.0, 0.0, 0.0);
     setId(_id);
-    m_AlignWeight=60;
-    m_SeparationWeight=70;
-    m_CohesionWeight=200;
-    m_Speed=0.8;
-    m_Mass=7;
-    MAX_SEE_AHEAD =0;
-    MAX_AVOID_FORCE = 200;
+    m_AlignWeight=65;
+    m_SeparationWeight=100;
+    m_CohesionWeight=85;
+    m_Speed=0.45;
+    m_Mass=9;
+    MAX_SEE_AHEAD =2;
+    MAX_AVOID_FORCE = 100;
 }
 
 Boid::~Boid()
@@ -326,7 +326,7 @@ void Boid::findObstacle(ngl::Vec3 ahead)
 
         ngl::Vec3 obstaclePos;
         obstaclePos.m_x = m_Neighbours[i]->getXPos(); obstaclePos.m_y=m_Neighbours[i]->getYPos(); obstaclePos.m_z=m_Neighbours[i]->getZPos();
-        bool collision = lineSphereIntersect(ahead, obstaclePos, 30);
+        bool collision = lineSphereIntersect(ahead, obstaclePos, 5);
         if(collision==1 && ((m_collisionPos=NULL)==true || Distance(m_Position.toVec3(), obstaclePos) < Distance(m_Position.toVec3(), m_collisionPos)))
         {
             m_collisionPos.m_x = m_Neighbours[i]->getXPos(); m_collisionPos.m_y=m_Neighbours[i]->getYPos(); m_collisionPos.m_z=m_Neighbours[i]->getZPos();
