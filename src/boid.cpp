@@ -1,5 +1,7 @@
 #include "boid.h"
 #include <math.h>
+#include <ngl/VAOPrimitives.h>
+#include <ngl/ShaderLib.h>
 
 Boid::Boid()
 {
@@ -13,6 +15,7 @@ Boid::Boid()
     m_Mass=10;
     MAX_SEE_AHEAD = 2.5;
     MAX_AVOID_FORCE = 2;
+    buildVAO();
 }
 
 Boid::Boid(int _id)
@@ -28,6 +31,7 @@ Boid::Boid(int _id)
     m_Mass=9;
     MAX_SEE_AHEAD =2;
     MAX_AVOID_FORCE = 100;
+    buildVAO();
 }
 
 Boid::~Boid()
@@ -43,37 +47,6 @@ void Boid::setPos(float _x, float _y, float _z)
     m_Position.m_z = _z;
 }
 
-float Boid::getXPos()
-{
-    return m_Position.m_x;
-}
-
-float Boid::getYPos()
-{
-    return m_Position.m_y;
-}
-
-float Boid::getZPos()
-{
-    return m_Position.m_z;
-}
-
-float Boid::getXVel()
-{
-    return m_Velocity.m_x;
-}
-
-float Boid::getYVel()
-{
-    return m_Velocity.m_y;
-}
-
-float Boid::getZVel()
-{
-    return m_Velocity.m_z;
-}
-
-
 void Boid::setId(int _id)
 {
     m_Id = _id;
@@ -86,8 +59,8 @@ int Boid::getId()
 
 void Boid::setDistance(Boid *const boid)
 {
-    ngl::Vec3 boidPos = (boid->getXPos(), boid->getYPos(), boid->getZPos());
-    m_Distance = Distance(m_Position.toVec3(), boidPos);
+    ngl::Vec3 boidPos = (boid->getPosition().m_x, boid->getPosition().m_y, boid->getPosition().m_z);
+    m_Distance = Distance(m_Position, boidPos);
 }
 
 float Boid::getDistance()
@@ -116,14 +89,12 @@ void Boid::getNeighbours()
 
 void Boid::calcCentroid()
 {
-    m_Centroid = (getXPos(),getYPos(),getZPos());
+    m_Centroid = getPosition();
     if(m_Neighbours.size()>0)
     {
         for(int i=0;i<m_Neighbours.size();++i)
         {
-            m_Centroid.m_x += m_Neighbours[i]->getXPos();
-            m_Centroid.m_y += m_Neighbours[i]->getYPos();
-            m_Centroid.m_z += m_Neighbours[i]->getZPos();
+            m_Centroid+=m_Neighbours[i]->getPosition();
         }
         m_Centroid /= m_Neighbours.size()+1;
     }
@@ -133,7 +104,7 @@ void Boid::calcCohesion()
 {
     if(m_Neighbours.size()>0)
     {
-        m_Cohesion = m_Centroid-m_Position.toVec3();
+        m_Cohesion = m_Centroid-m_Position;
         if(m_Cohesion!=0)
             m_Cohesion.normalize();
         m_Cohesion*=m_CohesionWeight;
@@ -154,9 +125,7 @@ void Boid::calcAlign()
     {
         for(int i=0;i<m_Neighbours.size();++i)
         {
-            m_Align.m_x += m_Neighbours[i]->getXVel();
-            m_Align.m_y += m_Neighbours[i]->getYVel();
-            m_Align.m_z += m_Neighbours[i]->getZVel();
+            m_Align+=m_Neighbours[i]->getVelocity();
         }
         m_Align /= m_Neighbours.size();
         if(m_Align!=0)
@@ -173,10 +142,10 @@ void Boid::calcSeparation()
     {
         for(int i=0;i<m_Neighbours.size();++i)
         {
-        ngl::Vec3 pos(m_Neighbours[i]->getXPos(), m_Neighbours[i]->getYPos(), m_Neighbours[i]->getZPos());
+        ngl::Vec3 pos(m_Neighbours[i]->getPosition());
         m_Neighbours[i]->setDistance(this);
         float weight = (1.0/m_Neighbours[i]->getDistance());
-        ngl::Vec3 target = (pos-m_Position.toVec3())*weight;
+        ngl::Vec3 target = (pos-m_Position)*weight;
         m_Separation += target;
         }
         m_Separation /= m_Neighbours.size();
@@ -194,7 +163,7 @@ void Boid::calcAvoid()
     ngl::Vec3 ahead;
     m_collisionPos = NULL;
     m_Velocity.normalize();
-    ahead=m_Position.toVec3() + m_Velocity * MAX_SEE_AHEAD;
+    ahead=m_Position + m_Velocity * MAX_SEE_AHEAD;
     findObstacle(ahead);
     m_avoid=(0,0,0);
     if(m_collisionPos != NULL)
@@ -314,7 +283,7 @@ float Boid::Distance(ngl::Vec3 a, ngl::Vec3 b)
 bool Boid::lineSphereIntersect(ngl::Vec3 ahead, ngl::Vec3 a, float radius)
 {
     ngl::Vec3 ahead2=ahead*0.5;
-    return Distance(a, ahead) <= radius || Distance(a, ahead2) <= radius || Distance(a, m_Position.toVec3()) <= radius;
+    return Distance(a, ahead) <= radius || Distance(a, ahead2) <= radius || Distance(a, m_Position) <= radius;
 }
 
 void Boid::findObstacle(ngl::Vec3 ahead)
@@ -324,15 +293,191 @@ void Boid::findObstacle(ngl::Vec3 ahead)
     for(int i=0;i<m_Neighbours.size();++i)
     {
 
-        ngl::Vec3 obstaclePos;
-        obstaclePos.m_x = m_Neighbours[i]->getXPos(); obstaclePos.m_y=m_Neighbours[i]->getYPos(); obstaclePos.m_z=m_Neighbours[i]->getZPos();
+        ngl::Vec3 obstaclePos(m_Neighbours[i]->getPosition());
         bool collision = lineSphereIntersect(ahead, obstaclePos, 5);
-        if(collision==1 && ((m_collisionPos=NULL)==true || Distance(m_Position.toVec3(), obstaclePos) < Distance(m_Position.toVec3(), m_collisionPos)))
+        if(collision==1 && ((m_collisionPos=NULL)==true || Distance(m_Position, obstaclePos) < Distance(m_Position, m_collisionPos)))
         {
-            m_collisionPos.m_x = m_Neighbours[i]->getXPos(); m_collisionPos.m_y=m_Neighbours[i]->getYPos(); m_collisionPos.m_z=m_Neighbours[i]->getZPos();
+            m_collisionPos=m_Neighbours[i]->getPosition();
         }
     }
 }
+
+void Boid::buildVAO()
+{
+  ngl::Vec3 verts[]=
+  {
+    // face 1
+    ngl::Vec3(0,0.5,-2),
+    ngl::Vec3(-1,-0.5,2),
+    ngl::Vec3(-1,0.5,2),
+    // face 2
+    ngl::Vec3(0,0.5,-1),
+    ngl::Vec3(0,-0.5,-2),
+    ngl::Vec3(-1,-0.5,2),
+    // face 3
+    ngl::Vec3(0,0.5,-2),
+    ngl::Vec3(0,0.5,0.7),
+    ngl::Vec3(-1,0.5,2),
+    // face 4
+    ngl::Vec3(0,0.5,-2),
+    ngl::Vec3(0,0.5,0.7),
+    ngl::Vec3(1,0.5,2),
+    // face 5
+    ngl::Vec3(0,-0.5,-2),
+    ngl::Vec3(0,-0.5,0.7),
+    ngl::Vec3(-1,-0.5,2),
+    // face 6
+    ngl::Vec3(0,-0.5,-2),
+    ngl::Vec3(0,-0.5,0.7),
+    ngl::Vec3(1,-0.5,2),
+    // face 7
+    ngl::Vec3(0,0.5,-2),
+    ngl::Vec3(1,-0.5,2),
+    ngl::Vec3(1,0.5,2),
+    // face 8
+    ngl::Vec3(0,0.5,-2),
+    ngl::Vec3(0,-0.5,-2),
+    ngl::Vec3(1,-0.5,2),
+    // face 9
+    ngl::Vec3(-1,0.5,2),
+    ngl::Vec3(0,-0.5,0.7),
+    ngl::Vec3(0,0.5,0.7),
+    // face 10
+    ngl::Vec3(-1,0.5,2),
+    ngl::Vec3(-1,-0.5,2),
+    ngl::Vec3(0,-0.5,0.7),
+    // face 11
+    ngl::Vec3(0,0.5,0.7),
+    ngl::Vec3(1,-0.5,2),
+    ngl::Vec3(1,0.5,2),
+    // face 12
+    ngl::Vec3(0,0.5,0.7),
+    ngl::Vec3(0,-0.5,0.7),
+    ngl::Vec3(1,-0.5,2)
+  };
+
+  std::vector <ngl::Vec3> normals;
+  // face 1
+  ngl::Vec3 n=ngl::calcNormal(verts[2],verts[1], verts[0]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 2
+  n=ngl::calcNormal(verts[5],verts[4],verts[3]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 3
+  n=ngl::calcNormal(verts[6],verts[7],verts[8]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 4
+  n=ngl::calcNormal(verts[11],verts[10],verts[9]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 5
+  n=ngl::calcNormal(verts[14],verts[13], verts[12]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 6
+  n=ngl::calcNormal(verts[15],verts[16],verts[17]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 7
+  n=ngl::calcNormal(verts[18],verts[19],verts[20]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 8
+  n=ngl::calcNormal(verts[21],verts[22],verts[23]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 9
+  n=ngl::calcNormal(verts[26],verts[25], verts[24]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 10
+  n=ngl::calcNormal(verts[29],verts[28],verts[27]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 11
+  n=ngl::calcNormal(verts[32],verts[31],verts[30]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+  // face 12
+  n=ngl::calcNormal(verts[35],verts[34],verts[33]);
+  normals.push_back(n);
+  normals.push_back(n);
+  normals.push_back(n);
+
+  std::cout<<"sizeof(verts) "<<sizeof(verts)<<" sizeof(ngl::Vec3) "<<sizeof(ngl::Vec3)<<"\n";
+  // create a vao as a series of GL_TRIANGLES
+  m_vao= ngl::VertexArrayObject::createVOA(GL_TRIANGLES);
+  m_vao->bind();
+
+  // in this case we are going to set our data as the vertices above
+
+    m_vao->setData(sizeof(verts),verts[0].m_x);
+    // now we set the attribute pointer to be 0 (as this matches vertIn in our shader)
+
+    m_vao->setVertexAttributePointer(0,3,GL_FLOAT,0,0);
+
+    m_vao->setData(sizeof(verts),normals[0].m_x);
+    // now we set the attribute pointer to be 2 (as this matches normal in our shader)
+
+    m_vao->setVertexAttributePointer(2,3,GL_FLOAT,0,0);
+
+    m_vao->setNumIndices(sizeof(verts)/sizeof(ngl::Vec3));
+
+ // now unbind
+  m_vao->unbind();
+
+
+}
+
+void Boid::draw()
+{
+    m_vao->bind();
+    m_vao->draw();
+    m_vao->unbind();
+}
+
+void Boid::setRotate()
+{
+    m_rotate.reset();
+    float rotY, rotX;
+    rotY = atan(m_Velocity.m_z/m_Velocity.m_x)*180/M_PI;
+    rotX = atan(m_Velocity.m_y/m_Velocity.m_z)*180/M_PI;
+    m_rotate.setRotation(rotX, rotY, 0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

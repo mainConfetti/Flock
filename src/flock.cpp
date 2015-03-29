@@ -34,7 +34,7 @@ Flock::Flock(int numBoids)
         fraction = ((float) r / RAND_MAX) * (upper - lower);
         float z = lower + fraction;
         m_Flock[i].setPos(x, y, z);
-        std::cout << "boid" << m_Flock[i].getId() << "at: (" << m_Flock[i].getXPos() << "," << m_Flock[i].getYPos() << "," << m_Flock[i].getZPos() << ")" << std::endl;
+        //std::cout << "boid" << m_Flock[i].getId() << "at: (" << m_Flock[i].getXPos() << "," << m_Flock[i].getYPos() << "," << m_Flock[i].getZPos() << ")" << std::endl;
         m_Flock[i].setVelocity((((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)), (((float) rand()/RAND_MAX)));
 
     }
@@ -115,14 +115,14 @@ void Flock::updateOctree()
     ngl::Vec4 dataPoint;
     for(int i=0;i<m_Flock.size();++i)
     {
-        dataPoint.set(m_Flock[i].getXPos(),m_Flock[i].getYPos(),m_Flock[i].getZPos(),m_Flock[i].getId());
+        dataPoint.set(m_Flock[i].getPosition());
         m_octree->insert(dataPoint);
     }
 }
 
 void Flock::setNeighboursOctree(int x)
 {
-    ngl::Vec3 centre = (m_Flock[x].getXPos(),m_Flock[x].getYPos(),m_Flock[x].getZPos());
+    ngl::Vec3 centre = (m_Flock[x].getPosition());
     float r = 3.0;
     m_Flock[x].clearNeighbour();
     m_octree->getPointsInsideSphere(centre, r);
@@ -152,9 +152,7 @@ void Flock::setCentroid()
 {
     for(int i=0;i<m_Flock.size();++i)
     {
-        m_Centroid.m_x +=  m_Flock[i].getXPos();
-        m_Centroid.m_y += m_Flock[i].getYPos();
-        m_Centroid.m_z += m_Flock[i].getZPos();
+        m_Centroid+=m_Flock[i].getPosition();
     }
     m_Centroid /= m_Flock.size();
 }
@@ -178,6 +176,7 @@ void Flock::updateFlock()
         m_Flock[i].calcAvoid();
         m_Flock[i].setTarget();
         m_Flock[i].setSteering();
+        m_Flock[i].setRotate();
         m_Flock[i].updatePosition();
     }
 }

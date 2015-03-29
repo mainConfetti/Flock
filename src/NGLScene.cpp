@@ -131,12 +131,8 @@ void NGLScene::loadMatricesToShader(int boidId)
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
     (*shader)["Phong"]->use();
 
-    ngl::Mat4 M, MV, MVP, V;
+    ngl::Mat4 M, MV, MVP;
     ngl::Mat3 normalMatrix;
-    //M.scale(0.5,0.5,0.5);
-    //M=m_transform.getMatrix();
-//    MV=m_transform.getMatrix()
-//       *m_mouseGlobalTX*m_cam->getViewMatrix() ;
     M=m_transform.getMatrix();
     MV = m_transform.getMatrix()*m_mouseGlobalTX*m_cam->getViewMatrix();
     MVP = MV*m_cam->getProjectionMatrix();
@@ -171,14 +167,15 @@ void NGLScene::render()
   m_mouseGlobalTX.m_m[3][1] = m_modelPos.m_y;
   m_mouseGlobalTX.m_m[3][2] = m_modelPos.m_z;
 
-  ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
+  //ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
   //draw cube
   for(int i=0; i<m_Flock->getSize(); ++i)
   {
     m_transform.reset();
-    m_transform.setPosition(m_Flock->m_Flock[i].getXPos(),m_Flock->m_Flock[i].getYPos(),m_Flock->m_Flock[i].getZPos());
+    m_transform.setPosition(m_Flock->m_Flock[i].getPosition());
+    m_transform*m_Flock->m_Flock[i].m_rotate;
     loadMatricesToShader(i);
-    prim->draw("icosahedron");
+    m_Flock->m_Flock[i].draw();
   }
 
 }

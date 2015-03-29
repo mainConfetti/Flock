@@ -3,8 +3,11 @@
 
 #include <stdlib.h>
 #include <iostream>
-#include <ngl/Vec4.h>
+#include <ngl/Vec3.h>
 #include <vector>
+#include <ngl/VertexArrayObject.h>
+#include <ngl/Transformation.h>
+
 
 class Boid
 {
@@ -13,18 +16,14 @@ public:
     Boid(int _id);
     ~Boid();
     void setPos(float _x, float _y, float _z);
-    float getXPos();
-    float getYPos();
-    float getZPos();
-    float getXVel();
-    float getYVel();
-    float getZVel();
+    ngl::Vec3 getPosition(){return m_Position;}
+    ngl::Vec3 getVelocity(){return m_Velocity;}
     void setId(int _id);
     int getId();
     void setNeighbour(Boid *boid);
     void clearNeighbour();
     void getNeighbours();
-    void setDistance(Boid * const boid);
+    void setDistance(Boid *boid);
     float getDistance();
     void calcCentroid();
     void calcCohesion();
@@ -45,10 +44,13 @@ public:
     void setSteering();
     void updatePosition();
     void setFlockCentroid(float _x, float _y, float _z);
-
+    void buildVAO();
+    void draw();
+    void setRotate();
+    ngl::Transformation m_rotate;
 
 private:
-    ngl::Vec4 m_Position;
+    ngl::Vec3 m_Position;
     std::vector<Boid *> m_Neighbours;
     int m_Id;
     float m_Distance;
@@ -72,8 +74,7 @@ private:
     float Distance(ngl::Vec3 a, ngl::Vec3 b);
     bool lineSphereIntersect(ngl::Vec3 avoid, ngl::Vec3 a, float radius);
     void findObstacle(ngl::Vec3 ahead);
-
-
+    ngl::VertexArrayObject *m_vao;
 };
 
 #endif // BOID_H
