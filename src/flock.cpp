@@ -112,7 +112,7 @@ void Flock::setNeighbours(int x)
 void Flock::updateOctree()
 {
     delete m_octree;
-    m_octree=new Octree(ngl::Vec3(0,0,0), 80, 4);
+    m_octree=new Octree(ngl::Vec3(0,0,0), 120, 4);
     ngl::Vec4 dataPoint;
     for(int i=0;i<m_Flock.size();++i)
     {
@@ -124,7 +124,7 @@ void Flock::updateOctree()
 void Flock::setNeighboursOctree(int x)
 {
     ngl::Vec3 centre = (m_Flock[x].getPosition());
-    float r = 20.0;
+    float r = 50.0;
     m_Flock[x].clearNeighbour();
     m_octree->getPointsInsideSphere(centre, r);
     for(int i=0;i<m_octree->temp_data.size();++i)
@@ -158,7 +158,6 @@ void Flock::updateFlock()
 {
     setCentroid();
     updateOctree();
-    setCentroid();
     for(int i=0; i<m_Flock.size();++i)
     {
         m_octree->clearResults();

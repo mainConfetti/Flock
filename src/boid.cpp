@@ -13,8 +13,8 @@ Boid::Boid()
     m_AlignWeight=1;
     m_SeparationWeight=2;
     m_CohesionWeight=2.5;
-    m_Speed=0.5;
-    m_Mass=10;
+    m_Speed=0.4;
+    m_Mass=8;
     MAX_SEE_AHEAD = 2.5;
     MAX_AVOID_FORCE = 2;
 }
@@ -25,14 +25,15 @@ Boid::Boid(int _id)
     m_Position.m_z = 0.0;
     setVelocity(1.0, 0.0, 0.0);
     setId(_id);
-    m_AlignWeight=100;
-    m_SeparationWeight=100;
-    m_CohesionWeight=200;
-    m_Speed=0.8;
-    m_goalWeight=10;
-    m_Mass=12;
-    MAX_SEE_AHEAD =5;
-    MAX_AVOID_FORCE = 100;
+    m_AlignWeight=300;
+    m_SeparationWeight=350;
+    m_CohesionWeight=300;
+    m_Speed=0.4;
+    m_goalWeight=5;
+    m_Mass=20;
+    MAX_SEE_AHEAD =15;
+    MAX_AVOID_FORCE = 500;
+    hasLeader=false;
 }
 
 Boid::~Boid()
@@ -197,15 +198,15 @@ void Boid::setAvoid()
     {
         m_avoid*=0;
     }
-    if(ahead.m_x >= 50.0 || ahead.m_x <= -50.0)
+    if(ahead.m_x >= 100.0 || ahead.m_x <= -100.0)
     {
         m_avoid-=ahead*fabs(ahead.m_x/10);
     }
-    if(ahead.m_y >= 50.0 || ahead.m_y <= -50.0)
+    if(ahead.m_y >= 100.0 || ahead.m_y <= -100.0)
     {
         m_avoid-=ahead*fabs(ahead.m_y/10);
     }
-    if(ahead.m_z >= 50.0 || ahead.m_z <= -50.0)
+    if(ahead.m_z >= 100.0 || ahead.m_z <= -100.0)
     {
         m_avoid-=ahead*fabs(ahead.m_z/10);
     }
@@ -323,11 +324,14 @@ void Boid::findObstacle(ngl::Vec3 ahead)
     {
 
         ngl::Vec3 obstaclePos(m_Neighbours[i]->getPosition());
-        bool collision = lineSphereIntersect(ahead, obstaclePos, 5);
-        if(collision==true  && ((m_collisionPos=NULL)==true || Distance3d(m_Position, obstaclePos) < Distance3d(m_Position, m_collisionPos)))
+        ngl::Vec3 temp = m_collisionPos;
+        bool collision = lineSphereIntersect(ahead, obstaclePos, 10);
+        if(collision==true  && (m_collisionPos==NULL || Distance3d(m_Position, obstaclePos) < Distance3d(m_Position, m_collisionPos)))
         {
             m_collisionPos=m_Neighbours[i]->getPosition();
         }
+        else if(m_collisionPos!=NULL)
+            m_collisionPos=temp;
     }
 }
 

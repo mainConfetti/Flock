@@ -11,11 +11,11 @@
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for x/y translation with mouse movement
 //----------------------------------------------------------------------------------------------------------------------
-const static float INCREMENT=0.01f;
+const static float INCREMENT=0.5f;
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //----------------------------------------------------------------------------------------------------------------------
-const static float ZOOM=0.1f;
+const static float ZOOM=5.0f;
 
 NGLScene::NGLScene(QWindow *_parent) : OpenGLWindow(_parent)
 {
@@ -98,12 +98,13 @@ void NGLScene::initialize()
   // load values (temp)
   shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
 
-  // initialise the flock
-  m_Flock = new Flock(200);
+//  (*shader)["nglColourShader"]->use();
+//  shader->setShaderParam4f("Colour", 1,1,1,1);
+  m_Flock = new Flock(100);
 
 
   // Camera position values
-  ngl::Vec3 from(0,1,250);
+  ngl::Vec3 from(0,1,500);
   ngl::Vec3 to(0,0,0);
   ngl::Vec3 up(0,1,0);
   //load camera
@@ -113,7 +114,7 @@ void NGLScene::initialize()
   // create a light
   ngl::Mat4 iv=m_cam->getViewMatrix();
   iv.transpose();
-  m_light = new ngl::Light(ngl::Vec3(0,30,250),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
+  m_light = new ngl::Light(ngl::Vec3(0,30,500),ngl::Colour(1,1,1,1),ngl::Colour(1,1,1,1), ngl::POINTLIGHT);
   m_light->setTransform(iv);
   //load light values to shader
   m_light->loadToShader("light");
@@ -122,14 +123,63 @@ void NGLScene::initialize()
   // as re-size is not explicitly called we need to do this.
   glViewport(0,0,width(),height());
 
+  worldBounds = ngl::VertexArrayObject::createVOA(GL_LINES);
+  ngl::Vec3 verts[]=
+  {
+      ngl::Vec3(115,115,115),
+      ngl::Vec3(115,115,-115),
+
+      ngl::Vec3(115,115,-115),
+      ngl::Vec3(-115,115,-115),
+
+      ngl::Vec3(-115,115,-115),
+      ngl::Vec3(-115,115,115),
+
+      ngl::Vec3(-115,115,115),
+      ngl::Vec3(115,115,115),
+
+      ngl::Vec3(115,-115,115),
+      ngl::Vec3(115,-115,-115),
+
+      ngl::Vec3(115,-115,-115),
+      ngl::Vec3(-115,-115,-115),
+
+      ngl::Vec3(-115,-115,-115),
+      ngl::Vec3(-115,-115,115),
+
+      ngl::Vec3(-115,-115,115),
+      ngl::Vec3(115,-115,115),
+
+      ngl::Vec3(115,-115,115),
+      ngl::Vec3(115,115,115),
+
+      ngl::Vec3(115,-115,-115),
+      ngl::Vec3(115,115,-115),
+
+      ngl::Vec3(-115,-115,-115),
+      ngl::Vec3(-115,115,-115),
+
+      ngl::Vec3(-115,-115,115),
+      ngl::Vec3(-115,115,115),
+  };
+  worldBounds->bind();
+  worldBounds->setData(sizeof(verts),verts[0].m_x);
+  // now we set the attribute pointer to be 0 (as this matches vertIn in our shader)
+
+  worldBounds->setVertexAttributePointer(0,3,GL_FLOAT,0,0);
+
+  worldBounds->setNumIndices(sizeof(verts)/sizeof(ngl::Vec3));
+
+  worldBounds->unbind();
+
   buildBoidVAO();
 }
 
-void NGLScene::loadMatricesToShader(int boidId)
+void NGLScene::loadMatricesToShader()
 {
     // create an instance of the shader lib
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-    (*shader)["Phong"]->use();
+    //(*shader)["Phong"]->use();
 
     ngl::Mat4 M, MV, MVP;
     ngl::Mat3 normalMatrix;
@@ -152,7 +202,7 @@ void NGLScene::render()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   // create an instance of shader manager
   ngl::ShaderLib *shader=ngl::ShaderLib::instance();
-  (*shader)["Phong"]->use();
+  //(*shader)["Phong"]->use();
 
   //Rotation based on the mouse position
   ngl::Mat4 rotX;
@@ -167,16 +217,22 @@ void NGLScene::render()
   m_mouseGlobalTX.m_m[3][1] = m_modelPos.m_y;
   m_mouseGlobalTX.m_m[3][2] = m_modelPos.m_z;
 
-  //ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
   //draw cube
   for(int i=0; i<m_Flock->getSize(); ++i)
   {
     m_transform.reset();
+    m_transform.setScale(0.8,0.8,0.8);
     m_transform.setPosition(m_Flock->m_Flock[i].getPosition());
     m_transform.addRotation( m_Flock->m_Flock[i].getRotation());
-    loadMatricesToShader(i);
+    loadMatricesToShader();
     drawBoid();
+
   }
+  m_transform.reset();
+  loadMatricesToShader();
+  worldBounds->bind();
+  worldBounds->draw();
+  worldBounds->unbind();
 
 }
 

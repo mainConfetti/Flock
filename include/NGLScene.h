@@ -105,7 +105,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief load required matrices to the shader program
     //----------------------------------------------------------------------------------------------------------------------
-    void loadMatricesToShader(int boidId);
+    void loadMatricesToShader();
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Qt Event called when the window is re-sized
     /// @param [in] _event the Qt event to query for size etc
@@ -141,6 +141,7 @@ private:
     void wheelEvent( QWheelEvent *_event);
     void timerEvent(QTimerEvent *);
     ngl::VertexArrayObject *m_Boidvao;
+    ngl::VertexArrayObject *worldBounds;
     void buildBoidVAO();
     void drawBoid();
 
