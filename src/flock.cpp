@@ -111,11 +111,12 @@ void Flock::setNeighbours(int x)
 }
 void Flock::updateOctree()
 {
+    delete m_octree;
     m_octree=new Octree(ngl::Vec3(0,0,0), 80, 4);
     ngl::Vec4 dataPoint;
     for(int i=0;i<m_Flock.size();++i)
     {
-        dataPoint.set(m_Flock[i].getPosition());
+        dataPoint.set(m_Flock[i].getPosition().m_x,m_Flock[i].getPosition().m_y,m_Flock[i].getPosition().m_z,m_Flock[i].getId());
         m_octree->insert(dataPoint);
     }
 }
@@ -123,20 +124,16 @@ void Flock::updateOctree()
 void Flock::setNeighboursOctree(int x)
 {
     ngl::Vec3 centre = (m_Flock[x].getPosition());
-    float r = 3.0;
+    float r = 20.0;
     m_Flock[x].clearNeighbour();
     m_octree->getPointsInsideSphere(centre, r);
-    m_octree->cleanResults();
     for(int i=0;i<m_octree->temp_data.size();++i)
     {
         if(m_octree->temp_data[i]!=NULL)
         {
-            float id = (m_octree->temp_data[i]->m_w)-1;
-            if((int) id+1 != m_Flock[x].getId())
-            {
+            float id = (m_octree->temp_data[i].m_w)-1;
+            if(id!=m_Flock[x].getId())
                 m_Flock[x].setNeighbour(&m_Flock[(int)id]);
-                //std::cout<<"added: "<<id<<std::endl;
-            }
         }
     }
 }
@@ -161,23 +158,25 @@ void Flock::updateFlock()
 {
     setCentroid();
     updateOctree();
+    setCentroid();
     for(int i=0; i<m_Flock.size();++i)
     {
         m_octree->clearResults();
         //std::cout<<"Boid: "<<m_Flock[i].getId()<<"-----------------------"<<std::endl;
-        setNeighbours(i);
-        //setNeighboursOctree(i);
+        //setNeighbours(i);
+        setNeighboursOctree(i);
         //m_Flock[i].getNeighbours();
-        m_Flock[i].setFlockCentroid(m_Centroid.m_x, m_Centroid.m_y, m_Centroid.m_z);
-        m_Flock[i].calcCentroid();
-        m_Flock[i].calcSeparation();
-        m_Flock[i].calcAlign();
-        m_Flock[i].calcCohesion();
-        m_Flock[i].calcAvoid();
+        m_Flock[i].setFlockCentroid(m_Centroid);
+        m_Flock[i].setGoal();
+        m_Flock[i].setCentroid();
+        m_Flock[i].setSeparation();
+        m_Flock[i].setAlign();
+        m_Flock[i].setCohesion();
+        m_Flock[i].setAvoid();
         m_Flock[i].setTarget();
         m_Flock[i].setSteering();
-        m_Flock[i].setRotate();
         m_Flock[i].updatePosition();
+        m_Flock[i].setRotate();
     }
 }
 

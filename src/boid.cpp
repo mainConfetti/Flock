@@ -3,6 +3,8 @@
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
 
+const float g = 9.81;
+
 Boid::Boid()
 {
     setPos(0.0, 0.0, 0.0);
@@ -15,7 +17,6 @@ Boid::Boid()
     m_Mass=10;
     MAX_SEE_AHEAD = 2.5;
     MAX_AVOID_FORCE = 2;
-    buildVAO();
 }
 
 Boid::Boid(int _id)
@@ -24,14 +25,14 @@ Boid::Boid(int _id)
     m_Position.m_z = 0.0;
     setVelocity(1.0, 0.0, 0.0);
     setId(_id);
-    m_AlignWeight=65;
+    m_AlignWeight=100;
     m_SeparationWeight=100;
-    m_CohesionWeight=85;
-    m_Speed=0.45;
-    m_Mass=9;
-    MAX_SEE_AHEAD =2;
+    m_CohesionWeight=200;
+    m_Speed=0.8;
+    m_goalWeight=10;
+    m_Mass=12;
+    MAX_SEE_AHEAD =5;
     MAX_AVOID_FORCE = 100;
-    buildVAO();
 }
 
 Boid::~Boid()
@@ -60,7 +61,7 @@ int Boid::getId()
 void Boid::setDistance(Boid *const boid)
 {
     ngl::Vec3 boidPos = (boid->getPosition().m_x, boid->getPosition().m_y, boid->getPosition().m_z);
-    m_Distance = Distance(m_Position, boidPos);
+    m_Distance = Distance3d(m_Position, boidPos);
 }
 
 float Boid::getDistance()
@@ -86,8 +87,27 @@ void Boid::getNeighbours()
     std::cout<<std::endl;
 }
 
+void Boid::setGoal()
+{
+    if(hasLeader==true)
+    {
+        m_goal=m_leaderPos-m_Position;
+        if(m_goal!=0)
+            m_goal.normalize();
+        m_goal*=m_goalWeight;
+    }
+    else if(m_Neighbours.size()<1)
+    {
+        m_goal=m_FlockCentroid-m_Position;
+        if(m_goal!=0)
+            m_goal.normalize();
+        m_goal*=m_goalWeight;
+    }
+    else
+        m_goal=0;
+}
 
-void Boid::calcCentroid()
+void Boid::setCentroid()
 {
     m_Centroid = getPosition();
     if(m_Neighbours.size()>0)
@@ -100,7 +120,7 @@ void Boid::calcCentroid()
     }
 }
 
-void Boid::calcCohesion()
+void Boid::setCohesion()
 {
     if(m_Neighbours.size()>0)
     {
@@ -119,7 +139,7 @@ void Boid::setVelocity(float _x, float _y, float _z)
     m_Velocity.m_z=_z;
 }
 
-void Boid::calcAlign()
+void Boid::setAlign()
 {
     if(m_Neighbours.size()>0)
     {
@@ -136,7 +156,7 @@ void Boid::calcAlign()
         m_Align.set(0,0,0);
 }
 
-void Boid::calcSeparation()
+void Boid::setSeparation()
 {
     if(m_Neighbours.size()>0)
     {
@@ -158,7 +178,7 @@ void Boid::calcSeparation()
         m_Separation.set(0,0,0);
 }
 
-void Boid::calcAvoid()
+void Boid::setAvoid()
 {
     ngl::Vec3 ahead;
     m_collisionPos = NULL;
@@ -248,7 +268,7 @@ int Boid::getMass()
 
 void Boid::setTarget()
 {
-    m_Target=m_Separation+m_Cohesion+m_Align+m_avoid;
+    m_Target=m_Separation+m_Cohesion+m_Align+m_avoid+m_goal;
     if(m_Target.length()!=0)
         m_Target.normalize();
 }
@@ -262,206 +282,96 @@ void Boid::setSteering()
 
 void Boid::updatePosition()
 {
+//    ngl::Vec2 last(m_Position.m_x, m_Position.m_z);
+//    if(prevPos.size()<2)
+//            prevPos.push_back(last);
+//    else
+//    {
+//        prevPos[0]=prevPos[1];
+//        prevPos[1]=last;
+//    }
     m_Velocity = m_Velocity+(m_Steering/m_Mass);
     m_Velocity.normalize();
     m_Position = m_Position+(m_Velocity*m_Speed);
 }
 
-void Boid::setFlockCentroid(float _x, float _y, float _z)
- {
-     m_FlockCentroid.m_x = _x;
-     m_FlockCentroid.m_y = _y;
-     m_FlockCentroid.m_z = _z;
-     m_FlockCentroid.normalize();
- }
+void Boid::setFlockCentroid(ngl::Vec3 _flockCentroid)
+{
+     m_FlockCentroid.set(_flockCentroid);
+}
 
-float Boid::Distance(ngl::Vec3 a, ngl::Vec3 b)
+float Boid::Distance3d(ngl::Vec3 a, ngl::Vec3 b)
 {
     return sqrt(((a.m_x - b.m_x)*(a.m_x - b.m_x)+(a.m_y - b.m_y)*(a.m_y - b.m_y) + (a.m_z - b.m_z)*(a.m_z - b.m_z)));
+}
+
+float Boid::Distance2d(ngl::Vec2 a, ngl::Vec2 b)
+{
+    return sqrt(((a.m_x - b.m_x)*(a.m_x - b.m_x)+(a.m_y - b.m_y)*(a.m_y - b.m_y)));
 }
 
 bool Boid::lineSphereIntersect(ngl::Vec3 ahead, ngl::Vec3 a, float radius)
 {
     ngl::Vec3 ahead2=ahead*0.5;
-    return Distance(a, ahead) <= radius || Distance(a, ahead2) <= radius || Distance(a, m_Position) <= radius;
+    return Distance3d(a, ahead) <= radius || Distance3d(a, ahead2) <= radius || Distance3d(a, m_Position) <= radius;
 }
 
 void Boid::findObstacle(ngl::Vec3 ahead)
 {
     m_collisionPos = NULL;
-    int m;
     for(int i=0;i<m_Neighbours.size();++i)
     {
 
         ngl::Vec3 obstaclePos(m_Neighbours[i]->getPosition());
         bool collision = lineSphereIntersect(ahead, obstaclePos, 5);
-        if(collision==1 && ((m_collisionPos=NULL)==true || Distance(m_Position, obstaclePos) < Distance(m_Position, m_collisionPos)))
+        if(collision==true  && ((m_collisionPos=NULL)==true || Distance3d(m_Position, obstaclePos) < Distance3d(m_Position, m_collisionPos)))
         {
             m_collisionPos=m_Neighbours[i]->getPosition();
         }
     }
 }
 
-void Boid::buildVAO()
-{
-  ngl::Vec3 verts[]=
-  {
-    // face 1
-    ngl::Vec3(0,0.5,-2),
-    ngl::Vec3(-1,-0.5,2),
-    ngl::Vec3(-1,0.5,2),
-    // face 2
-    ngl::Vec3(0,0.5,-1),
-    ngl::Vec3(0,-0.5,-2),
-    ngl::Vec3(-1,-0.5,2),
-    // face 3
-    ngl::Vec3(0,0.5,-2),
-    ngl::Vec3(0,0.5,0.7),
-    ngl::Vec3(-1,0.5,2),
-    // face 4
-    ngl::Vec3(0,0.5,-2),
-    ngl::Vec3(0,0.5,0.7),
-    ngl::Vec3(1,0.5,2),
-    // face 5
-    ngl::Vec3(0,-0.5,-2),
-    ngl::Vec3(0,-0.5,0.7),
-    ngl::Vec3(-1,-0.5,2),
-    // face 6
-    ngl::Vec3(0,-0.5,-2),
-    ngl::Vec3(0,-0.5,0.7),
-    ngl::Vec3(1,-0.5,2),
-    // face 7
-    ngl::Vec3(0,0.5,-2),
-    ngl::Vec3(1,-0.5,2),
-    ngl::Vec3(1,0.5,2),
-    // face 8
-    ngl::Vec3(0,0.5,-2),
-    ngl::Vec3(0,-0.5,-2),
-    ngl::Vec3(1,-0.5,2),
-    // face 9
-    ngl::Vec3(-1,0.5,2),
-    ngl::Vec3(0,-0.5,0.7),
-    ngl::Vec3(0,0.5,0.7),
-    // face 10
-    ngl::Vec3(-1,0.5,2),
-    ngl::Vec3(-1,-0.5,2),
-    ngl::Vec3(0,-0.5,0.7),
-    // face 11
-    ngl::Vec3(0,0.5,0.7),
-    ngl::Vec3(1,-0.5,2),
-    ngl::Vec3(1,0.5,2),
-    // face 12
-    ngl::Vec3(0,0.5,0.7),
-    ngl::Vec3(0,-0.5,0.7),
-    ngl::Vec3(1,-0.5,2)
-  };
 
-  std::vector <ngl::Vec3> normals;
-  // face 1
-  ngl::Vec3 n=ngl::calcNormal(verts[2],verts[1], verts[0]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 2
-  n=ngl::calcNormal(verts[5],verts[4],verts[3]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 3
-  n=ngl::calcNormal(verts[6],verts[7],verts[8]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 4
-  n=ngl::calcNormal(verts[11],verts[10],verts[9]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 5
-  n=ngl::calcNormal(verts[14],verts[13], verts[12]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 6
-  n=ngl::calcNormal(verts[15],verts[16],verts[17]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 7
-  n=ngl::calcNormal(verts[18],verts[19],verts[20]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 8
-  n=ngl::calcNormal(verts[21],verts[22],verts[23]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 9
-  n=ngl::calcNormal(verts[26],verts[25], verts[24]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 10
-  n=ngl::calcNormal(verts[29],verts[28],verts[27]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 11
-  n=ngl::calcNormal(verts[32],verts[31],verts[30]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-  // face 12
-  n=ngl::calcNormal(verts[35],verts[34],verts[33]);
-  normals.push_back(n);
-  normals.push_back(n);
-  normals.push_back(n);
-
-  std::cout<<"sizeof(verts) "<<sizeof(verts)<<" sizeof(ngl::Vec3) "<<sizeof(ngl::Vec3)<<"\n";
-  // create a vao as a series of GL_TRIANGLES
-  m_vao= ngl::VertexArrayObject::createVOA(GL_TRIANGLES);
-  m_vao->bind();
-
-  // in this case we are going to set our data as the vertices above
-
-    m_vao->setData(sizeof(verts),verts[0].m_x);
-    // now we set the attribute pointer to be 0 (as this matches vertIn in our shader)
-
-    m_vao->setVertexAttributePointer(0,3,GL_FLOAT,0,0);
-
-    m_vao->setData(sizeof(verts),normals[0].m_x);
-    // now we set the attribute pointer to be 2 (as this matches normal in our shader)
-
-    m_vao->setVertexAttributePointer(2,3,GL_FLOAT,0,0);
-
-    m_vao->setNumIndices(sizeof(verts)/sizeof(ngl::Vec3));
-
- // now unbind
-  m_vao->unbind();
-
-
-}
-
-void Boid::draw()
-{
-    m_vao->bind();
-    m_vao->draw();
-    m_vao->unbind();
-}
 
 void Boid::setRotate()
 {
-    m_rotate.reset();
-    float rotY, rotX;
-    rotY = atan(m_Velocity.m_z/m_Velocity.m_x)*180/M_PI;
-    rotX = atan(m_Velocity.m_y/m_Velocity.m_z)*180/M_PI;
-    m_rotate.setRotation(rotX, rotY, 0);
+    yaw = atan2(m_Velocity.m_x,m_Velocity.m_z)*180/M_PI+180;
+    pitch = atan2(m_Velocity.m_y,sqrt(m_Velocity.m_x*m_Velocity.m_x+m_Velocity.m_z*m_Velocity.m_z))*180/M_PI;
+    //ngl::Vec2 current(m_Position.m_x, m_Position.m_z);
+    roll = 0;
+//    if(prevPos.size()==2)
+//    {
+//        circlefrom3points(current, prevPos[0], prevPos[1]);
+//        if(20>turnRadius>0.1)
+//            roll = 90-(atan((m_Mass*g)/turnRadius)*180/M_PI);
+//    }
 }
 
+ngl::Vec3 Boid::getRotation()
+{
+    return ngl::Vec3(pitch, yaw, 0);
+}
 
+void Boid::circlefrom3points(ngl::Vec2 A, ngl::Vec2 B, ngl::Vec2 C)
+{
+    // centre point (x, y) and radius r
+    ngl::Vec2 centre;
+    float r;
 
+    //gradient of the line AB is mr and for BC it is mt
+    float Mr = (B.m_y-A.m_y)/(B.m_x-A.m_x);
+    float Mt = (C.m_y-B.m_y)/(C.m_x-B.m_x);
 
+    // formula derived from equations for perpendicular
+    // bisectors of chords AB and BC that intersect at the
+    // centre
+    centre.m_x = ((Mr*Mt*(C.m_y-A.m_y))+(Mr*(B.m_x+C.m_x))-(Mt*(A.m_x+B.m_x)))/(2*(Mr-Mt));
+    // substitue x into equation for perpendicular bisector
+    // of chord AB
+    centre.m_y = (-1/Mr)*(centre.m_x-((A.m_x+B.m_x)/2))+((A.m_y+B.m_y)/2);
+    // raidus is distance between and point A B C and the centre (x,y)
+    turnRadius = Distance2d(A,centre);
+}
 
 
 

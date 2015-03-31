@@ -140,6 +140,9 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     void wheelEvent( QWheelEvent *_event);
     void timerEvent(QTimerEvent *);
+    ngl::VertexArrayObject *m_Boidvao;
+    void buildBoidVAO();
+    void drawBoid();
 
 
 

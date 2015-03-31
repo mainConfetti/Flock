@@ -56,16 +56,16 @@ public:
     /// @param [in] radius the radius of the bounding sphere
     /// @param [in] results an array of the points inside the bounding sphere
     //----------------------------------------------------------------------------------------------------------------------
-    ngl::Vec4 *getPointsInsideSphere(ngl::Vec3 centre, float radius);
+    ngl::Vec4 getPointsInsideSphere(ngl::Vec3 centre, float radius);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief array for storing the results of getPointsInsideSphere
     //----------------------------------------------------------------------------------------------------------------------
-    std::vector<ngl::Vec4 *> m_results;
+    //std::vector<ngl::Vec4 *> m_results;
     void findData(ngl::Vec3 data);
     void clearResults();
     void clearTree();
     int m_plusIndex=0;
-    std::vector<ngl::Vec4 *> temp_data;
+    std::vector<ngl::Vec4> temp_data;
     void cleanResults();
 private:
     //----------------------------------------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief pointers to child octants
     //----------------------------------------------------------------------------------------------------------------------
-    Octree *m_children[8];
+    std::vector <Octree> m_children;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief  array of data points to be stored in tree, has x,y,z position and w Id of data's parent object
     //----------------------------------------------------------------------------------------------------------------------
