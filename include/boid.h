@@ -12,75 +12,79 @@
 class Boid
 {
 public:
-    Boid();
     Boid(int _id);
     ~Boid();
+    // set
     void setPos(float _x, float _y, float _z);
-    ngl::Vec3 getPosition(){return m_Position;}
-    ngl::Vec3 getVelocity(){return m_Velocity;}
-    void setId(int _id);
-    int getId();
+    void setDistance(Boid *boid);
     void setNeighbour(Boid *boid);
     void clearNeighbour();
-    void getNeighbours();
-    void setDistance(Boid *boid);
-    float getDistance();
-    void setCentroid();
-    void setCohesion();
-    void Info();
     void setVelocity(float _x, float _y, float _z);
-    void setAlign();
-    void setSeparation();
-    void setAvoid();
     void setSWeight(int _separationWeight);
     void setCWeight(int _cohesionWeight);
     void setAWeight(int _alignWeight);
     void setMass(int _mass);
-    int getSWeight();
-    int getCWeight();
-    int getAWeight();
-    int getMass();
+    void setFlockCentroid(ngl::Vec3 _flockCentroid);
+    // accessors
+    float getDistance();
+    void getNeighbours();
+    ngl::Vec3 getPosition(){return m_position;}
+    ngl::Vec3 getVelocity(){return m_velocity;}
+    int getId();
+    ngl::Vec3 getRotation();
+    // steering
+    void setCentroid();
+    void setCohesion();
+    void setAlign();
+    void setSeparation();
+    void setAvoid();
+    void setGoal(ngl::Vec3 _goal);
+    void setFlee(ngl::Vec3 _flee);
+    void fleeWalls();
+    void setEvade();
     void setTarget();
     void setSteering();
+    // action
     void updatePosition();
-    void setFlockCentroid(ngl::Vec3 _flockCentroid);
+    void move();
     void setRotate();
-    ngl::Vec3 getRotation();
+    // other
+    void getInfo();
     void circlefrom3points(ngl::Vec2 A, ngl::Vec2 B, ngl::Vec2 C);
-    void setGoal();
 
 private:
-    ngl::Vec3 m_Position;
-    std::vector<Boid *> m_Neighbours;
-    int m_Id;
-    float m_Distance;
-    float m_Speed;
-    int m_CohesionWeight;
-    int m_AlignWeight;
-    int m_SeparationWeight;
+    ngl::Vec3 m_position;
+    std::vector<Boid *> m_neighbours;
+    int m_id;
+    float m_distance;
+    float MAX_SPEED;
+    int m_cohesionWeight;
+    int m_alignWeight;
+    int m_separationWeight;
     int m_goalWeight;
-    int m_Mass;
+    int m_mass;
     float MAX_SEE_AHEAD;
     int MAX_AVOID_FORCE;
-    ngl::Vec3 m_Centroid;
+    ngl::Vec3 m_centroid;
     ngl::Vec3 m_collisionPos;
-    ngl::Vec3 m_Velocity;
-    ngl::Vec3 m_Cohesion;
-    ngl::Vec3 m_Align;
-    ngl::Vec3 m_Separation;
+    ngl::Vec3 m_velocity;
+    ngl::Vec3 m_cohesion;
+    ngl::Vec3 m_align;
+    ngl::Vec3 m_separation;
     ngl::Vec3 m_avoid;
-    ngl::Vec3 m_Target;
-    ngl::Vec3 m_Steering;
-    ngl::Vec3 m_FlockCentroid;
+    ngl::Vec3 m_target;
+    ngl::Vec3 m_steering;
+    ngl::Vec3 m_flockCentroid;
     ngl::Vec3 m_goal;
-    float Distance3d(ngl::Vec3 a, ngl::Vec3 b);
-    float Distance2d(ngl::Vec2 a, ngl::Vec2 b);
+    ngl::Vec3 m_flee;
+    float distance3d(ngl::Vec3 a, ngl::Vec3 b);
+    float distance2d(ngl::Vec2 a, ngl::Vec2 b);
     bool lineSphereIntersect(ngl::Vec3 avoid, ngl::Vec3 a, float radius);
     void findObstacle(ngl::Vec3 ahead);
-    float yaw;
-    float pitch;
-    float roll;
-    float turnRadius;
+    float m_yaw;
+    float m_pitch;
+    float m_roll;
+    float m_turnRadius;
     std::vector<ngl::Vec2> prevPos;
     bool hasLeader;
     ngl::Vec3 m_leaderPos;

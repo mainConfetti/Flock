@@ -103,7 +103,7 @@ void NGLScene::initialize()
   m_Flock = new Flock(100);
 
 
-  // Camera position values
+  // Camera position value
   ngl::Vec3 from(0,1,500);
   ngl::Vec3 to(0,0,0);
   ngl::Vec3 up(0,1,0);

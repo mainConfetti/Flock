@@ -112,7 +112,7 @@ void Flock::setNeighbours(int x)
 void Flock::updateOctree()
 {
     delete m_octree;
-    m_octree=new Octree(ngl::Vec3(0,0,0), 120, 4);
+    m_octree=new Octree(ngl::Vec3(0,0,0), 120, 3);
     ngl::Vec4 dataPoint;
     for(int i=0;i<m_Flock.size();++i)
     {
@@ -124,16 +124,16 @@ void Flock::updateOctree()
 void Flock::setNeighboursOctree(int x)
 {
     ngl::Vec3 centre = (m_Flock[x].getPosition());
-    float r = 50.0;
+    float r = 10.0;
     m_Flock[x].clearNeighbour();
     m_octree->getPointsInsideSphere(centre, r);
     for(int i=0;i<m_octree->temp_data.size();++i)
     {
         if(m_octree->temp_data[i]!=NULL)
         {
-            float id = (m_octree->temp_data[i].m_w)-1;
+            float id = (m_octree->temp_data[i].m_w);
             if(id!=m_Flock[x].getId())
-                m_Flock[x].setNeighbour(&m_Flock[(int)id]);
+                m_Flock[x].setNeighbour(&m_Flock[(int)id-1]);
         }
     }
 }
@@ -166,16 +166,8 @@ void Flock::updateFlock()
         setNeighboursOctree(i);
         //m_Flock[i].getNeighbours();
         m_Flock[i].setFlockCentroid(m_Centroid);
-        m_Flock[i].setGoal();
-        m_Flock[i].setCentroid();
-        m_Flock[i].setSeparation();
-        m_Flock[i].setAlign();
-        m_Flock[i].setCohesion();
-        m_Flock[i].setAvoid();
-        m_Flock[i].setTarget();
-        m_Flock[i].setSteering();
-        m_Flock[i].updatePosition();
-        m_Flock[i].setRotate();
+        m_Flock[i].move();
+
     }
 }
 
