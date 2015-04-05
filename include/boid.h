@@ -8,6 +8,7 @@
 #include <ngl/VertexArrayObject.h>
 #include <ngl/Transformation.h>
 
+class Predator;
 
 class Boid
 {
@@ -25,6 +26,7 @@ public:
     void setAWeight(int _alignWeight);
     void setMass(int _mass);
     void setFlockCentroid(ngl::Vec3 _flockCentroid);
+    void setPredator(Predator *_predator);
     // accessors
     float getDistance();
     void getNeighbours();
@@ -77,6 +79,7 @@ private:
     ngl::Vec3 m_flockCentroid;
     ngl::Vec3 m_goal;
     ngl::Vec3 m_flee;
+    Predator *m_predator;
     float distance3d(ngl::Vec3 a, ngl::Vec3 b);
     float distance2d(ngl::Vec2 a, ngl::Vec2 b);
     bool lineSphereIntersect(ngl::Vec3 avoid, ngl::Vec3 a, float radius);

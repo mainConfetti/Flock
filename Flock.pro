@@ -16,11 +16,9 @@ MOC_DIR=moc
 # on a mac we don't create a .app bundle file ( for ease of multiplatform use)
 CONFIG-=app_bundle
 # Auto include all .cpp files in the project src directory (can specifiy individually if required)
-SOURCES+= $$PWD/src/*.cpp \
-    src/predator.cpp
+SOURCES+= $$PWD/src/*.cpp
 # same for the .h files
-HEADERS+= $$PWD/include/*.h \
-    include/predator.h
+HEADERS+= $$PWD/include/*.h
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include
 # where our exe is going to live (root of project)

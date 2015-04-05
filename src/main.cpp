@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <boid.h>
-#include <flock.h>
+#include <world.h>
 #include <ngl/Vec3.h>
 #include <ngl/Vec4.h>
 

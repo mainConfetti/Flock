@@ -6,7 +6,7 @@
 #include <ngl/NGLInit.h>
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
-#include <flock.h>
+#include <world.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for x/y translation with mouse movement
@@ -100,7 +100,7 @@ void NGLScene::initialize()
 
 //  (*shader)["nglColourShader"]->use();
 //  shader->setShaderParam4f("Colour", 1,1,1,1);
-  m_Flock = new Flock(100);
+  m_world = new World(100);
 
 
   // Camera position value
@@ -218,13 +218,14 @@ void NGLScene::render()
   m_mouseGlobalTX.m_m[3][2] = m_modelPos.m_z;
 
   //draw cube
-  for(int i=0; i<m_Flock->getSize(); ++i)
+  for(int i=0; i<m_world->getSize(); ++i)
   {
     m_transform.reset();
     m_transform.setScale(0.8,0.8,0.8);
-    m_transform.setPosition(m_Flock->m_Flock[i].getPosition());
-    m_transform.addRotation( m_Flock->m_Flock[i].getRotation());
+    m_transform.setPosition(m_world->m_flock[i].getPosition());
+    m_transform.addRotation( m_world->m_flock[i].getRotation());
     loadMatricesToShader();
+    shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
     drawBoid();
 
   }
@@ -233,6 +234,16 @@ void NGLScene::render()
   worldBounds->bind();
   worldBounds->draw();
   worldBounds->unbind();
+  if(m_world->m_predator!=nullptr)
+  {
+      m_transform.reset();
+      m_transform.setScale(1.5,1.5,1.5);
+      m_transform.setPosition(m_world->m_predator->getPosition());
+      m_transform.setRotation(m_world->m_predator->getRotation());
+      loadMatricesToShader();
+      shader->setShaderParam4f("objectColour", 1.0, 0.1, 0.1,1.0);
+      drawBoid();
+  }
 
 }
 
@@ -325,7 +336,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   // escape key to quite
   case Qt::Key_Escape : QGuiApplication::exit(EXIT_SUCCESS); break;
   // space to update flock
-  case Qt::Key_U : m_Flock->updateFlock();
+  case Qt::Key_U : m_world->updateWorld();
   // turn on wirframe rendering
   case Qt::Key_W : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
   // turn off wire frame
@@ -334,6 +345,9 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   case Qt::Key_F : showFullScreen(); break;
   // show windowed
   case Qt::Key_N : showNormal(); break;
+  // add predator
+  case Qt::Key_P : m_world->addPredator(); break;
+  case Qt::Key_O : m_world->removePredator(); break;
   default : break;
   }
   // finally update the GLWindow and re-draw
@@ -343,7 +357,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
 
 void NGLScene::timerEvent(QTimerEvent *)
 {
-    m_Flock->updateFlock();
+    m_world->updateWorld();
     renderLater();
 }
 

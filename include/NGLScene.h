@@ -6,7 +6,7 @@
 #include <ngl/Light.h>
 #include <ngl/Transformation.h>
 #include <ngl/Text.h>
-#include <flock.h>
+#include <world.h>
 #include <vector>
 //----------------------------------------------------------------------------------------------------------------------
 /// @file NGLScene.h
@@ -46,13 +46,13 @@ class NGLScene : public OpenGLWindow
     /// @brief updates the boid positions
     /// @param flock the flock to copy positions from
     //----------------------------------------------------------------------------------------------------------------------
-    void setBoidPos(Flock flock);
+    void setBoidPos(World flock);
 
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the flock of boids
     //----------------------------------------------------------------------------------------------------------------------
-    Flock *m_Flock;
+    World *m_world;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief used to store the x rotation mouse value
     //----------------------------------------------------------------------------------------------------------------------
@@ -144,6 +144,7 @@ private:
     ngl::VertexArrayObject *worldBounds;
     void buildBoidVAO();
     void drawBoid();
+    bool m_predator;
 
 
 
