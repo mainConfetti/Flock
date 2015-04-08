@@ -131,11 +131,10 @@ void World::setNeighboursOctree(int x)
     m_octree->getPointsInsideSphere(centre, r);
     for(int i=0;i<m_octree->temp_data.size();++i)
     {
-        if(m_octree->temp_data[i]!=NULL)
+        float id = (m_octree->temp_data[i].m_w);
+        if(id!=m_flock[x].getId() && m_flock[x].isLeader()!=true)
         {
-            float id = (m_octree->temp_data[i].m_w);
-            if(id!=m_flock[x].getId())
-                m_flock[x].setNeighbour(&m_flock[(int)id-1]);
+            m_flock[x].setNeighbour(&m_flock[(int)id-1]);
         }
     }
 }
@@ -166,7 +165,7 @@ void World::updateWorld()
         //std::cout<<"Boid: "<<m_flock[i].getId()<<"-----------------------"<<std::endl;
         //setNeighbours(i);
         setNeighboursOctree(i);
-        //m_flock[i].getNeighbours();
+       // m_flock[i].getNeighbours();
         m_flock[i].setFlockCentroid(m_centroid);
         m_flock[i].move();
 
@@ -220,3 +219,19 @@ float World::distance3d(ngl::Vec3 a, ngl::Vec3 b)
     return sqrt(((a.m_x - b.m_x)*(a.m_x - b.m_x)+(a.m_y - b.m_y)*(a.m_y - b.m_y) + (a.m_z - b.m_z)*(a.m_z - b.m_z)));
 }
 
+void World::setLeader(int _id)
+{
+    for(int i=0;i<m_flock.size();++i)
+    {
+        m_flock[i].setLeader(&m_flock[_id]);
+    }
+    m_flock[_id].promoteToLeader();
+}
+
+void World::clearLeader()
+{
+    for(int i=0;i<m_flock.size();++i)
+    {
+        m_flock[i].clearLeader();
+    }
+}

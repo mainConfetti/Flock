@@ -28,7 +28,8 @@ public:
     void addPredator();
     void removePredator();
     void setPrey();
-
+    void setLeader(int _id);
+    void clearLeader();
     float distance3d(ngl::Vec3 a, ngl::Vec3);
 
     Predator *m_predator;

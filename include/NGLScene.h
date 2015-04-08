@@ -145,6 +145,7 @@ private:
     void buildBoidVAO();
     void drawBoid();
     bool m_predator;
+    bool m_leader;
 
 
 

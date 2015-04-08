@@ -2,7 +2,6 @@
 #define PREDATOR_H
 
 #include <ngl/Vec3.h>
-#include <ctime>
 
 class Boid;
 

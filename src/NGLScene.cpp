@@ -26,6 +26,9 @@ NGLScene::NGLScene(QWindow *_parent) : OpenGLWindow(_parent)
   // mouse rotation values set to 0
   m_spinXFace=0.0f;
   m_spinYFace=0.0f;
+
+  m_predator=false;
+  m_leader=false;
 }
 
 
@@ -220,24 +223,36 @@ void NGLScene::render()
   //draw cube
   for(int i=0; i<m_world->getSize(); ++i)
   {
-    m_transform.reset();
-    m_transform.setScale(0.8,0.8,0.8);
-    m_transform.setPosition(m_world->m_flock[i].getPosition());
-    m_transform.addRotation( m_world->m_flock[i].getRotation());
-    loadMatricesToShader();
-    shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
-    drawBoid();
-
+      if(m_world->m_flock[i].isLeader()==true)
+      {
+          m_transform.reset();
+          m_transform.setScale(2,2,2);
+          m_transform.setPosition(m_world->m_flock[i].getPosition());
+          m_transform.addRotation( m_world->m_flock[i].getRotation());
+          loadMatricesToShader();
+          shader->setShaderParam4f("objectColour", 0.5, 0.5, 1,1.0);
+          drawBoid();
+      }
+      else
+      {
+          m_transform.reset();
+          m_transform.setScale(0.8,0.8,0.8);
+          m_transform.setPosition(m_world->m_flock[i].getPosition());
+          m_transform.addRotation( m_world->m_flock[i].getRotation());
+          loadMatricesToShader();
+          shader->setShaderParam4f("objectColour", 1.0, 0.5, 0.31,1.0);
+          drawBoid();
+      }
   }
   m_transform.reset();
   loadMatricesToShader();
   worldBounds->bind();
   worldBounds->draw();
   worldBounds->unbind();
-  if(m_world->m_predator!=nullptr)
+  if(m_predator==true)
   {
       m_transform.reset();
-      m_transform.setScale(1.5,1.5,1.5);
+      m_transform.setScale(2,2,2);
       m_transform.setPosition(m_world->m_predator->getPosition());
       m_transform.setRotation(m_world->m_predator->getRotation());
       loadMatricesToShader();
@@ -346,8 +361,32 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   // show windowed
   case Qt::Key_N : showNormal(); break;
   // add predator
-  case Qt::Key_P : m_world->addPredator(); break;
-  case Qt::Key_O : m_world->removePredator(); break;
+  case Qt::Key_P :
+  {
+      if(m_predator==false)
+      {
+        m_world->addPredator();
+        m_predator=true;
+      }
+      else if(m_predator==true)
+      {
+          m_world->removePredator();
+          m_predator=false;
+      }
+  } break;
+  case Qt::Key_L :
+  {
+      if(m_leader==false)
+      {
+        m_world->setLeader(50);
+        m_leader=true;
+      }
+      else if(m_leader==true)
+      {
+          m_world->clearLeader();
+          m_leader=false;
+      }
+  } break;
   default : break;
   }
   // finally update the GLWindow and re-draw

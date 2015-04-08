@@ -154,7 +154,11 @@ ngl::Vec4 Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius)
                         inc = m_children[i].getDataSize();
                     for(int j=0;j<inc;++j)
                     {
-                        temp_data.push_back(m_children[i].getPointsInsideSphere(centre, radius));
+                        temp =m_children[i].getPointsInsideSphere(centre, radius);
+                        if(temp!=NULL)
+                        {
+                            temp_data.push_back(temp);
+                        }
                     }
                  }
             }

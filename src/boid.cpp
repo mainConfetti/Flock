@@ -1,4 +1,4 @@
-#include <boid.h>
+#include "boid.h"
 #include <math.h>
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
@@ -14,15 +14,17 @@ Boid::Boid(int _id)
     m_velocity.set(1.0, 0.0, 0.0);
     m_flee.set(0,0,0);
     m_id=_id;
-    m_alignWeight=12;
-    m_separationWeight=14;
-    m_cohesionWeight=8;
-    MAX_SPEED=0.4f;
-    m_goalWeight=1;
-    m_mass=12;
+    m_alignWeight=25;
+    m_separationWeight=10;
+    m_cohesionWeight=20;
+    MAX_SPEED=0.5f;
+    m_speed=0.5f;
+    m_goalWeight=17;
+    m_mass=15;
     MAX_SEE_AHEAD =5;
-    MAX_AVOID_FORCE = 3;
-    hasLeader=false;
+    MAX_AVOID_FORCE = 50;
+    m_hasLeader=false;
+    m_isLeader=false;
     m_predator=nullptr;
 }
 
@@ -88,6 +90,26 @@ void Boid::setPredator(Predator *_predator)
     m_predator=_predator;
 }
 
+void Boid::setLeader(Boid *_leader)
+{
+    m_leader=_leader;
+    m_hasLeader=true;
+}
+
+void Boid::clearLeader()
+{
+    if(m_isLeader==true)
+    {
+        m_isLeader=false;
+    }
+    else
+    {
+        m_hasLeader=false;
+        m_leader=nullptr;
+    }
+    m_speed=MAX_SPEED;
+}
+
 float Boid::getDistance()
 {
     return m_distance;
@@ -131,7 +153,7 @@ void Boid::setCohesion()
     if(m_neighbours.size()>0)
     {
         m_cohesion = m_centroid-m_position;
-        if(m_cohesion!=0)
+        if(m_cohesion.length()!=0)
             m_cohesion.normalize();
     }
     else m_cohesion.set(0,0,0);
@@ -146,7 +168,7 @@ void Boid::setAlign()
             m_align+=m_neighbours[i]->getVelocity();
         }
         m_align /= m_neighbours.size();
-        if(m_align!=0)
+        if(m_align.length()!=0)
             m_align.normalize();
     }
     else
@@ -155,7 +177,6 @@ void Boid::setAlign()
 
 void Boid::setSeparation()
 {
-    int inc=0;
     m_separation.set(0,0,0);
     for(int i=0;i<m_neighbours.size();++i)
     {
@@ -166,15 +187,16 @@ void Boid::setSeparation()
             float weight = (1.0/m_neighbours[i]->getDistance());
             ngl::Vec3 target = (pos-m_position)*weight;
             m_separation += target;
-            ++inc;
         }
     }
-    if(inc>0)
+    if(m_neighbours.size()>0)
     {
-        m_separation /= inc;
+        m_separation /= m_neighbours.size();
     }
-    if(m_separation!=0)
+    if(m_separation.length()!=0)
+    {
         m_separation.normalize();
+    }
     m_separation = -m_separation;
 }
 
@@ -190,7 +212,9 @@ void Boid::setAvoid()
     {
         m_avoid=(m_position-m_collisionPos);
         if(m_avoid.length()!=0)
+        {
             m_avoid.normalize();
+        }
     }
     else
     {
@@ -201,7 +225,7 @@ void Boid::setAvoid()
 void Boid::setGoal(ngl::Vec3 _goal)
 {
     m_goal=_goal-m_position;
-    if(m_goal!=0)
+    if(m_goal.length()!=0)
     {
         m_goal.normalize();
     }
@@ -209,10 +233,13 @@ void Boid::setGoal(ngl::Vec3 _goal)
 
 void Boid::setFlee(ngl::Vec3 _flee)
 {
-    m_flee=m_position-_flee;
-    if(m_flee!=0)
+    if(distance3d(_flee,m_position)<35)
     {
-        m_flee.normalize();
+        m_flee=-(_flee-m_position);
+        if(m_flee.length()!=0)
+        {
+            m_flee.normalize();
+        }
     }
 }
 
@@ -232,51 +259,103 @@ void Boid::fleeWalls()
     }
 }
 
-void Boid::setEvade()
-{
 
+
+void Boid::setWander()
+{
+    // every 0.5 secods change the goal
+    if(((std::clock()-m_wanderTimer)/CLOCKS_PER_SEC)>0.5)
+    {
+        // randomly set a goal
+        float lower = -80.0, upper = 80.0;
+        int r;
+        float fraction;
+        r = rand();
+        fraction = ((float) r / RAND_MAX) * (upper - lower);
+        float x = (lower + fraction);
+        r = rand();
+        fraction = ((float) r / RAND_MAX) * (upper - lower);
+        float y = (lower + fraction);
+        r = rand();
+        fraction = ((float) r / RAND_MAX) * (upper - lower);
+        float z = (lower + fraction);
+        m_wander.set(x,y,z);
+        // reset timer
+        m_wanderTimer = std::clock();
+    }
+}
+
+void Boid::followLeader()
+{
+    ngl::Vec3 behind, follow;
+    behind=-(m_leader->getPosition());
+    if(behind!=0)
+    {
+        behind.normalize();
+    }
+    behind*=7;
+    follow = m_leader->getPosition()+behind;
+    m_follow=follow-m_position;
+    float distance = m_follow.length();
+    m_speed=MAX_SPEED*(distance/20);
+    if(m_speed>0.7)
+    {
+        m_speed=0.7;
+    }
+
+    if(distance3d(m_leader->getVelocity(), m_position)<5 || distance3d(m_leader->getPosition(), m_position)<5)
+    {
+        setFlee(m_leader->getPosition());
+    }
+    if(m_follow.length()!=0)
+    {
+        m_follow.normalize();
+    }
 }
 
 void Boid::setTarget()
 {
-    m_goal*=m_goalWeight;
+    m_target.set(0,0,0);
     m_avoid*=MAX_AVOID_FORCE;
-    m_separation*=m_separationWeight;
-    m_align*=m_alignWeight;
-    m_cohesion*=m_cohesionWeight;
-    if(m_predator!=nullptr)
+    if(m_isLeader==true)
     {
-        m_flee*=100/distance3d(m_predator->getPosition(), m_position);
+        m_target=m_wander+m_flee+m_avoid;
     }
-    m_target=m_separation+m_cohesion+m_align+m_avoid+m_goal+m_flee;
-//    if(m_target.length()!=0)
-//        m_target.normalize();
+    else
+    {
+        m_goal*=m_goalWeight;
+        m_separation*=m_separationWeight;
+        m_align*=m_alignWeight;
+        m_cohesion*=m_cohesionWeight;
+
+        if(m_predator!=nullptr)
+        {
+            m_flee*=1000.0/distance3d(m_predator->getPosition(), m_position);
+        }
+        if(m_hasLeader==true)
+        {
+            m_follow*=8;
+            m_target+=m_follow;
+        }
+        m_target+=m_separation+m_cohesion+m_align+m_avoid+m_goal+m_flee;
+
+    }
 }
 
 void Boid::setSteering()
 {
     m_steering = m_target-m_velocity;
     if(m_steering.length()!=0)
-    {
         m_steering.normalize();
-    }
 }
 
 void Boid::updatePosition()
 {
-//    ngl::Vec2 last(m_position.m_x, m_position.m_z);
-//    if(prevPos.size()<2)
-//            prevPos.push_back(last);
-//    else
-//    {
-//        prevPos[0]=prevPos[1];
-//        prevPos[1]=last;
-//    }
     m_velocity = m_velocity+(m_steering/m_mass);
-    if(m_velocity.length()>MAX_SPEED)
+    if(m_velocity.length()!=0)
     {
         m_velocity.normalize();
-        m_velocity*=MAX_SPEED;
+        m_velocity*=m_speed;
     }
     m_position = m_position+m_velocity;
 }
@@ -286,39 +365,41 @@ void Boid::setRotate()
 {
     m_yaw = atan2(m_velocity.m_x,m_velocity.m_z)*180/M_PI+180;
     m_pitch = atan2(m_velocity.m_y,sqrt(m_velocity.m_x*m_velocity.m_x+m_velocity.m_z*m_velocity.m_z))*180/M_PI;
-    //ngl::Vec2 current(m_position.m_x, m_position.m_z);
     m_roll = 0;
-//    if(prevPos.size()==2)
-//    {
-//        circlefrom3points(current, prevPos[0], prevPos[1]);
-//        if(20>m_turnRadius>0.1)
-//            m_roll = 90-(atan((m_mass*g)/m_turnRadius)*180/M_PI);
-//    }
 }
 
 
 void Boid::move()
 {
     m_flee.set(0,0,0);
-    // perceptions
-    if(hasLeader==true)
+    m_goal.set(0,0,0);
+    if(m_isLeader==true)
     {
-        setGoal(m_leaderPos);
+        setWander();
     }
-    else if(m_neighbours.size()<1)
+
+    else
     {
-        setGoal(m_flockCentroid);
+        // perceptions
+        if(m_hasLeader==true)
+        {
+            followLeader();
+        }
+        if(m_neighbours.size()<1)
+        {
+            setGoal(m_flockCentroid);
+        }
+        setSeparation();
+        setAlign();
+        setCohesion();
     }
-    if(m_predator!=nullptr && distance3d(m_predator->getPosition(), m_position)<55)
+    // drives
+    setAvoid();
+    if(m_predator!=nullptr)
     {
         setFlee(m_predator->getPosition());
     }
-    setSeparation();
-    setAlign();
-    setCohesion();
-    setAvoid();
     fleeWalls();
-    // drives
     setTarget();
     setSteering();
     // action selection
@@ -397,7 +478,12 @@ void Boid::circlefrom3points(ngl::Vec2 A, ngl::Vec2 B, ngl::Vec2 C)
     m_turnRadius = distance2d(A,centre);
 }
 
-
+void Boid::promoteToLeader()
+{
+    m_isLeader=true;
+    m_hasLeader=false;
+    m_leader=nullptr;
+}
 
 
 

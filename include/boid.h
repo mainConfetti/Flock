@@ -5,6 +5,7 @@
 #include <iostream>
 #include <ngl/Vec3.h>
 #include <vector>
+#include <ctime>
 #include <ngl/VertexArrayObject.h>
 #include <ngl/Transformation.h>
 
@@ -27,11 +28,14 @@ public:
     void setMass(int _mass);
     void setFlockCentroid(ngl::Vec3 _flockCentroid);
     void setPredator(Predator *_predator);
+    void setLeader(Boid *_leader);
+    void clearLeader();
     // accessors
     float getDistance();
     void getNeighbours();
     ngl::Vec3 getPosition(){return m_position;}
     ngl::Vec3 getVelocity(){return m_velocity;}
+    bool isLeader(){return m_isLeader;}
     int getId();
     ngl::Vec3 getRotation();
     // steering
@@ -43,7 +47,8 @@ public:
     void setGoal(ngl::Vec3 _goal);
     void setFlee(ngl::Vec3 _flee);
     void fleeWalls();
-    void setEvade();
+    void setWander();
+    void followLeader();
     void setTarget();
     void setSteering();
     // action
@@ -53,6 +58,7 @@ public:
     // other
     void getInfo();
     void circlefrom3points(ngl::Vec2 A, ngl::Vec2 B, ngl::Vec2 C);
+    void promoteToLeader();
 
 private:
     ngl::Vec3 m_position;
@@ -60,6 +66,7 @@ private:
     int m_id;
     float m_distance;
     float MAX_SPEED;
+    float m_speed;
     int m_cohesionWeight;
     int m_alignWeight;
     int m_separationWeight;
@@ -74,11 +81,13 @@ private:
     ngl::Vec3 m_align;
     ngl::Vec3 m_separation;
     ngl::Vec3 m_avoid;
+    ngl::Vec3 m_wander;
     ngl::Vec3 m_target;
     ngl::Vec3 m_steering;
     ngl::Vec3 m_flockCentroid;
     ngl::Vec3 m_goal;
     ngl::Vec3 m_flee;
+    ngl::Vec3 m_follow;
     Predator *m_predator;
     float distance3d(ngl::Vec3 a, ngl::Vec3 b);
     float distance2d(ngl::Vec2 a, ngl::Vec2 b);
@@ -88,9 +97,12 @@ private:
     float m_pitch;
     float m_roll;
     float m_turnRadius;
-    std::vector<ngl::Vec2> prevPos;
-    bool hasLeader;
-    ngl::Vec3 m_leaderPos;
+    std::clock_t m_wanderTimer;
+    std::vector<ngl::Vec2> m_prevPos;
+    bool m_hasLeader;
+    bool m_isLeader;
+    Boid* m_leader;
+
 };
 
 #endif // BOID_H

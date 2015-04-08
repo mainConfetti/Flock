@@ -44,29 +44,6 @@ void Predator::setPursiut(ngl::Vec3 _pos, float targetSpeed)
     }
 }
 
-//void Predator::wander()
-//{
-//    // every 0.5 secods change the goal
-//    if((std::clock()-wanderTimer)/CLOCKS_PER_SEC>0.5)
-//    {
-//        // randomly set a goal
-//        float lower = -50.0, upper = 50.0;
-//        int r;
-//        float fraction;
-//        r = rand();
-//        fraction = ((float) r / RAND_MAX) * (upper - lower);
-//        float x = (lower + fraction);
-//        r = rand();
-//        fraction = ((float) r / RAND_MAX) * (upper - lower);
-//        float y = (lower + fraction);
-//        r = rand();
-//        fraction = ((float) r / RAND_MAX) * (upper - lower);
-//        float z = (lower + fraction);
-//        m_goal.set(x,y,z);
-//        // reset timer
-//        wanderTimer = std::clock();
-//    }
-//}
 
 void Predator::setTarget()
 {
