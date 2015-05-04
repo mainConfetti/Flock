@@ -11,10 +11,10 @@
 #include <iostream>
 
 OpenGLWindow::OpenGLWindow(QWindow *_parent)
-    : QWindow(_parent)
-    , m_updatePending(false)
-    , m_context(0)
-    , m_device(0)
+  : QWindow(_parent)
+  , m_updatePending(false)
+  , m_context(0)
+  , m_device(0)
 {
   // ensure we render to OpenGL and not a QPainter by setting the surface type
   setSurfaceType(QWindow::OpenGLSurface);
@@ -43,12 +43,12 @@ bool OpenGLWindow::event(QEvent *event)
 {
   switch (event->type())
   {
-  case QEvent::UpdateRequest:
-    renderNow();
-    return true;
+    case QEvent::UpdateRequest:
+      renderNow();
+      return true;
 
-  default:
-    return QWindow::event(event);
+    default:
+      return QWindow::event(event);
   }
 }
 
