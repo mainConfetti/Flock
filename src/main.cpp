@@ -1,13 +1,3 @@
-#include <iostream>
-#include <stdlib.h>
-#include <boid.h>
-#include <world.h>
-#include <ngl/Vec3.h>
-#include <ngl/Vec4.h>
-#include <boidmath.h>
-#include <deque>
-#include "OpenGLWindow.h"
-
 #include <QtGui/QGuiApplication>
 #include <iostream>
 #include "NGLScene.h"

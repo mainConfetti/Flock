@@ -105,7 +105,7 @@ void NGLScene::initialize()
 
   //  (*shader)["nglColourShader"]->use();
   //  shader->setShaderParam4f("Colour", 1,1,1,1);
-  m_world = new World(200);
+  m_world = new World(100);
 
   createCameras();
   // Camera position value

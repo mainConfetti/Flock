@@ -21,7 +21,7 @@ World::World(int numBoids)
     addBoid();
   }
   srand(time(NULL));
-  m_predator=nullptr;
+  m_predator=NULL;
   m_obstacles.clear();
   for(int i=0;i<m_flock.size();++i)
   {
@@ -145,7 +145,7 @@ void World::updateWorld()
     m_flock[i].move();
 
   }
-  if(m_predator!=nullptr)
+  if(m_predator!=NULL)
   {
     for(int j=0;j<m_obstacles.size();++j)
     {
@@ -158,7 +158,7 @@ void World::updateWorld()
 
 void World::addPredator()
 {
-  if(m_predator!=nullptr)
+  if(m_predator!=NULL)
   {
     std::cout<<"there is already a predator in the world"<<std::endl;
     return;
@@ -173,16 +173,16 @@ void World::addPredator()
 
 void World::removePredator()
 {
-  if(m_predator==nullptr)
+  if(m_predator==NULL)
   {
     std::cout<<"there is no predator to remove"<<std::endl;
     return;
   }
   delete m_predator;
-  m_predator=nullptr;
+  m_predator=NULL;
   for(int i=0;i<m_flock.size();++i)
   {
-    m_flock[i].setPredator(nullptr);
+    m_flock[i].setPredator(NULL);
   }
 }
 

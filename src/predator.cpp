@@ -3,7 +3,6 @@
 #include <boidmath.h>
 #include <ctime>
 #include <ngl/Transformation.h>
-#include <random>
 #include <boid.h>
 
 const float MAX_SEE_AHEAD=20;

@@ -25,7 +25,7 @@ Boid::Boid(int _id)
   MAX_AVOID_FORCE = 10000;
   m_hasLeader=false;
   m_isLeader=false;
-  m_predator=nullptr;
+  m_predator=NULL;
   m_boundRadius=5;
   m_collisionPos = NULL;
   m_searchRad = 10;
@@ -127,7 +127,7 @@ void Boid::clearLeader()
   else
   {
     m_hasLeader=false;
-    m_leader=nullptr;
+    m_leader=NULL;
   }
   m_speed=MAX_SPEED;
 }
@@ -326,7 +326,7 @@ void Boid::setTarget()
     m_align*=m_alignWeight;
     m_cohesion*=m_cohesionWeight;
 
-    if(m_predator!=nullptr)
+    if(m_predator!=NULL)
     {
       m_flee*=10000.0/BoidMath::distance(m_predator->getPosition(), m_position);
     }
@@ -403,7 +403,7 @@ void Boid::move()
   }
   // drives
   setAvoid();
-  if(m_predator!=nullptr)
+  if(m_predator!=NULL)
   {
     setFlee(m_predator->getPosition());
   }
@@ -451,7 +451,7 @@ void Boid::promoteToLeader()
   m_hasLeader=false;
   m_boundRadius=8;
   m_mass*=3;
-  m_leader=nullptr;
+  m_leader=NULL;
 }
 
 void Boid::toggleFOV()

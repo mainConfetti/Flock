@@ -15,20 +15,19 @@ isEqual(QT_MAJOR_VERSION, 5) {
 MOC_DIR=moc
 # on a mac we don't create a .app bundle file ( for ease of multiplatform use)
 CONFIG-=app_bundle
+
+UI_HEADERS_DIR+=ui
 # Auto include all .cpp files in the project src directory (can specifiy individually if required)
-SOURCES+= $$PWD/src/*.cpp \
-    src/obstacle.cpp \
-    src/boidmath.cpp
+SOURCES+= src/*.cpp
 # same for the .h files
-HEADERS+= $$PWD/include/*.h \
-    include/obstacle.h \
-    include/boidmath.h
+HEADERS+= include/*.h
 # and add the include dir into the search path for Qt and make
 INCLUDEPATH +=./include
 # where our exe is going to live (root of project)
 DESTDIR=./
 # add the glsl shader files
-OTHER_FILES+= $$PWD/shaders/*.glsl
+OTHER_FILES+= shaders/*.glsl \
+           += ui
 # were are going to default to a console app
 CONFIG += console
 # note each command you add needs a ; as it will be run as a single line
@@ -85,4 +84,7 @@ win32: {
         LIBS += -LC:/NGL/lib/ -lNGL
         DEFINES+=NO_DLL
 }
+
+FORMS += \
+    ui/mainwindow.ui
 

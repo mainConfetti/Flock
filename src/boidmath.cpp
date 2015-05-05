@@ -136,20 +136,20 @@ ngl::Vec3 BoidMath::hornPoint(float u, float v)
 std::vector<ngl::Vec3> BoidMath::borromeanPoint(float u, float r1, float r2)
 {
   ngl::Vec3 vert1, vert2, vert3;
-
+  std::vector<ngl::Vec3> results;
   vert1.m_x = 0;
   vert1.m_y = r1*cos(u);
   vert1.m_z = r2*sin(u);
-
+  results.push_back(vert1);
   vert2.m_x = r2*cos(u);
   vert2.m_y = 0;
   vert2.m_z = r1*sin(u);
-
+  results.push_back(vert2);
   vert3.m_x = r1*cos(u);
   vert3.m_y = r2*sin(u);
   vert3.m_z = 0;
-
-  return std::vector<ngl::Vec3> {vert1, vert2, vert3};
+  results.push_back(vert3);
+  return results;
 }
 
 ngl::Vec3 BoidMath::bezierPoint(ngl::Vec3 start, ngl::Vec3 end, ngl::Vec3 ctrl, float t)
