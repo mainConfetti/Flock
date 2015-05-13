@@ -1,9 +1,9 @@
 #include <predator.h>
 #include <stdlib.h>
-#include <boidmath.h>
+#include <BoidMath.h>
 #include <ctime>
 #include <ngl/Transformation.h>
-#include <boid.h>
+#include <Boid.h>
 
 const float MAX_SEE_AHEAD=20;
 
@@ -12,7 +12,7 @@ Predator::Predator(ngl::Vec3 _pos, float _mass)
   m_position=_pos;
   m_mass=_mass;
   m_velocity.set(0.8,0.3,0.2);
-  MAX_SPEED=1.3;
+  MAX_SPEED=2.0;
   MIN_SPEED=0.6;
   MAX_ACCELERATE=0.01;
   m_speed = 0.3;
@@ -157,7 +157,7 @@ void Predator::findObstacle(ngl::Vec3 _pos, float _rad)
 {
 
   ngl::Vec3 ahead(m_position + m_velocity * MAX_SEE_AHEAD);
-  bool collision = BoidMath::lineSphereIntersect(ahead, _pos, m_position, _rad);
+  bool collision = BoidMath::collisionDetect(ahead, _pos, m_position, _rad);
   if(collision==true  && (m_collisionPos==NULL || BoidMath::distance(m_position, _pos) < BoidMath::distance(m_position, m_collisionPos)))
   {
     m_collisionPos=_pos;

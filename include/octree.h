@@ -1,19 +1,24 @@
+//----------------------------------------------------------------------------------------------------------------------
+/// @file Octree.h
+/// Modified from:-
+/// Brandon Pelfrey (January 5, 1013). Coding a Simple Octree [online]
+/// [Accessed 2015]. Available from: <http://www.brandonpelfrey.com/blog/coding-a-simple-octree>.
+/// @date 22/03/15
+/// @class Octree
+/// @brief A simple, dynamic octree to be used for finding the neighbours of a boid in a flocking system
+/// Modifications of the origional source code are to implement ngl vectors as well as the specific
+/// data required for the flocking system. It is also modififed so that a leaf node may contain mroe than
+/// one data point, this is necessary for its use in the flockign system. This required a major overhaul of the
+/// getPointsInsideSphere method.
+//----------------------------------------------------------------------------------------------------------------------
 #ifndef OCTREE_H
 #define OCTREE_H
 
+#include <stdlib.h>
 #include <ngl/Vec3.h>
 #include <ngl/Vec4.h>
-#include <vector>
-#include <stdlib.h>
 #include <ngl/VertexArrayObject.h>
-
-//----------------------------------------------------------------------------------------------------------------------
-/// @file octree.h
-/// @author Alexander la Tourelle
-/// @version 1.0
-/// @date 22/03/15
-/// @class NGLScene
-/// @brief A simple octree to be used for finding the neighbours of a boid in a flocking system
+#include <vector>
 //----------------------------------------------------------------------------------------------------------------------
 class Octree
 {
@@ -55,21 +60,25 @@ public:
   /// @brief query the tree for points within a bounding sphere
   /// @param [in] centre the centre of the bounding sphere
   /// @param [in] radius the radius of the bounding sphere
-  /// @param [in] results an array of the points inside the bounding sphere
+  /// @return returns and appends the points inside the bounding sphere to m_resultsData
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec4 getPointsInsideSphere(ngl::Vec3 centre, float radius);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief array for storing the results of getPointsInsideSphere
+  /// @brief resets m_resultsData
   //----------------------------------------------------------------------------------------------------------------------
-  //std::vector<ngl::Vec4 *> m_results;
-  void findData(ngl::Vec3 data);
   void clearResults();
-  void clearTree();
-  int m_plusIndex=0;
-  std::vector<ngl::Vec4> temp_data;
-  void cleanResults();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief builds a simple VAO object of the octrree for visualisation purposes
+  //----------------------------------------------------------------------------------------------------------------------
   void buildVAO();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief draws the vao in openGL for viusualisation purposes
+  //----------------------------------------------------------------------------------------------------------------------
   void draw();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief resets m_resultsData
+  //----------------------------------------------------------------------------------------------------------------------
+  std::vector<ngl::Vec4> m_resultsData;
 private:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief the physical centre of this node
@@ -92,21 +101,34 @@ private:
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<ngl::Vec4> m_data;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief query if a box intersects with a sphere
-  /// @param [in] Bmin the minimum corner of the box
-  /// @param [in] Bmax the maximum corner of the box
-  /// @param [in] C the centre of the sphere
-  /// @param [in] r the radius of the circle
-  /// @return true if box intersects with sphere, false if not
+  /// @brief  a member variable to store how many data points have passed through the node when the tree is created.
+  /// This is used to know how many times to itterate over each node when retreiving the data stored in
+  /// its children.
+  //----------------------------------------------------------------------------------------------------------------------
+  int m_tempDataIndex;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief  A member variable to store an incrememnted value that coresponds with the index of the next data point to be
+  /// returned when finding points inside a sphere
+  //----------------------------------------------------------------------------------------------------------------------
+  int m_inc;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief  a member variable storing the index of the current data point being queried
+  //----------------------------------------------------------------------------------------------------------------------
+  int m_dataIndex;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief  VAO containing the node's eight corners
+  //----------------------------------------------------------------------------------------------------------------------
+  ngl::VertexArrayObject* m_vao;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief  a function to return how many data points are stored in the node to its parent
   //----------------------------------------------------------------------------------------------------------------------
   int getDataSize();
-  int m_dataIndex;
-  int m_tempDataSize;
-  int m_tempDataIndex;
-  int getTempDataSize();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief  a method to return m_dataIndex to the node's parent
+  //----------------------------------------------------------------------------------------------------------------------
   int getTempDataIndex();
-  int m_inc;
-  ngl::VertexArrayObject* m_vao;
+
+
 
 
 

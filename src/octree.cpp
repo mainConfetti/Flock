@@ -1,14 +1,14 @@
-#include <octree.h>
+#include <Octree.h>
 #include <iostream>
 #include <ngl/Vec3.h>
 #include <ngl/Vec4.h>
 #include <vector>
 #include <stdlib.h>
-#include <boidmath.h>
+#include <BoidMath.h>
 #include <algorithm>
 
 
-
+//----------------------------------------------------------------------------------------------------------------------
 Octree::Octree(ngl::Vec3 _origin, float _halfD, int _height)
 {
   // set the position and size
@@ -18,23 +18,22 @@ Octree::Octree(ngl::Vec3 _origin, float _halfD, int _height)
   //initially there are no children
   m_children.clear();
   m_dataIndex = 0;
-  m_tempDataSize = 0;
   m_tempDataIndex = 0;
   m_inc=0;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 Octree::~Octree()
 {
   // recursively delete all children
   m_children.clear();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void Octree::setData(ngl::Vec4 _data)
 {
   // set the data
   m_data.push_back(_data);
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 int Octree::getOctantContainingPoint(ngl::Vec3 point)
 {
   // int identiying octant
@@ -48,14 +47,14 @@ int Octree::getOctantContainingPoint(ngl::Vec3 point)
     oct |= 1;
   return oct;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 bool Octree::isLeaf()
 {
-  // The node is a leaf it it has no children or its
+  // The node is a leaf if it has no children or its
   // height is 1
   return (m_height==1 || m_children.size()==0);
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void Octree::insert(ngl::Vec4 _data)
 {
   // If the node doesnt have a data point assigned and its a
@@ -94,9 +93,7 @@ void Octree::insert(ngl::Vec4 _data)
       }
 
       // Re-insert old data and insert new data
-      //std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(oldData.toVec3())<<std::endl;
       m_children[getOctantContainingPoint(oldData.toVec3())].insert(oldData);
-      //std::cout<<"entering: "<<m_height-1<<" : "<<getOctantContainingPoint(_data.toVec3())<<std::endl;
       m_children[getOctantContainingPoint(_data.toVec3())].insert(_data);
     }
   }
@@ -110,28 +107,23 @@ void Octree::insert(ngl::Vec4 _data)
     // one more time to retrieve all data in its chilren when calling
     // getObjectsInSphere.
     ++m_tempDataIndex;
-    //std::cout<<"entering: "<<m_height-1<<" : "<<octant<<std::endl;
     m_children[octant].insert(_data);
   }
   return;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 ngl::Vec4 Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius)
 {
   // If the current node is a leaf, check if the current data point
   // is inside the query bouding sphere
   int inc;
-  ngl::Vec4 tempResults=NULL;
+  ngl::Vec4 tempResults=0;
   ngl::Vec4 temp;
   if(isLeaf())
   {
-    //std::cout<<"size before: "<<temp.size()<<std::endl;
     if(sqrt(((m_data[m_dataIndex].m_x-centre.m_x)*(m_data[m_dataIndex].m_x-centre.m_x)+(m_data[m_dataIndex].m_y-centre.m_y)*(m_data[m_dataIndex].m_y-centre.m_y)+(m_data[m_dataIndex].m_z-centre.m_z)*(m_data[m_dataIndex].m_z-centre.m_z)))<=radius)
     {
       tempResults=m_data[m_dataIndex];
-      //std::cout<<m_data[m_dataIndex].m_w<<" added neighbour: "<<tempResults->m_w<<std::endl;
-      //std::cout<<m_data.m_w<<std::endl;
-      //std::cout<<"added data"<<std::endl;
     }
     ++m_dataIndex;
   }
@@ -155,38 +147,39 @@ ngl::Vec4 Octree::getPointsInsideSphere(ngl::Vec3 centre, float radius)
           for(int j=0;j<inc;++j)
           {
             temp =m_children[i].getPointsInsideSphere(centre, radius);
-            if(temp!=NULL)
+            if(temp!=0)
             {
-              temp_data.push_back(temp);
+              // add the found data to m_resultsData
+              m_resultsData.push_back(temp);
             }
           }
         }
       }
-    //int index = m_plusIndex-m_tempDataIndex;
-    //index+=m_inc;
-    if(temp_data.size()!=0 && temp_data.size()>m_inc)
-      tempResults=temp_data[m_inc];
+
+    if(m_resultsData.size()!=0 && m_resultsData.size()>m_inc)
+    {
+      tempResults=m_resultsData[m_inc];
+    }
     ++m_inc;
-    ++m_tempDataSize;
   }
+  // return the point inside sphere to parent node. If the current nod eis the root node
+  // then this value is not used.
   return tempResults;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void Octree::clearResults()
 {
   if(isLeaf())
   {
-    temp_data.clear();
+    m_resultsData.clear();
     m_dataIndex = 0;
-    m_tempDataSize=0;
     m_inc = 0;
     return;
   }
   else
   {
-    temp_data.clear();
+    m_resultsData.clear();
     m_dataIndex = 0;
-    m_tempDataSize=0;
     m_inc = 0;
     for(int i=0;i<8;++i)
     {
@@ -195,42 +188,17 @@ void Octree::clearResults()
   }
   return;
 }
-
-//used for debugging
-void Octree::findData(ngl::Vec3 data)
-{
-  if(isLeaf())
-  {
-    if(m_data[0]!=NULL)
-    {
-      std::cout<<"found data here: "<<std::endl;
-    }
-  }
-  else
-  {
-    for(int i=0;i<8;++i)
-    {
-      std::cout<<"searching child octant "<<i<<std::endl;
-      m_children[i].findData(data);
-    }
-  }
-}
-
+//----------------------------------------------------------------------------------------------------------------------
 int Octree::getDataSize()
 {
   return m_data.size();
 }
-
-int Octree::getTempDataSize()
-{
-  return m_tempDataSize;
-}
-
+//----------------------------------------------------------------------------------------------------------------------
 int Octree::getTempDataIndex()
 {
   return m_tempDataIndex;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void Octree::buildVAO()
 {
 
@@ -303,7 +271,7 @@ void Octree::buildVAO()
 
   }
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void Octree::draw()
 {
   if(isLeaf()==true)

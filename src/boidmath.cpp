@@ -1,35 +1,35 @@
-#include "boidmath.h"
+#include "BoidMath.h"
 #include <iostream>
 #include <math.h>
 #include <ngl/Transformation.h>
 
+//----------------------------------------------------------------------------------------------------------------------
 BoidMath::BoidMath()
 {
 
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 BoidMath::~BoidMath()
 {
 
 }
-
-
+//----------------------------------------------------------------------------------------------------------------------
 float BoidMath::distance(ngl::Vec3 a, ngl::Vec3 b)
 {
   return sqrt(((a.m_x - b.m_x)*(a.m_x - b.m_x)+(a.m_y - b.m_y)*(a.m_y - b.m_y) + (a.m_z - b.m_z)*(a.m_z - b.m_z)));
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 float BoidMath::distance(ngl::Vec2 a, ngl::Vec2 b)
 {
   return sqrt(((a.m_x - b.m_x)*(a.m_x - b.m_x)+(a.m_y - b.m_y)*(a.m_y - b.m_y)));
 }
-
-bool BoidMath::lineSphereIntersect(ngl::Vec3 ahead, ngl::Vec3 a, ngl::Vec3 b, float radius)
+//----------------------------------------------------------------------------------------------------------------------
+bool BoidMath::collisionDetect(ngl::Vec3 ahead, ngl::Vec3 a, ngl::Vec3 b, float radius)
 {
   ngl::Vec3 ahead2=ahead*0.5;
   return distance(a, ahead) <= radius || distance(a, ahead2) <= radius || distance(a, b) <= radius;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 bool BoidMath::boxIntersectsSphere(ngl::Vec3 bMin, ngl::Vec3 bMax, ngl::Vec3 C, float r)
 {
   float dist_squared = r * r;
@@ -47,7 +47,7 @@ bool BoidMath::boxIntersectsSphere(ngl::Vec3 bMin, ngl::Vec3 bMax, ngl::Vec3 C, 
     dist_squared -= (C.m_z - bMax.m_z)*(C.m_z - bMax.m_z);
   return dist_squared > 0;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 float BoidMath::pointToPlane(ngl::Vec3 a, ngl::Vec3 b, ngl::Vec3 c, ngl::Vec3 x)
 {
   ngl::Vec3 AB, AC, N;
@@ -65,7 +65,7 @@ float BoidMath::pointToPlane(ngl::Vec3 a, ngl::Vec3 b, ngl::Vec3 c, ngl::Vec3 x)
 
   return result;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 std::vector<ngl::Vec3> BoidMath::calcFOV(ngl::Vec3 a, ngl::Vec3 b, float rotX, float fovAngle)
 {
   ngl::Vec3 a1, a2, b1;
@@ -82,17 +82,12 @@ std::vector<ngl::Vec3> BoidMath::calcFOV(ngl::Vec3 a, ngl::Vec3 b, float rotX, f
   trans.reset();
 
   b1.set(0,-1,0);
-  //std::cout<<"1st b1 = ("<<b1.m_x<<", "<<b1.m_y<<", "<<b1.m_z<<")"<<std::endl;
   trans.setRotation(ngl::Vec3(rotX,0,0));
   b1=trans.getMatrix()*b1;
-  //std::cout<<"2nd b1 = ("<<b1.m_x<<", "<<b1.m_y<<", "<<b1.m_z<<")"<<std::endl;
   b1.m_x+=b.m_x;
   b1.m_y+=b.m_y;
   b1.m_z+=b.m_z;
-  //std::cout<<"3rd b1 = ("<<b1.m_x<<", "<<b1.m_y<<", "<<b1.m_z<<")"<<std::endl;
   points.push_back(b1);
-  //std::cout<<"b = ("<<b.m_x<<", "<<b.m_y<<", "<<b.m_z<<")"<<std::endl;
-  //std::cout<<"b1 = ("<<b1.m_x<<", "<<b1.m_y<<", "<<b1.m_z<<")"<<std::endl;
   trans.reset();
 
   a2=a;
@@ -103,13 +98,13 @@ std::vector<ngl::Vec3> BoidMath::calcFOV(ngl::Vec3 a, ngl::Vec3 b, float rotX, f
 
   return points;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 template<typename T>
 T BoidMath::lerp(T a, T b, float t)
 {
   return (a*(1-t))+(b*t);
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 ngl::Vec3 BoidMath::cresentPoint(float u, float v)
 {
   ngl::Vec3 vertex;
@@ -121,7 +116,7 @@ ngl::Vec3 BoidMath::cresentPoint(float u, float v)
   vertex.m_z = (cos(2*piu)*sin(2*piv)+(4*v)-2);
   return vertex;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 ngl::Vec3 BoidMath::hornPoint(float u, float v)
 {
   ngl::Vec3 vertex;
@@ -132,7 +127,7 @@ ngl::Vec3 BoidMath::hornPoint(float u, float v)
   vertex.m_z = u*sin(v);
   return vertex;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 std::vector<ngl::Vec3> BoidMath::borromeanPoint(float u, float r1, float r2)
 {
   ngl::Vec3 vert1, vert2, vert3;
@@ -151,7 +146,7 @@ std::vector<ngl::Vec3> BoidMath::borromeanPoint(float u, float r1, float r2)
   results.push_back(vert3);
   return results;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 ngl::Vec3 BoidMath::bezierPoint(ngl::Vec3 start, ngl::Vec3 end, ngl::Vec3 ctrl, float t)
 {
   ngl::Vec3 start2 = lerp(start, ctrl, t);
@@ -159,12 +154,6 @@ ngl::Vec3 BoidMath::bezierPoint(ngl::Vec3 start, ngl::Vec3 end, ngl::Vec3 ctrl, 
   ngl::Vec3 point = lerp(start2, end2, t);
   return point;
 }
-
-
-
-
-
-
 
 
 

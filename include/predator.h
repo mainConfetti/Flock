@@ -18,6 +18,7 @@ public:
   void setTarget();
   void setPosition();
   void setSteering();
+  inline void setSpeed(float _speed){m_speed = _speed;}
   void updatePosition();
   void setRotation();
   void move();

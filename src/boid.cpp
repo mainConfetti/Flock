@@ -1,5 +1,5 @@
-#include "boid.h"
-#include <boidmath.h>
+#include "Boid.h"
+#include <BoidMath.h>
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
 #include <predator.h>
@@ -18,16 +18,16 @@ Boid::Boid(int _id)
   m_alignWeight=50;
   m_separationWeight=100;
   m_cohesionWeight=200;
-  MAX_SPEED=0.5f;
+  MAX_SPEED=2.0f;
   m_speed=0.5f;
   m_mass=15;
-  MAX_SEE_AHEAD =40;
-  MAX_AVOID_FORCE = 10000;
+  MAX_SEE_AHEAD =50;
+  MAX_AVOID_FORCE = 50000;
   m_hasLeader=false;
   m_isLeader=false;
-  m_predator=NULL;
+  m_predator=0;
   m_boundRadius=5;
-  m_collisionPos = NULL;
+  m_collisionPos = 0;
   m_searchRad = 10;
   m_fov=false;
   m_tail=false;
@@ -44,12 +44,6 @@ Boid::~Boid()
 void Boid::setPos(float _x, float _y, float _z)
 {
   m_position.set(_x,_y,_z);
-}
-
-void Boid::setDistance(Boid *const boid)
-{
-  ngl::Vec3 boidPos = (boid->getPosition().m_x, boid->getPosition().m_y, boid->getPosition().m_z);
-  m_distance = BoidMath::distance(m_position, boidPos);
 }
 
 void Boid::setNeighbour(Boid *boid)
@@ -100,11 +94,6 @@ void Boid::setMass(int _mass)
   m_mass = _mass;
 }
 
-void Boid::setFlockCentroid(ngl::Vec3 _flockCentroid)
-{
-  m_flockCentroid.set(_flockCentroid);
-}
-
 void Boid::setPredator(Predator *_predator)
 {
   m_predator=_predator;
@@ -114,6 +103,18 @@ void Boid::setLeader(Boid *_leader)
 {
   m_leader=_leader;
   m_hasLeader=true;
+}
+
+void Boid::setFovAngle(int _angle)
+{
+  m_FOV=_angle;
+  std::cout<<m_FOV<<std::endl;
+}
+
+void Boid::setSpeed(float _speed)
+{
+  m_setSpeed=_speed;
+  m_speed=m_setSpeed;
 }
 
 void Boid::clearLeader()
@@ -127,9 +128,9 @@ void Boid::clearLeader()
   else
   {
     m_hasLeader=false;
-    m_leader=NULL;
+    m_leader=0;
   }
-  m_speed=MAX_SPEED;
+  m_speed=m_setSpeed;
 }
 
 void Boid::setCentroid()
@@ -178,8 +179,7 @@ void Boid::setSeparation()
   m_separation.set(0,0,0);
   for(int i=0;i<m_neighbours.size();++i)
   {
-    m_neighbours[i]->setDistance(this);
-    if(m_neighbours[i]->getDistance()>SEPARATION_DISTANCE)
+    if(BoidMath::distance(m_position, m_neighbours[i]->getPosition())>SEPARATION_DISTANCE)
     {
       ngl::Vec3 pos(m_neighbours[i]->getPosition());
       ngl::Vec3 target = (pos-m_position);
@@ -204,10 +204,13 @@ void Boid::setAvoid()
     findObstacle(m_neighbours[i]->getPosition(), m_neighbours[i]->getRadius());
 
   }
-  m_velocity.normalize();
+  if(m_velocity.length()!=0)
+  {
+    m_velocity.normalize();
+  }
   m_avoid=(0,0,0);
-  ngl::Vec3 ahead(m_position + m_velocity * MAX_SEE_AHEAD);
-  if(m_collisionPos != NULL)
+  ngl::Vec3 ahead(m_position + m_velocity * MAX_SEE_AHEAD * m_speed);
+  if(m_collisionPos != 0)
   {
     m_avoid=(ahead-m_collisionPos);
     if(m_avoid.length()!=0)
@@ -219,7 +222,7 @@ void Boid::setAvoid()
   {
     m_avoid*=0;
   }
-  m_collisionPos = NULL;
+  m_collisionPos = 0;
 }
 
 void Boid::setFlee(ngl::Vec3 _flee)
@@ -290,9 +293,13 @@ void Boid::followLeader()
   m_follow=follow-m_position;
   float distance = m_follow.length();
   m_speed=MAX_SPEED*(distance/20);
-  if(m_speed>0.7)
+  if(m_speed>m_setSpeed+0.4)
   {
-    m_speed=0.7;
+    m_speed=m_setSpeed+0.4;
+    if(m_speed > MAX_SPEED)
+    {
+      m_speed=MAX_SPEED;
+    }
   }
 
   if(BoidMath::distance(m_leader->getVelocity(), m_position)<5 || BoidMath::distance(m_leader->getPosition(), m_position)<5)
@@ -326,7 +333,7 @@ void Boid::setTarget()
     m_align*=m_alignWeight;
     m_cohesion*=m_cohesionWeight;
 
-    if(m_predator!=NULL)
+    if(m_predator!=0)
     {
       m_flee*=10000.0/BoidMath::distance(m_predator->getPosition(), m_position);
     }
@@ -334,7 +341,6 @@ void Boid::setTarget()
     {
       m_follow*=BoidMath::distance(m_position, m_leader->getPosition())/200;
       m_target+=m_follow;
-      m_separation*=1.3;
     }
     m_target+=m_separation+m_cohesion+m_align+m_avoid+m_flee;
   }
@@ -403,7 +409,7 @@ void Boid::move()
   }
   // drives
   setAvoid();
-  if(m_predator!=NULL)
+  if(m_predator!=0)
   {
     setFlee(m_predator->getPosition());
   }
@@ -420,26 +426,12 @@ void Boid::move()
   }
 }
 
-
-void Boid::getInfo()
-{
-  std::cout<<"Pos: "<<m_position.m_x<<", "<<m_position.m_y<<", "<<m_position.m_z<<std::endl;
-  std::cout<<"Vel: "<<m_velocity.m_x<<", "<<m_velocity.m_y<<", "<<m_velocity.m_z<<std::endl;
-  std::cout<<"cetroid: "<<m_centroid.m_x<<", "<<m_centroid.m_y<<", "<<m_centroid.m_z<<std::endl;
-  std::cout<<"cohesion target: "<<m_cohesion.m_x<<", "<<m_cohesion.m_y<<", "<<m_cohesion.m_z<<" : "<<m_cohesion.length()<<std::endl;
-  std::cout<<"align target: "<<m_align.m_x<<", "<<m_align.m_y<<", "<<m_align.m_z<<" : "<<m_align.length()<<std::endl;
-  std::cout<<"separation target: "<<m_separation.m_x<<", "<<m_separation.m_y<<", "<<m_separation.m_z<<" : "<<m_separation.length()<<std::endl;
-  std::cout<<"target vector: "<<m_target.m_x<<", "<<m_target.m_y<<", "<<m_target.m_z<<std::endl;
-  std::cout<<"steering vector: "<<m_steering.m_x<<", "<<m_steering.m_y<<", "<<m_steering.m_z<<std::endl;
-  std::cout<<"weights: sep - "<<m_separationWeight<<", coh - "<<m_cohesionWeight<<", align - "<<m_alignWeight<<std::endl;
-}
-
 void Boid::findObstacle(ngl::Vec3 _pos, float _rad)
 {
 
   ngl::Vec3 ahead(m_position + m_velocity * MAX_SEE_AHEAD);
-  bool collision = BoidMath::lineSphereIntersect(ahead, _pos, m_position, _rad);
-  if(collision==true  && (m_collisionPos==NULL || BoidMath::distance(m_position, _pos) < BoidMath::distance(m_position, m_collisionPos)))
+  bool collision = BoidMath::collisionDetect(ahead, _pos, m_position, _rad);
+  if(collision==true  && (m_collisionPos==0 || BoidMath::distance(m_position, _pos) < BoidMath::distance(m_position, m_collisionPos)))
   {
     m_collisionPos=_pos;
   }
@@ -451,32 +443,21 @@ void Boid::promoteToLeader()
   m_hasLeader=false;
   m_boundRadius=8;
   m_mass*=3;
-  m_leader=NULL;
+  m_leader=0;
 }
 
-void Boid::toggleFOV()
+void Boid::setFOV(bool _fov)
 {
-  if(m_fov==false)
-  {
-    m_fov=true;
-  }
-  else
-  {
-    m_fov=false;
-  }
+  m_fov=_fov;
 }
 
-void Boid::toggleTail()
+void Boid::setTail(bool _tail)
 {
-  if(m_tail==false)
+  if(_tail==false)
   {
-    m_tail=true;
-  }
-  else
-  {
-    m_tail=false;
     clearPrevPos();
   }
+  m_tail=_tail;
 }
 
 void Boid::manageTail()
@@ -493,10 +474,9 @@ void Boid::clearPrevPos()
   m_prevPos.clear();
 }
 
-void Boid::toggleSteer()
+void Boid::setSteer(bool _steer)
 {
-  bool result = (m_steer == false ? true : false);
-  m_steer = result;
+  m_steer = _steer;
 }
 
 void Boid::steerLeader(int _dir)
@@ -514,3 +494,4 @@ void Boid::steerLeader(int _dir)
   }
   m_goal = m_goal * trans.getInverseMatrix();
 }
+
