@@ -49,7 +49,6 @@ GLWindow::~GLWindow()
   delete m_Boidvao;
   delete m_tailVao;
   delete m_worldBounds;
-  delete m_vao;
   Init->NGLQuit();
 }
 
@@ -506,13 +505,13 @@ void GLWindow::keyPressEvent(QKeyEvent *_event)
   // finally update the GLWindow and re-draw
   updateGL();
 }
-
-void GLWindow::timerEvent(QTimerEvent *)
+//----------------------------------------------------------------------------------------------------------------------
+void GLWindow::timerEvent(QTimerEvent *_event)
 {
   m_world->updateWorld();
   updateGL();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::buildBoidVAO()
 {
   ngl::Vec3 verts[]=
@@ -653,16 +652,14 @@ void GLWindow::buildBoidVAO()
 
 
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::drawBoid()
 {
   m_Boidvao->bind();
   m_Boidvao->draw();
   m_Boidvao->unbind();
 }
-
-
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::drawControlPoint(ngl::VAOPrimitives *_prim, ngl::ShaderLib *_shader)
 {
   _prim->createSphere("sphere", 5, 20);
@@ -672,7 +669,7 @@ void GLWindow::drawControlPoint(ngl::VAOPrimitives *_prim, ngl::ShaderLib *_shad
   loadMatricesToShader();
   _prim->draw("sphere");
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::createCameras()
 {
   // create a load of cameras
@@ -695,17 +692,17 @@ void GLWindow::createCameras()
   POVcam.setShape(80.0f, (float)m_width/m_height, 0.01f,350.0f);
   m_cameras.push_back(POVcam);
 }
-
-void GLWindow::buildTailArray(int i)
+//----------------------------------------------------------------------------------------------------------------------
+void GLWindow::buildTailArray(int _id)
 {
   m_tail.clear();
-  std::deque<ngl::Vec3> tail(m_world->m_flock[i].getPrevPos());
+  std::deque<ngl::Vec3> tail(m_world->m_flock[_id].getPrevPos());
   for(int i=0;i<tail.size();++i)
   {
     m_tail.push_back(tail[i]);
   }
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::addBoid(int _cohesion, int _separation,
                        int _alignment, float _speed,
                        int _mass)
@@ -713,13 +710,13 @@ void GLWindow::addBoid(int _cohesion, int _separation,
   m_world->addBoid(_cohesion, _separation, _alignment, _speed, _mass);
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::removeBoid()
 {
   m_world->removeBoid();
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::newFlock(int _numBoids, int _cohesion, int _separation,
                         int _alignment, float _speed, int _mass)
 {
@@ -728,7 +725,7 @@ void GLWindow::newFlock(int _numBoids, int _cohesion, int _separation,
                     _alignment, _speed, _mass);
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::toggleLeader(bool _leaderState)
 {
 
@@ -745,7 +742,7 @@ void GLWindow::toggleLeader(bool _leaderState)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::togglePredator(bool _predatorState)
 {
   if(_predatorState==true)
@@ -760,7 +757,7 @@ void GLWindow::togglePredator(bool _predatorState)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::toggleSteer(bool _steerState)
 {
   if(m_leader == true)
@@ -769,7 +766,7 @@ void GLWindow::toggleSteer(bool _steerState)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::toggleFOV(bool _fovState)
 {
   for(int i=0; i<m_world->m_flock.size(); ++i)
@@ -778,27 +775,26 @@ void GLWindow::toggleFOV(bool _fovState)
   }
   setFocus();
 }
-
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::addObstacle()
 {
   m_world->addObstacle();
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::removeObstacle()
 {
   m_world->removeObstacle();
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::clearObstacle()
 {
   m_world->clearObstacles();
   m_customPoints.clear();
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::toggleOctree(bool _octreeState)
 {
   m_vizOctree = _octreeState;
@@ -818,7 +814,7 @@ void GLWindow::togglePOV(bool _povState)
   m_cameraIndex = _povState;
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::toggleDrawPoints(bool _drawPointsState)
 {
   if(m_customPoints.size()!=0)
@@ -827,7 +823,7 @@ void GLWindow::toggleDrawPoints(bool _drawPointsState)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setFOVAngle(int _angle)
 {
   for(int i=0; i<m_world->m_flock.size(); ++i)
@@ -836,13 +832,13 @@ void GLWindow::setFOVAngle(int _angle)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setObstacle(int _index)
 {
   m_world->createObstacles(_index);
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setCohesion(int _cohesion)
 {
   for(int i=0; i<m_world->m_flock.size(); ++i)
@@ -851,7 +847,7 @@ void GLWindow::setCohesion(int _cohesion)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setseparation(int _separation)
 {
   for(int i=0; i<m_world->m_flock.size(); ++i)
@@ -860,7 +856,7 @@ void GLWindow::setseparation(int _separation)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setAlign(int _align)
 {
   for(int i=0; i<m_world->m_flock.size(); ++i)
@@ -869,7 +865,7 @@ void GLWindow::setAlign(int _align)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setSpeed(int _speed)
 {
   float speed = _speed/10.0;
@@ -883,7 +879,7 @@ void GLWindow::setSpeed(int _speed)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setMass(int _mass)
 {
   for(int i=0; i<m_world->m_flock.size(); ++i)
@@ -892,7 +888,7 @@ void GLWindow::setMass(int _mass)
   }
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setNewCustomObstacle()
 {
   ngl::Vec3 start(0,-150,100);
@@ -907,7 +903,7 @@ void GLWindow::setNewCustomObstacle()
   m_currentObstacleId = (m_customPoints.size()-1);
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::updateObstacle(int _id, ngl::Vec3 _newStart, ngl::Vec3 _newEnd, ngl::Vec3 _newCtrl, int _newRad)
 {
   m_world->updateCustomObstacle(_id, _newStart, _newEnd, _newCtrl, _newRad);

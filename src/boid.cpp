@@ -2,11 +2,7 @@
 #include <BoidMath.h>
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
-#include <predator.h>
-
-const float g = 9.81;
-const float SEPARATION_DISTANCE = 10;
-int tailLength =50;
+#include <Predator.h>
 
 Boid::Boid(int _id)
 {
@@ -18,11 +14,11 @@ Boid::Boid(int _id)
   m_alignWeight=50;
   m_separationWeight=100;
   m_cohesionWeight=200;
-  MAX_SPEED=2.0f;
+  m_maxSpeed=2.0f;
   m_speed=0.5f;
   m_mass=15;
-  MAX_SEE_AHEAD =50;
-  MAX_AVOID_FORCE = 50000;
+  m_seeAhead =10;
+  m_avoidWeight = 1000;
   m_hasLeader=false;
   m_isLeader=false;
   m_predator=0;
@@ -33,6 +29,8 @@ Boid::Boid(int _id)
   m_tail=false;
   m_FOV=100;
   m_steer = false;
+  m_separationDistance = 10;
+  m_tailLength=50;
 }
 
 Boid::~Boid()
@@ -48,6 +46,8 @@ void Boid::setPos(float _x, float _y, float _z)
 
 void Boid::setNeighbour(Boid *boid)
 {
+  //if field of view mod is on, calculate the field of view planes and check whether
+  //the boid is contained between them. If it is, add the boid to m_neighbours vector
   if(m_fov==true)
   {
     std::vector<ngl::Vec3> planePoints = BoidMath::calcFOV(m_velocity, m_position, m_pitch, m_yaw);
@@ -58,6 +58,7 @@ void Boid::setNeighbour(Boid *boid)
       m_neighbours.push_back(boid);
     }
   }
+  // if field of view mode is not on, then add the boid to m_neighbours vector
   else
   {
     m_neighbours.push_back(boid);
@@ -66,6 +67,7 @@ void Boid::setNeighbour(Boid *boid)
 
 void Boid::clearNeighbour()
 {
+  //clear the m_neighbours vector
   m_neighbours.clear();
 }
 
@@ -108,34 +110,42 @@ void Boid::setLeader(Boid *_leader)
 void Boid::setFovAngle(int _angle)
 {
   m_FOV=_angle;
-  std::cout<<m_FOV<<std::endl;
 }
 
 void Boid::setSpeed(float _speed)
 {
+  // set m_setSpeed and m_speed
   m_setSpeed=_speed;
   m_speed=m_setSpeed;
 }
 
 void Boid::clearLeader()
 {
+  // if the boid is a leader, demote it and return
+  // its radius and mass to normal
   if(m_isLeader==true)
   {
     m_isLeader=false;
     m_boundRadius=4;
     m_mass/=3;
   }
+  // if the boid is not a leader then set the m_hasLeader
+  // flag to false and remove m_leader
   else
   {
     m_hasLeader=false;
     m_leader=0;
   }
+  // revert speed back to the speed that was set in case
+  // boids haave accelerated or decelerated suring the time
+  // that the leader owas active
   m_speed=m_setSpeed;
 }
 
 void Boid::setCentroid()
 {
-  m_centroid = getPosition();
+  // calculate the centroid of the boid's neighborus by
+  // averaging their positions
   if(m_neighbours.size()>0)
   {
     for(int i=0;i<m_neighbours.size();++i)
@@ -148,6 +158,7 @@ void Boid::setCentroid()
 
 void Boid::setCohesion()
 {
+  // cohesion is calculated as a vector towards the local centroid
   setCentroid();
   if(m_neighbours.size()>0)
   {
@@ -155,11 +166,13 @@ void Boid::setCohesion()
     if(m_cohesion.length()!=0)
       m_cohesion.normalize();
   }
+  // if the boid has no neighbours then has no cohesion force
   else m_cohesion.set(0,0,0);
 }
 
 void Boid::setAlign()
 {
+  // alignment force is calculated by averaging the boid's neighbours's velocities
   if(m_neighbours.size()>0)
   {
     for(int i=0;i<m_neighbours.size();++i)
@@ -168,21 +181,28 @@ void Boid::setAlign()
     }
     m_align /= m_neighbours.size();
     if(m_align.length()!=0)
+    {
       m_align.normalize();
+    }
   }
+  // if the boid has no neighbours it has no alignment force
   else
     m_align.set(0,0,0);
 }
 
 void Boid::setSeparation()
 {
+  // separation is calculated by taking a vector from each neighbours position to the boid's
+  // position and averaging them all.
   m_separation.set(0,0,0);
   for(int i=0;i<m_neighbours.size();++i)
   {
-    if(BoidMath::distance(m_position, m_neighbours[i]->getPosition())>SEPARATION_DISTANCE)
+    // if the neighbour is within the boid's separation radius then add a vector from the
+    // neighbour to the boids position to the separation vector.
+    if(BoidMath::distance(m_position, m_neighbours[i]->getPosition())>m_separationDistance)
     {
       ngl::Vec3 pos(m_neighbours[i]->getPosition());
-      ngl::Vec3 target = (pos-m_position);
+      ngl::Vec3 target = (m_position-pos);
       m_separation += target;
     }
   }
@@ -194,11 +214,12 @@ void Boid::setSeparation()
   {
     m_separation.normalize();
   }
-  m_separation = -m_separation;
 }
 
 void Boid::setAvoid()
 {
+  // first check neighbours for collisions, obstacle collisions are
+  // checked in World.cpp
   for(int i=0; i<m_neighbours.size();++i)
   {
     findObstacle(m_neighbours[i]->getPosition(), m_neighbours[i]->getRadius());
@@ -208,8 +229,10 @@ void Boid::setAvoid()
   {
     m_velocity.normalize();
   }
+  // if there is a collision, calculate the avoidance force as a vector
+  // from the collision position to the ahead vector
   m_avoid=(0,0,0);
-  ngl::Vec3 ahead(m_position + m_velocity * MAX_SEE_AHEAD * m_speed);
+  ngl::Vec3 ahead(m_position + m_velocity * m_seeAhead * m_speed);
   if(m_collisionPos != 0)
   {
     m_avoid=(ahead-m_collisionPos);
@@ -227,6 +250,8 @@ void Boid::setAvoid()
 
 void Boid::setFlee(ngl::Vec3 _flee)
 {
+  // the flee force is calculated as a vector from the flee position
+  // to the boid
   if(BoidMath::distance(_flee,m_position)<50)
   {
     m_flee=-(_flee-m_position);
@@ -239,6 +264,9 @@ void Boid::setFlee(ngl::Vec3 _flee)
 
 void Boid::fleeWalls()
 {
+  // if a boid raoms outside of the world bounds
+  // it experiences a force to turn it around that
+  // increases the further away it goes.
   if(m_position.m_x<=-150 || m_position.m_x>=150)
   {
     m_flee.m_x-=(m_position.m_x/2);
@@ -288,20 +316,23 @@ void Boid::followLeader()
   {
     behind.normalize();
   }
+  // the the target as a position slightly behind the leader
   behind*=7;
   follow = m_leader->getPosition()+behind;
   m_follow=follow-m_position;
   float distance = m_follow.length();
-  m_speed=MAX_SPEED*(distance/20);
+  // increase speed with distance from leader
+  m_speed=m_maxSpeed*(distance/20);
+  // cap the maximum speed
   if(m_speed>m_setSpeed+0.4)
   {
     m_speed=m_setSpeed+0.4;
-    if(m_speed > MAX_SPEED)
+    if(m_speed > m_maxSpeed)
     {
-      m_speed=MAX_SPEED;
+      m_speed=m_maxSpeed;
     }
   }
-
+  // if the boid is in front ofthe leader, get out of its way
   if(BoidMath::distance(m_leader->getVelocity(), m_position)<5 || BoidMath::distance(m_leader->getPosition(), m_position)<5)
   {
     setFlee(m_leader->getPosition());
@@ -315,39 +346,48 @@ void Boid::followLeader()
 void Boid::setTarget()
 {
   m_target.set(0,0,0);
-  m_avoid*=MAX_AVOID_FORCE;
+  // scale the avoid force by the avoid force meight
+  m_avoid*=m_avoidWeight;
+  // if the boid is a leader
   if(m_isLeader==true)
   {
+    // and if it is steerable, set the target by combining the flee force, avoid force and goal position
     if(m_steer==true)
     {
       m_target=m_flee+m_avoid+m_goal;
     }
+    // otherwise set is as wander force + flee force + avoid force
     else
     {
       m_target=m_wander+m_flee+m_avoid;
     }
   }
+  // if the boid is not a leader
   else
   {
+    // scale the steering forces by their weights
     m_separation*=m_separationWeight;
     m_align*=m_alignWeight;
     m_cohesion*=m_cohesionWeight;
-
+    // there is a predator set the flee force increasing with proximity
     if(m_predator!=0)
     {
       m_flee*=10000.0/BoidMath::distance(m_predator->getPosition(), m_position);
     }
+    // if the boid has a leader set the follow leader force, scale it depending on the boid's distance from the leader
     if(m_hasLeader==true)
     {
-      m_follow*=BoidMath::distance(m_position, m_leader->getPosition())/200;
+      m_follow*=BoidMath::distance(m_position, m_leader->getPosition())*2;
       m_target+=m_follow;
     }
+    // set the target by combining the weighted steering forces
     m_target+=m_separation+m_cohesion+m_align+m_avoid+m_flee;
   }
 }
 
 void Boid::setSteering()
 {
+  // set a steering vector from the current velocity to the target
   m_steering = m_target-m_velocity;
   if(m_steering.length()!=0)
     m_steering.normalize();
@@ -355,12 +395,15 @@ void Boid::setSteering()
 
 void Boid::updatePosition()
 {
+  // update the velocity by adding the steering vector divided by the mass
   m_velocity = m_velocity+(m_steering/m_mass);
+  // scale it by the speed
   if(m_velocity.length()!=0)
   {
     m_velocity.normalize();
     m_velocity*=m_speed;
   }
+  // add the velocity to the current position tyo update it
   m_position = m_position+m_velocity;
 }
 
@@ -369,12 +412,12 @@ void Boid::setRotate()
 {
   m_yaw = atan2(m_velocity.m_x,m_velocity.m_z)*180/M_PI+180;
   m_pitch = atan2(m_velocity.m_y,sqrt(m_velocity.m_x*m_velocity.m_x+m_velocity.m_z*m_velocity.m_z))*180/M_PI;
-  m_roll = 0;
 }
 
 
 void Boid::move()
 {
+  // combines all the steering methods into one for easy use outside the class
   m_flee.set(0,0,0);
   if(m_isLeader==true)
   {
@@ -395,11 +438,13 @@ void Boid::move()
     {
       followLeader();
     }
+    //if the boid has only 1 or fewer neighbours, double its search radius
     if(m_neighbours.size()<=1 && m_searchRad<350)
     {
       m_searchRad*=2;
     }
-    if(m_searchRad!=10 && m_neighbours.size()>=10)
+    //if the search radius is not less than of equal to 10 and the boid has 5 or more neighbours then half the search radius
+    if(m_searchRad<=!10 && m_neighbours.size()>=5)
     {
       m_searchRad/=2;
     }
@@ -407,13 +452,13 @@ void Boid::move()
     setAlign();
     setCohesion();
   }
-  // drives
   setAvoid();
   if(m_predator!=0)
   {
     setFlee(m_predator->getPosition());
   }
   fleeWalls();
+  // drives
   setTarget();
   setSteering();
   // action selection
@@ -429,7 +474,7 @@ void Boid::move()
 void Boid::findObstacle(ngl::Vec3 _pos, float _rad)
 {
 
-  ngl::Vec3 ahead(m_position + m_velocity * MAX_SEE_AHEAD);
+  ngl::Vec3 ahead(m_position + m_velocity * m_seeAhead * m_speed);
   bool collision = BoidMath::collisionDetect(ahead, _pos, m_position, _rad);
   if(collision==true  && (m_collisionPos==0 || BoidMath::distance(m_position, _pos) < BoidMath::distance(m_position, m_collisionPos)))
   {
@@ -463,7 +508,7 @@ void Boid::setTail(bool _tail)
 void Boid::manageTail()
 {
   m_prevPos.push_back(m_position-(m_velocity*3.5));
-  if(m_prevPos.size()>tailLength)
+  if(m_prevPos.size()>m_tailLength)
   {
     m_prevPos.pop_front();
   }

@@ -1,4 +1,4 @@
-#include <predator.h>
+#include <Predator.h>
 #include <stdlib.h>
 #include <BoidMath.h>
 #include <ctime>
@@ -12,12 +12,12 @@ Predator::Predator(ngl::Vec3 _pos, float _mass)
   m_position=_pos;
   m_mass=_mass;
   m_velocity.set(0.8,0.3,0.2);
-  MAX_SPEED=2.0;
-  MIN_SPEED=0.6;
-  MAX_ACCELERATE=0.01;
+  m_maxSpeed=2.0;
+  m_minSpeed=0.6;
+  m_maxAccelerate=0.01;
   m_speed = 0.3;
   m_prey=NULL;
-  MAX_AVOID_FORCE=1000;
+  m_avoidWeight=1000;
   m_collisionPos=NULL;
 }
 
@@ -29,7 +29,7 @@ Predator::~Predator()
 void Predator::setPrey(Boid *_prey)
 {
   m_prey=_prey;
-  prevDistance=BoidMath::distance(m_prey->getPosition(), m_position);
+  m_prevDistance=BoidMath::distance(m_prey->getPosition(), m_position);
 }
 
 void Predator::clearPrey()
@@ -71,7 +71,7 @@ void Predator::setAvoid()
 void Predator::setTarget()
 {
   m_goal*=10;
-  m_avoid*=MAX_AVOID_FORCE;
+  m_avoid*=m_avoidWeight;
   m_target=m_goal+m_flee+m_avoid;
   if(m_target.length()!=0)
   {
@@ -107,13 +107,13 @@ void Predator::fleeWalls()
 void Predator::updatePosition()
 {
   m_velocity = m_velocity+(m_steering/m_mass);
-  if(m_speed>MAX_SPEED)
+  if(m_speed>m_maxSpeed)
   {
-    m_speed=MAX_SPEED;
+    m_speed=m_maxSpeed;
   }
-  else if(m_speed<MIN_SPEED)
+  else if(m_speed<m_minSpeed)
   {
-    m_speed=MIN_SPEED;
+    m_speed=m_minSpeed;
   }
   if(m_velocity.length()!=0)
   {
@@ -127,23 +127,21 @@ void Predator::setRotation()
 {
   m_yaw = atan2(m_velocity.m_x,m_velocity.m_z)*180/M_PI+180;
   m_pitch = atan2(m_velocity.m_y,sqrt(m_velocity.m_x*m_velocity.m_x+m_velocity.m_z*m_velocity.m_z))*180/M_PI;
-  //ngl::Vec2 current(m_position.m_x, m_position.m_z);
-  m_roll = 0;
 }
 
 void Predator::move()
 {
   m_flee.set(0,0,0);
   float distance=BoidMath::distance(m_prey->getPosition(),m_position);
-  float delta = prevDistance-distance;
-  if(delta>=0)
+  if(distance<m_prevDistance)
   {
-    m_speed+=MAX_ACCELERATE;
+    m_speed+=m_maxAccelerate;
   }
   else
   {
-    m_speed-=MAX_ACCELERATE;
+    m_speed-=m_maxAccelerate;
   }
+  m_prevDistance = distance;
   setPursiut(m_prey->getPosition(), 0.8);
   setAvoid();
   fleeWalls();

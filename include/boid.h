@@ -253,6 +253,8 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to calculate the position of a future or
   /// current collision
+  /// @param [in] _pos the position of the obstacle to check
+  /// @param [in] _rad the radius of th eobstacle to check
   //----------------------------------------------------------------------------------------------------------------------
   void findObstacle(ngl::Vec3 _pos, float _rad);
   //----------------------------------------------------------------------------------------------------------------------
@@ -263,311 +265,181 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
 private:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the bounding radius of the boid
   //----------------------------------------------------------------------------------------------------------------------
   float m_boundRadius;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the boids position
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_position;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief vector containing pointers to all the boid's neighbours
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<Boid *> m_neighbours;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the boid's ID
   //----------------------------------------------------------------------------------------------------------------------
   int m_id;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the maximum speed the boid can achieve
+  /// this is only relevant when the flock has a leader as boids that are
+  /// further away from the leader will accelerate towards it
   //----------------------------------------------------------------------------------------------------------------------
-  float m_distance;
+  float m_maxSpeed;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
-  //----------------------------------------------------------------------------------------------------------------------
-  float MAX_SPEED;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the boid's current speed
   //----------------------------------------------------------------------------------------------------------------------
   float m_speed;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the initial speed set to the boid, this acts as a minimum
   //----------------------------------------------------------------------------------------------------------------------
   float m_setSpeed;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the weight of the cohesion force acting on the boid
   //----------------------------------------------------------------------------------------------------------------------
   int m_cohesionWeight;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the weight of the alignment force acting on the boid
   //----------------------------------------------------------------------------------------------------------------------
   int m_alignWeight;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the weight of the separation force acting on the boid
   //----------------------------------------------------------------------------------------------------------------------
   int m_separationWeight;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the distance at which boids begin to feel the separation force
+  float m_separationDistance;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief the mass of the boid, this effects how quickly it is able to
+  /// change direction
   //----------------------------------------------------------------------------------------------------------------------
   int m_mass;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the distance the boid checks ahead for obstacles
   //----------------------------------------------------------------------------------------------------------------------
-  float MAX_SEE_AHEAD;
+  float m_seeAhead;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the weight of the avoidance force acting on the boid
+  /// this does not change and is permanently very high as avoiding
+  /// obstacles has the highest priority
   //----------------------------------------------------------------------------------------------------------------------
-  int MAX_AVOID_FORCE;
+  int m_avoidWeight;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the averaged positions of the boid and its neighbours
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_centroid;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the position of an obstacle that is goign to be or has
+  /// been collided with
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_collisionPos;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the boids veclocity
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_velocity;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the cohesion force vector
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_cohesion;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the alignment force vector
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_align;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the separation force vector
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_separation;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the avoidance force vector
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_avoid;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the random target set to a wandering leader
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_wander;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the target vector that is the result of the weighted
+  /// average of all the steering forces
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_target;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief vector from the current velocity to the target vector.
+  /// This ensures a smooth flight and the speed of the turning is
+  /// controlled by the mass of the boid
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_steering;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
-  //----------------------------------------------------------------------------------------------------------------------
-  ngl::Vec3 m_flockCentroid;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the flee force vector
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_flee;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the follow leader force vector
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_follow;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the goal force vector
   //----------------------------------------------------------------------------------------------------------------------
   ngl::Vec3 m_goal;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief pointer to a predator boid to avoid
   //----------------------------------------------------------------------------------------------------------------------
   Predator *m_predator;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the yaw (y-axis rotation) of the boid
   //----------------------------------------------------------------------------------------------------------------------
   float m_yaw;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the pitch (x-axis rotation) of the boid
   //----------------------------------------------------------------------------------------------------------------------
   float m_pitch;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
-  //----------------------------------------------------------------------------------------------------------------------
-  float m_roll;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
-  //----------------------------------------------------------------------------------------------------------------------
-  float m_turnRadius;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the distance that the boid searches for neighbours
   //----------------------------------------------------------------------------------------------------------------------
   int m_searchRad;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the field of view angle
   //----------------------------------------------------------------------------------------------------------------------
   int m_FOV;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a timer that dictates how often the random wander
+  /// target is set for a wandering leader
   //----------------------------------------------------------------------------------------------------------------------
   std::clock_t m_wanderTimer;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a flag signalling whether the flock has a leader
   //----------------------------------------------------------------------------------------------------------------------
   bool m_hasLeader;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a flag signalling whether this boid is currently the leader
   //----------------------------------------------------------------------------------------------------------------------
   bool m_isLeader;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a pointer the the current leader of the flock
   //----------------------------------------------------------------------------------------------------------------------
   Boid* m_leader;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a flag signalling whether FOV mode is set on or off
   //----------------------------------------------------------------------------------------------------------------------
   bool m_fov;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a flag signalling whether boid trails are set on or off
   //----------------------------------------------------------------------------------------------------------------------
   bool m_tail;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief the length of the boids trail. This is how many previous
+  /// positions will be stored in m_prevPos
+  //----------------------------------------------------------------------------------------------------------------------
+  int m_tailLength;
+  /// @brief a flag signalling whether leader steering is set on or off
   //----------------------------------------------------------------------------------------------------------------------
   bool m_steer;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a deque housing the preivous 50 positions of the boid
+  /// for drawing a trail behind it
   //----------------------------------------------------------------------------------------------------------------------
   std::deque<ngl::Vec3> m_prevPos;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to calculate the distance between two 3d points
-  /// @param [in] a a 3d point
-  /// @param [in] b the 3d point whos distance from a is to be calculated
-  /// @return returns the distance of b from a
+  /// @brief a method to clear m_prevPos
   //----------------------------------------------------------------------------------------------------------------------
   void clearPrevPos();
   //----------------------------------------------------------------------------------------------------------------------

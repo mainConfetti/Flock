@@ -150,7 +150,7 @@ public:
 
         m_separation = new QSlider(m_BehaviourOptions);
         m_separation->setObjectName(QStringLiteral("m_separation"));
-        m_separation->setMaximum(500);
+        m_separation->setMaximum(300);
         m_separation->setValue(100);
         m_separation->setOrientation(Qt::Horizontal);
 
@@ -158,7 +158,7 @@ public:
 
         m_alignment = new QSlider(m_BehaviourOptions);
         m_alignment->setObjectName(QStringLiteral("m_alignment"));
-        m_alignment->setMaximum(500);
+        m_alignment->setMaximum(300);
         m_alignment->setValue(50);
         m_alignment->setOrientation(Qt::Horizontal);
 
@@ -196,7 +196,7 @@ public:
 
         m_cohesion = new QSlider(m_BehaviourOptions);
         m_cohesion->setObjectName(QStringLiteral("m_cohesion"));
-        m_cohesion->setMaximum(500);
+        m_cohesion->setMaximum(300);
         m_cohesion->setValue(200);
         m_cohesion->setOrientation(Qt::Horizontal);
 

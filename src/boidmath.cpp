@@ -111,9 +111,9 @@ ngl::Vec3 BoidMath::cresentPoint(float u, float v)
 
   float piu = M_PI*u;
   float piv = M_PI*v;
-  vertex.m_x = 2 + (sin(2*piu)*sin(2*piv)*sin(3*piv));
-  vertex.m_y = 2 + (sin(2*piu)*sin(2*piv)*cos(3*piv));
-  vertex.m_z = (cos(2*piu)*sin(2*piv)+(4*v)-2);
+  vertex.m_x = (2 + (sin(2*piu)*sin(2*piv))*sin(3*piv));
+  vertex.m_y = (2 + (sin(2*piu)*sin(2*piv))*cos(3*piv));
+  vertex.m_z = cos(2*piu)*sin(2*piv)+(4*v)-2;
   return vertex;
 }
 //----------------------------------------------------------------------------------------------------------------------
