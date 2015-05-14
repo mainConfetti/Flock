@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>966</width>
-    <height>578</height>
+    <width>1110</width>
+    <height>682</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,13 +28,19 @@
       </property>
      </spacer>
     </item>
-    <item row="0" column="2">
+    <item row="0" column="1">
      <widget class="QTabWidget" name="m_optionsTabWidget">
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>400</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="usesScrollButtons">
        <bool>true</bool>
@@ -48,7 +54,7 @@
       <property name="movable">
        <bool>false</bool>
       </property>
-      <property name="tabBarAutoHide">
+      <property name="tabBarAutoHide" stdset="0">
        <bool>false</bool>
       </property>
       <widget class="QWidget" name="m_flockTab">
@@ -65,7 +71,7 @@
            <string>Boid Behaviours</string>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="5" column="0">
+           <item row="6" column="0">
             <widget class="QCheckBox" name="m_fov">
              <property name="text">
               <string>Field of View</string>
@@ -112,17 +118,17 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="m_alignLabel">
-             <property name="text">
-              <string>Alignment</string>
-             </property>
-            </widget>
-           </item>
            <item row="3" column="0">
             <widget class="QLabel" name="m_speedLabel">
              <property name="text">
               <string>Speed</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="m_alignLabel">
+             <property name="text">
+              <string>Alignment</string>
              </property>
             </widget>
            </item>
@@ -145,6 +151,13 @@
              </property>
             </widget>
            </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="m_fovAngleLabel">
+             <property name="text">
+              <string>Field of View Angle</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="2">
             <widget class="QSlider" name="m_cohesion">
              <property name="maximum">
@@ -158,27 +171,20 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="2">
+           <item row="4" column="0">
+            <widget class="QLabel" name="m_massLabel">
+             <property name="text">
+              <string>Mass</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
             <widget class="QSpinBox" name="m_fovAngle">
              <property name="maximum">
               <number>180</number>
              </property>
              <property name="value">
               <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="m_fovAngleLabel">
-             <property name="text">
-              <string>Field of View Angle</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="m_massLabel">
-             <property name="text">
-              <string>Mass</string>
              </property>
             </widget>
            </item>
@@ -198,6 +204,39 @@
              </property>
             </widget>
            </item>
+           <item row="5" column="2">
+            <widget class="QSlider" name="m_sepDist">
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="maximumSize">
+              <size>
+               <width>1000</width>
+               <height>200</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Separation Distance</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QPushButton" name="m_reset">
+             <property name="text">
+              <string>Reset Values</string>
+             </property>
+            </widget>
+           </item>
           </layout>
           <zorder>m_cohesion</zorder>
           <zorder>m_separation</zorder>
@@ -212,6 +251,9 @@
           <zorder>m_fovAngle</zorder>
           <zorder>m_massLabel</zorder>
           <zorder>m_mass</zorder>
+          <zorder>label_6</zorder>
+          <zorder>m_sepDist</zorder>
+          <zorder>m_reset</zorder>
          </widget>
         </item>
         <item row="0" column="0">
@@ -344,6 +386,11 @@
              <property name="maxCount">
               <number>10</number>
              </property>
+             <item>
+              <property name="text">
+               <string>none</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="1" column="0">
@@ -361,25 +408,18 @@
              <item>
               <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>End point (x,y,z</string>
+                <string>End point   </string>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
+              <widget class="QDoubleSpinBox" name="m_customEndX">
+               <property name="maximumSize">
                 <size>
-                 <width>20</width>
-                 <height>20</height>
+                 <width>70</width>
+                 <height>16777215</height>
                 </size>
                </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="m_customEndX">
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -396,6 +436,12 @@
              </item>
              <item>
               <widget class="QDoubleSpinBox" name="m_customEndY">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -412,6 +458,12 @@
              </item>
              <item>
               <widget class="QDoubleSpinBox" name="m_customEndZ">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -436,25 +488,18 @@
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Start point (x,y,z)</string>
+                <string>Start point </string>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
+              <widget class="QDoubleSpinBox" name="m_customStartX">
+               <property name="maximumSize">
                 <size>
-                 <width>10</width>
-                 <height>20</height>
+                 <width>70</width>
+                 <height>16777215</height>
                 </size>
                </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="m_customStartX">
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -468,6 +513,12 @@
              </item>
              <item>
               <widget class="QDoubleSpinBox" name="m_customStartY">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -484,6 +535,12 @@
              </item>
              <item>
               <widget class="QDoubleSpinBox" name="m_customStartZ">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -508,25 +565,18 @@
              <item>
               <widget class="QLabel" name="label_4">
                <property name="text">
-                <string>Control Point (x,y,z)</string>
+                <string>Control Point</string>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
+              <widget class="QDoubleSpinBox" name="m_customCtrlX">
+               <property name="maximumSize">
                 <size>
-                 <width>10</width>
-                 <height>20</height>
+                 <width>70</width>
+                 <height>16777215</height>
                 </size>
                </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="m_customCtrlX">
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -540,6 +590,12 @@
              </item>
              <item>
               <widget class="QDoubleSpinBox" name="m_customCtrlY">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -556,6 +612,12 @@
              </item>
              <item>
               <widget class="QDoubleSpinBox" name="m_customCtrlZ">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="minimum">
                 <double>-1000.000000000000000</double>
                </property>
@@ -650,43 +712,53 @@
         <string>Visualisation</string>
        </attribute>
        <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="m_visOctree">
-          <property name="text">
-           <string>Visualise Octree</string>
+        <item row="5" column="1">
+         <widget class="QSpinBox" name="m_tailLength">
+          <property name="maximumSize">
+           <size>
+            <width>70</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>70</number>
+          </property>
+          <property name="value">
+           <number>50</number>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="m_tails">
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Trails</string>
+           <string>Trail Length</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="4" column="0">
          <widget class="QCheckBox" name="m_pov">
           <property name="text">
            <string>Point of View</string>
           </property>
          </widget>
         </item>
+        <item row="3" column="0">
+         <widget class="QCheckBox" name="m_tails">
+          <property name="text">
+           <string>Trails</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="m_visOctree">
+          <property name="text">
+           <string>Visualise Octree</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
-    </item>
-    <item row="0" column="1">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
     </item>
    </layout>
   </widget>
@@ -695,8 +767,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>966</width>
-     <height>20</height>
+     <width>1110</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>

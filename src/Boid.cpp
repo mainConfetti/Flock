@@ -1,8 +1,8 @@
-#include "Boid.h"
-#include <BoidMath.h>
 #include <ngl/VAOPrimitives.h>
 #include <ngl/ShaderLib.h>
-#include <Predator.h>
+#include "Predator.h"
+#include "Boid.h"
+#include "BoidMath.h"
 
 Boid::Boid(int _id)
 {
@@ -508,7 +508,7 @@ void Boid::setTail(bool _tail)
 void Boid::manageTail()
 {
   m_prevPos.push_back(m_position-(m_velocity*3.5));
-  if(m_prevPos.size()>m_tailLength)
+  while (m_prevPos.size()>m_tailLength)
   {
     m_prevPos.pop_front();
   }

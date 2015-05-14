@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.4.1
+** Created by: Qt User Interface Compiler version 5.3.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -50,14 +50,17 @@ public:
     QSlider *m_alignment;
     QLabel *m_cohesionLabel;
     QLabel *m_spearatioLabel;
-    QLabel *m_alignLabel;
     QLabel *m_speedLabel;
+    QLabel *m_alignLabel;
     QSlider *m_speed;
-    QSlider *m_cohesion;
-    QSpinBox *m_fovAngle;
     QLabel *m_fovAngleLabel;
+    QSlider *m_cohesion;
     QLabel *m_massLabel;
+    QSpinBox *m_fovAngle;
     QSlider *m_mass;
+    QSlider *m_sepDist;
+    QLabel *label_6;
+    QPushButton *m_reset;
     QGroupBox *m_flockOptions;
     QGridLayout *gridLayout_3;
     QPushButton *m_addBoid;
@@ -79,19 +82,16 @@ public:
     QLabel *label;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_3;
-    QSpacerItem *horizontalSpacer_4;
     QDoubleSpinBox *m_customEndX;
     QDoubleSpinBox *m_customEndY;
     QDoubleSpinBox *m_customEndZ;
     QHBoxLayout *horizontalLayout;
     QLabel *label_2;
-    QSpacerItem *horizontalSpacer_5;
     QDoubleSpinBox *m_customStartX;
     QDoubleSpinBox *m_customStartY;
     QDoubleSpinBox *m_customStartZ;
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_4;
-    QSpacerItem *horizontalSpacer_6;
     QDoubleSpinBox *m_customCtrlX;
     QDoubleSpinBox *m_customCtrlY;
     QDoubleSpinBox *m_customCtrlZ;
@@ -107,10 +107,11 @@ public:
     QSpacerItem *verticalSpacer;
     QWidget *m_visTab;
     QFormLayout *formLayout;
-    QCheckBox *m_visOctree;
-    QCheckBox *m_tails;
+    QSpinBox *m_tailLength;
+    QLabel *label_5;
     QCheckBox *m_pov;
-    QSpacerItem *horizontalSpacer_2;
+    QCheckBox *m_tails;
+    QCheckBox *m_visOctree;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -118,7 +119,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(966, 578);
+        MainWindow->resize(1110, 682);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         s_mainWindowGridLayout = new QGridLayout(centralwidget);
@@ -130,11 +131,12 @@ public:
         m_optionsTabWidget = new QTabWidget(centralwidget);
         m_optionsTabWidget->setObjectName(QStringLiteral("m_optionsTabWidget"));
         m_optionsTabWidget->setEnabled(true);
+        m_optionsTabWidget->setMaximumSize(QSize(400, 16777215));
         m_optionsTabWidget->setUsesScrollButtons(true);
         m_optionsTabWidget->setDocumentMode(false);
         m_optionsTabWidget->setTabsClosable(false);
         m_optionsTabWidget->setMovable(false);
-        m_optionsTabWidget->setTabBarAutoHide(false);
+        m_optionsTabWidget->setProperty("tabBarAutoHide", QVariant(false));
         m_flockTab = new QWidget();
         m_flockTab->setObjectName(QStringLiteral("m_flockTab"));
         gridLayout_4 = new QGridLayout(m_flockTab);
@@ -146,7 +148,7 @@ public:
         m_fov = new QCheckBox(m_BehaviourOptions);
         m_fov->setObjectName(QStringLiteral("m_fov"));
 
-        gridLayout->addWidget(m_fov, 5, 0, 1, 1);
+        gridLayout->addWidget(m_fov, 6, 0, 1, 1);
 
         m_separation = new QSlider(m_BehaviourOptions);
         m_separation->setObjectName(QStringLiteral("m_separation"));
@@ -174,15 +176,15 @@ public:
 
         gridLayout->addWidget(m_spearatioLabel, 1, 0, 1, 1);
 
-        m_alignLabel = new QLabel(m_BehaviourOptions);
-        m_alignLabel->setObjectName(QStringLiteral("m_alignLabel"));
-
-        gridLayout->addWidget(m_alignLabel, 2, 0, 1, 1);
-
         m_speedLabel = new QLabel(m_BehaviourOptions);
         m_speedLabel->setObjectName(QStringLiteral("m_speedLabel"));
 
         gridLayout->addWidget(m_speedLabel, 3, 0, 1, 1);
+
+        m_alignLabel = new QLabel(m_BehaviourOptions);
+        m_alignLabel->setObjectName(QStringLiteral("m_alignLabel"));
+
+        gridLayout->addWidget(m_alignLabel, 2, 0, 1, 1);
 
         m_speed = new QSlider(m_BehaviourOptions);
         m_speed->setObjectName(QStringLiteral("m_speed"));
@@ -194,6 +196,11 @@ public:
 
         gridLayout->addWidget(m_speed, 3, 2, 1, 1);
 
+        m_fovAngleLabel = new QLabel(m_BehaviourOptions);
+        m_fovAngleLabel->setObjectName(QStringLiteral("m_fovAngleLabel"));
+
+        gridLayout->addWidget(m_fovAngleLabel, 7, 0, 1, 1);
+
         m_cohesion = new QSlider(m_BehaviourOptions);
         m_cohesion->setObjectName(QStringLiteral("m_cohesion"));
         m_cohesion->setMaximum(300);
@@ -202,22 +209,17 @@ public:
 
         gridLayout->addWidget(m_cohesion, 0, 2, 1, 1);
 
+        m_massLabel = new QLabel(m_BehaviourOptions);
+        m_massLabel->setObjectName(QStringLiteral("m_massLabel"));
+
+        gridLayout->addWidget(m_massLabel, 4, 0, 1, 1);
+
         m_fovAngle = new QSpinBox(m_BehaviourOptions);
         m_fovAngle->setObjectName(QStringLiteral("m_fovAngle"));
         m_fovAngle->setMaximum(180);
         m_fovAngle->setValue(100);
 
-        gridLayout->addWidget(m_fovAngle, 6, 2, 1, 1);
-
-        m_fovAngleLabel = new QLabel(m_BehaviourOptions);
-        m_fovAngleLabel->setObjectName(QStringLiteral("m_fovAngleLabel"));
-
-        gridLayout->addWidget(m_fovAngleLabel, 6, 0, 1, 1);
-
-        m_massLabel = new QLabel(m_BehaviourOptions);
-        m_massLabel->setObjectName(QStringLiteral("m_massLabel"));
-
-        gridLayout->addWidget(m_massLabel, 4, 0, 1, 1);
+        gridLayout->addWidget(m_fovAngle, 7, 2, 1, 1);
 
         m_mass = new QSlider(m_BehaviourOptions);
         m_mass->setObjectName(QStringLiteral("m_mass"));
@@ -227,6 +229,25 @@ public:
         m_mass->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(m_mass, 4, 2, 1, 1);
+
+        m_sepDist = new QSlider(m_BehaviourOptions);
+        m_sepDist->setObjectName(QStringLiteral("m_sepDist"));
+        m_sepDist->setMaximum(100);
+        m_sepDist->setValue(10);
+        m_sepDist->setOrientation(Qt::Horizontal);
+
+        gridLayout->addWidget(m_sepDist, 5, 2, 1, 1);
+
+        label_6 = new QLabel(m_BehaviourOptions);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        label_6->setMaximumSize(QSize(1000, 200));
+
+        gridLayout->addWidget(label_6, 5, 0, 1, 1);
+
+        m_reset = new QPushButton(m_BehaviourOptions);
+        m_reset->setObjectName(QStringLiteral("m_reset"));
+
+        gridLayout->addWidget(m_reset, 8, 0, 1, 1);
 
         m_cohesion->raise();
         m_separation->raise();
@@ -241,6 +262,9 @@ public:
         m_fovAngle->raise();
         m_massLabel->raise();
         m_mass->raise();
+        label_6->raise();
+        m_sepDist->raise();
+        m_reset->raise();
 
         gridLayout_4->addWidget(m_BehaviourOptions, 1, 0, 1, 1);
 
@@ -334,12 +358,9 @@ public:
 
         horizontalLayout_2->addWidget(label_3);
 
-        horizontalSpacer_4 = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_2->addItem(horizontalSpacer_4);
-
         m_customEndX = new QDoubleSpinBox(m_customObstacleOptions);
         m_customEndX->setObjectName(QStringLiteral("m_customEndX"));
+        m_customEndX->setMaximumSize(QSize(70, 16777215));
         m_customEndX->setMinimum(-1000);
         m_customEndX->setMaximum(1000);
         m_customEndX->setSingleStep(2);
@@ -349,6 +370,7 @@ public:
 
         m_customEndY = new QDoubleSpinBox(m_customObstacleOptions);
         m_customEndY->setObjectName(QStringLiteral("m_customEndY"));
+        m_customEndY->setMaximumSize(QSize(70, 16777215));
         m_customEndY->setMinimum(-1000);
         m_customEndY->setMaximum(1000);
         m_customEndY->setSingleStep(2);
@@ -358,6 +380,7 @@ public:
 
         m_customEndZ = new QDoubleSpinBox(m_customObstacleOptions);
         m_customEndZ->setObjectName(QStringLiteral("m_customEndZ"));
+        m_customEndZ->setMaximumSize(QSize(70, 16777215));
         m_customEndZ->setMinimum(-1000);
         m_customEndZ->setMaximum(1000);
         m_customEndZ->setSingleStep(2);
@@ -376,12 +399,9 @@ public:
 
         horizontalLayout->addWidget(label_2);
 
-        horizontalSpacer_5 = new QSpacerItem(10, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout->addItem(horizontalSpacer_5);
-
         m_customStartX = new QDoubleSpinBox(m_customObstacleOptions);
         m_customStartX->setObjectName(QStringLiteral("m_customStartX"));
+        m_customStartX->setMaximumSize(QSize(70, 16777215));
         m_customStartX->setMinimum(-1000);
         m_customStartX->setMaximum(1000);
         m_customStartX->setSingleStep(2);
@@ -390,6 +410,7 @@ public:
 
         m_customStartY = new QDoubleSpinBox(m_customObstacleOptions);
         m_customStartY->setObjectName(QStringLiteral("m_customStartY"));
+        m_customStartY->setMaximumSize(QSize(70, 16777215));
         m_customStartY->setMinimum(-1000);
         m_customStartY->setMaximum(1000);
         m_customStartY->setSingleStep(2);
@@ -399,6 +420,7 @@ public:
 
         m_customStartZ = new QDoubleSpinBox(m_customObstacleOptions);
         m_customStartZ->setObjectName(QStringLiteral("m_customStartZ"));
+        m_customStartZ->setMaximumSize(QSize(70, 16777215));
         m_customStartZ->setMinimum(-1000);
         m_customStartZ->setMaximum(1000);
         m_customStartZ->setSingleStep(2);
@@ -417,12 +439,9 @@ public:
 
         horizontalLayout_3->addWidget(label_4);
 
-        horizontalSpacer_6 = new QSpacerItem(10, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_3->addItem(horizontalSpacer_6);
-
         m_customCtrlX = new QDoubleSpinBox(m_customObstacleOptions);
         m_customCtrlX->setObjectName(QStringLiteral("m_customCtrlX"));
+        m_customCtrlX->setMaximumSize(QSize(70, 16777215));
         m_customCtrlX->setMinimum(-1000);
         m_customCtrlX->setMaximum(1000);
         m_customCtrlX->setSingleStep(2);
@@ -431,6 +450,7 @@ public:
 
         m_customCtrlY = new QDoubleSpinBox(m_customObstacleOptions);
         m_customCtrlY->setObjectName(QStringLiteral("m_customCtrlY"));
+        m_customCtrlY->setMaximumSize(QSize(70, 16777215));
         m_customCtrlY->setMinimum(-1000);
         m_customCtrlY->setMaximum(1000);
         m_customCtrlY->setSingleStep(2);
@@ -440,6 +460,7 @@ public:
 
         m_customCtrlZ = new QDoubleSpinBox(m_customObstacleOptions);
         m_customCtrlZ->setObjectName(QStringLiteral("m_customCtrlZ"));
+        m_customCtrlZ->setMaximumSize(QSize(70, 16777215));
         m_customCtrlZ->setMinimum(-1000);
         m_customCtrlZ->setMaximum(1000);
         m_customCtrlZ->setSingleStep(2);
@@ -504,33 +525,42 @@ public:
         m_visTab->setObjectName(QStringLiteral("m_visTab"));
         formLayout = new QFormLayout(m_visTab);
         formLayout->setObjectName(QStringLiteral("formLayout"));
-        m_visOctree = new QCheckBox(m_visTab);
-        m_visOctree->setObjectName(QStringLiteral("m_visOctree"));
+        m_tailLength = new QSpinBox(m_visTab);
+        m_tailLength->setObjectName(QStringLiteral("m_tailLength"));
+        m_tailLength->setMaximumSize(QSize(70, 16777215));
+        m_tailLength->setMaximum(70);
+        m_tailLength->setValue(50);
 
-        formLayout->setWidget(0, QFormLayout::FieldRole, m_visOctree);
+        formLayout->setWidget(5, QFormLayout::FieldRole, m_tailLength);
 
-        m_tails = new QCheckBox(m_visTab);
-        m_tails->setObjectName(QStringLiteral("m_tails"));
+        label_5 = new QLabel(m_visTab);
+        label_5->setObjectName(QStringLiteral("label_5"));
 
-        formLayout->setWidget(1, QFormLayout::FieldRole, m_tails);
+        formLayout->setWidget(5, QFormLayout::LabelRole, label_5);
 
         m_pov = new QCheckBox(m_visTab);
         m_pov->setObjectName(QStringLiteral("m_pov"));
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, m_pov);
+        formLayout->setWidget(4, QFormLayout::LabelRole, m_pov);
+
+        m_tails = new QCheckBox(m_visTab);
+        m_tails->setObjectName(QStringLiteral("m_tails"));
+
+        formLayout->setWidget(3, QFormLayout::LabelRole, m_tails);
+
+        m_visOctree = new QCheckBox(m_visTab);
+        m_visOctree->setObjectName(QStringLiteral("m_visOctree"));
+
+        formLayout->setWidget(2, QFormLayout::LabelRole, m_visOctree);
 
         m_optionsTabWidget->addTab(m_visTab, QString());
 
-        s_mainWindowGridLayout->addWidget(m_optionsTabWidget, 0, 2, 1, 1);
-
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        s_mainWindowGridLayout->addItem(horizontalSpacer_2, 0, 1, 1, 1);
+        s_mainWindowGridLayout->addWidget(m_optionsTabWidget, 0, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 966, 20));
+        menubar->setGeometry(QRect(0, 0, 1110, 25));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
@@ -538,7 +568,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        m_optionsTabWidget->setCurrentIndex(0);
+        m_optionsTabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -554,10 +584,12 @@ public:
         m_fov->setText(QApplication::translate("MainWindow", "Field of View", 0));
         m_cohesionLabel->setText(QApplication::translate("MainWindow", "Cohesion", 0));
         m_spearatioLabel->setText(QApplication::translate("MainWindow", "Separation", 0));
-        m_alignLabel->setText(QApplication::translate("MainWindow", "Alignment", 0));
         m_speedLabel->setText(QApplication::translate("MainWindow", "Speed", 0));
+        m_alignLabel->setText(QApplication::translate("MainWindow", "Alignment", 0));
         m_fovAngleLabel->setText(QApplication::translate("MainWindow", "Field of View Angle", 0));
         m_massLabel->setText(QApplication::translate("MainWindow", "Mass", 0));
+        label_6->setText(QApplication::translate("MainWindow", "Separation Distance", 0));
+        m_reset->setText(QApplication::translate("MainWindow", "Reset Values", 0));
         m_flockOptions->setTitle(QApplication::translate("MainWindow", "Flock", 0));
         m_addBoid->setText(QApplication::translate("MainWindow", "Add Boid", 0));
         m_leader->setText(QApplication::translate("MainWindow", "Leader", 0));
@@ -578,10 +610,14 @@ public:
         m_presetObstacles->setCurrentText(QApplication::translate("MainWindow", "None", 0));
         m_customObstacleOptions->setTitle(QApplication::translate("MainWindow", "Custom Obstacles", 0));
         obstacleradius->setText(QApplication::translate("MainWindow", "Obstacle Radius", 0));
+        m_customObstacle->clear();
+        m_customObstacle->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "none", 0)
+        );
         label->setText(QApplication::translate("MainWindow", "Custom Obstacle number", 0));
-        label_3->setText(QApplication::translate("MainWindow", "End point (x,y,z", 0));
-        label_2->setText(QApplication::translate("MainWindow", "Start point (x,y,z)", 0));
-        label_4->setText(QApplication::translate("MainWindow", "Control Point (x,y,z)", 0));
+        label_3->setText(QApplication::translate("MainWindow", "End point   ", 0));
+        label_2->setText(QApplication::translate("MainWindow", "Start point ", 0));
+        label_4->setText(QApplication::translate("MainWindow", "Control Point", 0));
         m_removeCustomObstacle->setText(QApplication::translate("MainWindow", "Remove Custom Obstacle", 0));
         m_addCustomObstacle->setText(QApplication::translate("MainWindow", "Add Custom Obstacle", 0));
         m_showCtrlPoints->setText(QApplication::translate("MainWindow", "Show Control Point", 0));
@@ -590,9 +626,10 @@ public:
         m_removeObstacle->setText(QApplication::translate("MainWindow", "Remove Obstacle", 0));
         m_addObstacle->setText(QApplication::translate("MainWindow", "Add Obstacle", 0));
         m_optionsTabWidget->setTabText(m_optionsTabWidget->indexOf(m_obstacleTab), QApplication::translate("MainWindow", "Obstacle", 0));
-        m_visOctree->setText(QApplication::translate("MainWindow", "Visualise Octree", 0));
-        m_tails->setText(QApplication::translate("MainWindow", "Trails", 0));
+        label_5->setText(QApplication::translate("MainWindow", "Trail Length", 0));
         m_pov->setText(QApplication::translate("MainWindow", "Point of View", 0));
+        m_tails->setText(QApplication::translate("MainWindow", "Trails", 0));
+        m_visOctree->setText(QApplication::translate("MainWindow", "Visualise Octree", 0));
         m_optionsTabWidget->setTabText(m_optionsTabWidget->indexOf(m_visTab), QApplication::translate("MainWindow", "Visualisation", 0));
     } // retranslateUi
 

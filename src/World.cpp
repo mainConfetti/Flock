@@ -37,8 +37,8 @@ World::World(int _numBoids, int _cohesion, int _separation, int _alignment, floa
 World::~World()
 {
   // delete octree and predator
-  delete m_octree;
   delete m_predator;
+  delete m_octree;
 }
 
 void World::addBoid(int _cohesion, int _separation, int _alignment, float _speed, int _mass)
@@ -147,7 +147,7 @@ void World::updateWorld()
     // search for collisions with obstacles
     for(int j=0;j<m_obstacles.size();++j)
     {
-      m_flock[i].findObstacle(m_obstacles[j].getPosition(), m_obstacles[j].getRadius()+4);
+      m_flock[i].findObstacle(m_obstacles[j].getPosition(), m_obstacles[j].getRadius());
     }
     for(int j=0;j<m_customObs.size();++j)
     {
@@ -383,7 +383,10 @@ void World::updateCustomObstacle(int _id, ngl::Vec3 _newStart, ngl::Vec3 _newEnd
 
 void World::removeCustomObstacle()
 {
-  m_customObs.pop_back();
+  if(m_customObs.size()>0)
+  {
+    m_customObs.pop_back();
+  }
 }
 
 

@@ -1,14 +1,13 @@
+//----------------------------------------------------------------------------------------------------------------------
 /// @file GLWindow.h
-/// @brief a basic Qt GL window class for ngl demos
-/// @author Jonathan Macey
+/// @brief a basic Qt GL window class for creating a Flocking System
+/// @author Alexander la Tourelle
 /// @version 1.0
-/// @date 10/10/10
-/// Revision History :
-/// Initial Version 10/10/10 (Binary day ;-0 )
+/// @date 07/05/15
 /// @class GLWindow
-/// @brief our main glwindow widget for NGL applications all drawing elements are
+/// @brief our main glwindow widget for the flocking system all drawing elements are
 /// put in this file
-
+//----------------------------------------------------------------------------------------------------------------------
 #ifndef GL_WINDOW_H__
 #define GL_WINDOW_H__
 #include <ngl/Camera.h>
@@ -67,7 +66,7 @@ public :
   /// also updates the relevent ngl::vec3 values in m_customPoints
   void updateObstacle(int _id, ngl::Vec3 _newStart, ngl::Vec3 _newEnd, ngl::Vec3 _newCtrl, int _newRad);
 
-  std::vector<std::vector<ngl::Vec3>> m_customPoints;
+  std::vector<std::vector<ngl::Vec3> > m_customPoints;
 
 public slots :
   //----------------------------------------------------------------------------------------------------------------------
@@ -123,6 +122,9 @@ public slots :
   /// @brief A slot to clear all obstacles
   void clearObstacle();
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief A slot to remove the last created custom obstacle
+  void removeCustomObstacle();
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief A slot to set boid field of view angle
   /// @param[in] _angle the value to set
   void setFOVAngle(int _angle);
@@ -150,7 +152,14 @@ public slots :
   /// @brief A slot to set mass
   /// @param[in] _mass the value to set
   void setMass(int _mass);
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief A slot to set the length of boid trails
+  /// @param[in] _trailLength the value to set
+  void setTrailLength(int _trailLength);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief A slot to set the separation distance of boids
+  /// @param[in] _sepDist the value to set
+  void setSepDist(int _sepDist);
 
 protected :
 

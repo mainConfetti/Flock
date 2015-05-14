@@ -1,3 +1,10 @@
+//----------------------------------------------------------------------------------------------------------------------
+/// @file MainWindow.h
+/// @author Alexander la Tourelle
+/// @date 07/05/15
+/// @class MainWindow
+/// @brief class to connect gui elements to GLWindow
+//----------------------------------------------------------------------------------------------------------------------
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -29,6 +36,8 @@ private slots :
   void addObstaclePressed();
   void changeCustomObstaclePoints();
   void selectObstacle(int _id);
+  void removeCustomObstaclePressed();
+  void clearObstaclePressed();
 
 };
 

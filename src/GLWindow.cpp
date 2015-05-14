@@ -495,10 +495,6 @@ void GLWindow::keyPressEvent(QKeyEvent *_event)
   case Qt::Key_Down : m_world->m_flock[m_leaderId].steerLeader(1); break;
   case Qt::Key_Left : m_world->m_flock[m_leaderId].steerLeader(2); break;
   case Qt::Key_Right : m_world->m_flock[m_leaderId].steerLeader(3); break;
-  case Qt::Key_0 : m_world->createObstacles(0); break;
-  case Qt::Key_1 : m_world->createObstacles(1); break;
-  case Qt::Key_2 : m_world->createObstacles(2); break;
-  case Qt::Key_3 : m_world->createObstacles(3); break;
   case Qt::Key_Y : m_vizOctree = (m_vizOctree==true ? false : true); break;
   default : break;
   }
@@ -795,6 +791,16 @@ void GLWindow::clearObstacle()
   setFocus();
 }
 //----------------------------------------------------------------------------------------------------------------------
+void GLWindow::removeCustomObstacle()
+{
+  m_world->removeCustomObstacle();
+  if(m_customPoints.size()>0)
+  {
+    m_customPoints.pop_back();
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::toggleOctree(bool _octreeState)
 {
   m_vizOctree = _octreeState;
@@ -889,18 +895,40 @@ void GLWindow::setMass(int _mass)
   setFocus();
 }
 //----------------------------------------------------------------------------------------------------------------------
+void GLWindow::setTrailLength(int _trailLength)
+{
+ for(int i=0;i<m_world->m_flock.size();++i)
+ {
+   m_world->m_flock[i].setTailLength(_trailLength);
+ }
+ setFocus();
+}
+//----------------------------------------------------------------------------------------------------------------------
+void GLWindow::setSepDist(int _sepDist)
+{
+  for(int i=0;i<m_world->m_flock.size();++i)
+  {
+    m_world->m_flock[i].setSepDist(_sepDist);
+  }
+  setFocus();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void GLWindow::setNewCustomObstacle()
 {
-  ngl::Vec3 start(0,-150,100);
-  ngl::Vec3 end(0,-150,-100);
-  ngl::Vec3 ctrl(0,100,0);
-  std::vector<ngl::Vec3> customPoints;
-  customPoints.push_back(start);
-  customPoints.push_back(end);
-  customPoints.push_back(ctrl);
-  m_customPoints.push_back(customPoints);
-  m_world->createCustomObstacle(customPoints[0],customPoints[1],customPoints[2], 10);
-  m_currentObstacleId = (m_customPoints.size()-1);
+  if(m_customPoints.size()<10)
+  {
+    ngl::Vec3 start(0,-150,100);
+    ngl::Vec3 end(0,-150,-100);
+    ngl::Vec3 ctrl(0,100,0);
+    std::vector<ngl::Vec3> customPoints;
+    customPoints.push_back(start);
+    customPoints.push_back(end);
+    customPoints.push_back(ctrl);
+    m_customPoints.push_back(customPoints);
+    m_world->createCustomObstacle(customPoints[0],customPoints[1],customPoints[2], 10);
+    m_currentObstacleId = (m_customPoints.size()-1);
+  }
   setFocus();
 }
 //----------------------------------------------------------------------------------------------------------------------
