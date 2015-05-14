@@ -940,7 +940,29 @@ void GLWindow::updateObstacle(int _id, ngl::Vec3 _newStart, ngl::Vec3 _newEnd, n
   m_customPoints[_id][2]=_newCtrl;
   setFocus();
 }
-
+//----------------------------------------------------------------------------------------------------------------------
+void GLWindow::reset()
+{
+  if(m_predator==true)
+  {
+    m_world->removePredator();
+  }
+  if(m_leader==true)
+  {
+    m_world->clearLeader();
+  }
+  for(int i=0;i<m_world->m_flock.size();++i)
+  {
+    m_world->m_flock[i].setCWeight(200);
+    m_world->m_flock[i].setSWeight(100);
+    m_world->m_flock[i].setAWeight(50);
+    m_world->m_flock[i].setSpeed(0.5);
+    m_world->m_flock[i].setMass(15);
+    m_world->m_flock[i].setSepDist(10);
+    m_world->m_flock[i].setFOV(0);
+    m_world->m_flock[i].setFovAngle(100);
+  }
+}
 
 
 

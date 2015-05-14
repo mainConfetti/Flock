@@ -2,7 +2,7 @@
 /// @file Obstacle.h
 /// @author Alexander la Tourelle
 /// @date 22/03/15
-/// @class Boid
+/// @class Obstacle
 /// @brief A class to contain all relevant data and methods for an obstacle in
 /// a flocking system. The class contains data such as position, radius and colour
 /// as well as some simple accessor methods

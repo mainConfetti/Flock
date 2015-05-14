@@ -37,10 +37,10 @@ void Predator::clearPrey()
   m_prey = NULL;
 }
 
-void Predator::setPursiut(ngl::Vec3 _pos, float targetSpeed)
+void Predator::setPursiut(ngl::Vec3 _pos, float _targetSpeed)
 {
   float predict = BoidMath::distance(m_prey->getPosition(), m_position)/10;
-  m_goal=(_pos+targetSpeed*predict)-m_position;
+  m_goal=(_pos+_targetSpeed*predict)-m_position;
   if(m_goal.length()!=0)
   {
     m_goal.normalize();

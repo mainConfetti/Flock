@@ -1,0 +1,212 @@
+\hypertarget{classBoidMath}{
+\section{BoidMath Class Reference}
+\label{classBoidMath}\index{BoidMath@{BoidMath}}
+}
+
+
+A simple class to contain all relevant mathematical operations for the flocking system so as to aid organisation and to prevent code duplication.  
+
+
+{\ttfamily \#include $<$BoidMath.h$>$}\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBoidMath_a96f701b19a18f2a07372f5eb50548e99}{BoidMath} ()
+\begin{DoxyCompactList}\small\item\em ctor \item\end{DoxyCompactList}\item 
+\hyperlink{classBoidMath_a1b7dfa1c968c08d4ed9ba03be75d91e0}{$\sim$BoidMath} ()
+\begin{DoxyCompactList}\small\item\em ctor \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static float \hyperlink{classBoidMath_a85211e5039504d81a63ce05bfba4ba87}{distance} (ngl::Vec3 a, ngl::Vec3 b)
+\begin{DoxyCompactList}\small\item\em method to calculate the distance between two 3d points \item\end{DoxyCompactList}\item 
+static float \hyperlink{classBoidMath_aa3410e24db5ea38c42b509e130810a52}{distance} (ngl::Vec2 a, ngl::Vec2 b)
+\begin{DoxyCompactList}\small\item\em overlaoded function to calculate the distance between two 2d points \item\end{DoxyCompactList}\item 
+static bool \hyperlink{classBoidMath_a4480da5f7efbf66fa658b82ba3258545}{collisionDetect} (ngl::Vec3 ahead, ngl::Vec3 a, ngl::Vec3 b, float radius)
+\begin{DoxyCompactList}\small\item\em method to detect and predict collisions based on two points and a radius \item\end{DoxyCompactList}\item 
+static bool \hyperlink{classBoidMath_a1be18ef4f6d12c58cc4168ad0d814a28}{boxIntersectsSphere} (ngl::Vec3 bMin, ngl::Vec3 bMax, ngl::Vec3 C, float r)
+\begin{DoxyCompactList}\small\item\em query if a box intersects with a sphere \item\end{DoxyCompactList}\item 
+static float \hyperlink{classBoidMath_a088202ca86b463ad5573870bd705cd87}{pointToPlane} (ngl::Vec3 a, ngl::Vec3 b, ngl::Vec3 c, ngl::Vec3 d)
+\begin{DoxyCompactList}\small\item\em method to check whether a point is on, bellow or above a plane \item\end{DoxyCompactList}\item 
+static std::vector$<$ ngl::Vec3 $>$ \hyperlink{classBoidMath_ab1a1787cf7762f8193ef70b2b83a7416}{calcFOV} (ngl::Vec3 a, ngl::Vec3 b, float rotX, float fovAngle)
+\begin{DoxyCompactList}\small\item\em method to calculate 3 poitns on a plane enclosing the field of view of a boid defined by an angle fovAngle \item\end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\static T \hyperlink{classBoidMath_aca4c74ae6d21b75541ccaf8007af4d2d}{lerp} (T a, T b, float t)
+\begin{DoxyCompactList}\small\item\em method to linearly interpolate between 2 points \item\end{DoxyCompactList}\item 
+static ngl::Vec3 \hyperlink{classBoidMath_aaf61747aac10ac35975469f9e1b67e66}{cresentPoint} (float u, float piv)
+\begin{DoxyCompactList}\small\item\em method to calculate points on a formation made up of cresents. Paule Bourke (2002) Available at: $<$\href{http://paulbourke.net/geometry/cresent/}{\tt http://paulbourke.net/geometry/cresent/}$>$. \item\end{DoxyCompactList}\item 
+static ngl::Vec3 \hyperlink{classBoidMath_aeaef9db8eb5da71f8f10c4892ff044ae}{hornPoint} (float u, float v)
+\begin{DoxyCompactList}\small\item\em method to calculate points on a horn formation. Paule Bourke (2002) Available at: $<$\href{http://paulbourke.net/geometry/horn/}{\tt http://paulbourke.net/geometry/horn/}$>$. \item\end{DoxyCompactList}\item 
+static std::vector$<$ ngl::Vec3 $>$ \hyperlink{classBoidMath_a933eefc38fd6e377f5de824f4af92f14}{borromeanPoint} (float u, float r1, float r2)
+\begin{DoxyCompactList}\small\item\em method to calculate points on a set of eliptical borromean rings. Paule Bourke (1997) Available at: $<$\href{http://paulbourke.net/geometry/borromean/}{\tt http://paulbourke.net/geometry/borromean/}$>$. \item\end{DoxyCompactList}\item 
+static ngl::Vec3 \hyperlink{classBoidMath_a5d79930301768c78ba68963bd13e263d}{bezierPoint} (ngl::Vec3 start, ngl::Vec3 end, ngl::Vec3 ctrl, float t)
+\begin{DoxyCompactList}\small\item\em method to calculate points on a bezier curve \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A simple class to contain all relevant mathematical operations for the flocking system so as to aid organisation and to prevent code duplication. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classBoidMath_a96f701b19a18f2a07372f5eb50548e99}{
+\index{BoidMath@{BoidMath}!BoidMath@{BoidMath}}
+\index{BoidMath@{BoidMath}!BoidMath@{BoidMath}}
+\subsubsection[{BoidMath}]{\setlength{\rightskip}{0pt plus 5cm}BoidMath::BoidMath ()}}
+\label{classBoidMath_a96f701b19a18f2a07372f5eb50548e99}
+
+
+ctor \hypertarget{classBoidMath_a1b7dfa1c968c08d4ed9ba03be75d91e0}{
+\index{BoidMath@{BoidMath}!$\sim$BoidMath@{$\sim$BoidMath}}
+\index{$\sim$BoidMath@{$\sim$BoidMath}!BoidMath@{BoidMath}}
+\subsubsection[{$\sim$BoidMath}]{\setlength{\rightskip}{0pt plus 5cm}BoidMath::$\sim$BoidMath ()}}
+\label{classBoidMath_a1b7dfa1c968c08d4ed9ba03be75d91e0}
+
+
+ctor 
+
+\subsection{Member Function Documentation}
+\hypertarget{classBoidMath_a5d79930301768c78ba68963bd13e263d}{
+\index{BoidMath@{BoidMath}!bezierPoint@{bezierPoint}}
+\index{bezierPoint@{bezierPoint}!BoidMath@{BoidMath}}
+\subsubsection[{bezierPoint}]{\setlength{\rightskip}{0pt plus 5cm}static ngl::Vec3 BoidMath::bezierPoint (ngl::Vec3 {\em start}, \/  ngl::Vec3 {\em end}, \/  ngl::Vec3 {\em ctrl}, \/  float {\em t})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_a5d79930301768c78ba68963bd13e263d}
+
+
+method to calculate points on a bezier curve 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em start}]the starting point of the curve. \item[\mbox{$\leftarrow$} {\em end}]the end point of the curve. \item[\mbox{$\leftarrow$} {\em ctrl}]the control point of the curve. \item[\mbox{$\leftarrow$} {\em t}]the interval along the bezier curve. \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns a point at distance t along a bezier curve. 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_a933eefc38fd6e377f5de824f4af92f14}{
+\index{BoidMath@{BoidMath}!borromeanPoint@{borromeanPoint}}
+\index{borromeanPoint@{borromeanPoint}!BoidMath@{BoidMath}}
+\subsubsection[{borromeanPoint}]{\setlength{\rightskip}{0pt plus 5cm}static std::vector$<$ngl::Vec3$>$ BoidMath::borromeanPoint (float {\em u}, \/  float {\em r1}, \/  float {\em r2})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_a933eefc38fd6e377f5de824f4af92f14}
+
+
+method to calculate points on a set of eliptical borromean rings. Paule Bourke (1997) Available at: $<$\href{http://paulbourke.net/geometry/borromean/}{\tt http://paulbourke.net/geometry/borromean/}$>$. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em u}]angle in radians 0$<$=u$<$=2pi. \item[\mbox{$\leftarrow$} {\em r1}]shortest radius. \item[\mbox{$\leftarrow$} {\em r2}]longest radius. \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns std::vector of points, each on one of the 3 borromean rings at angle u. 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_a1be18ef4f6d12c58cc4168ad0d814a28}{
+\index{BoidMath@{BoidMath}!boxIntersectsSphere@{boxIntersectsSphere}}
+\index{boxIntersectsSphere@{boxIntersectsSphere}!BoidMath@{BoidMath}}
+\subsubsection[{boxIntersectsSphere}]{\setlength{\rightskip}{0pt plus 5cm}static bool BoidMath::boxIntersectsSphere (ngl::Vec3 {\em bMin}, \/  ngl::Vec3 {\em bMax}, \/  ngl::Vec3 {\em C}, \/  float {\em r})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_a1be18ef4f6d12c58cc4168ad0d814a28}
+
+
+query if a box intersects with a sphere 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em bMin}]the minimum corner of the box \item[\mbox{$\leftarrow$} {\em bMax}]the maximum corner of the box \item[\mbox{$\leftarrow$} {\em C}]the centre of the sphere \item[\mbox{$\leftarrow$} {\em r}]the radius of the circle \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if box intersects with sphere, false if not 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_ab1a1787cf7762f8193ef70b2b83a7416}{
+\index{BoidMath@{BoidMath}!calcFOV@{calcFOV}}
+\index{calcFOV@{calcFOV}!BoidMath@{BoidMath}}
+\subsubsection[{calcFOV}]{\setlength{\rightskip}{0pt plus 5cm}static std::vector$<$ngl::Vec3$>$ BoidMath::calcFOV (ngl::Vec3 {\em a}, \/  ngl::Vec3 {\em b}, \/  float {\em rotX}, \/  float {\em fovAngle})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_ab1a1787cf7762f8193ef70b2b83a7416}
+
+
+method to calculate 3 poitns on a plane enclosing the field of view of a boid defined by an angle fovAngle 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em a}]the velocity of the boid \item[\mbox{$\leftarrow$} {\em b}]the position of the boid \item[\mbox{$\leftarrow$} {\em rotX}]the boid's rotation in the x axis \item[\mbox{$\leftarrow$} {\em fovAngle}]the boid's field of view angle \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns a std::vector of 3 3d points that lie on the plane 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_a4480da5f7efbf66fa658b82ba3258545}{
+\index{BoidMath@{BoidMath}!collisionDetect@{collisionDetect}}
+\index{collisionDetect@{collisionDetect}!BoidMath@{BoidMath}}
+\subsubsection[{collisionDetect}]{\setlength{\rightskip}{0pt plus 5cm}static bool BoidMath::collisionDetect (ngl::Vec3 {\em ahead}, \/  ngl::Vec3 {\em a}, \/  ngl::Vec3 {\em b}, \/  float {\em radius})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_a4480da5f7efbf66fa658b82ba3258545}
+
+
+method to detect and predict collisions based on two points and a radius 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em ahead}]vector pointing ahead of the object we are checking for collisions, used for prediction \item[\mbox{$\leftarrow$} {\em a}]the position of the object we are checking \item[\mbox{$\leftarrow$} {\em b}]the position of the potential obstacle \item[\mbox{$\leftarrow$} {\em radius}]the radius of th epotential obstacle \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns true of there will be or is a collision between a and b or flase if there is not. 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_aaf61747aac10ac35975469f9e1b67e66}{
+\index{BoidMath@{BoidMath}!cresentPoint@{cresentPoint}}
+\index{cresentPoint@{cresentPoint}!BoidMath@{BoidMath}}
+\subsubsection[{cresentPoint}]{\setlength{\rightskip}{0pt plus 5cm}static ngl::Vec3 BoidMath::cresentPoint (float {\em u}, \/  float {\em piv})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_aaf61747aac10ac35975469f9e1b67e66}
+
+
+method to calculate points on a formation made up of cresents. Paule Bourke (2002) Available at: $<$\href{http://paulbourke.net/geometry/cresent/}{\tt http://paulbourke.net/geometry/cresent/}$>$. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em u}]angle in radians 0$<$=u$<$=1. \item[\mbox{$\leftarrow$} {\em piv}]pi$\ast$v where v is an angle in radians 0$<$=v$<$=1. \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns a point on the double cresent with the input u and v values. 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_aa3410e24db5ea38c42b509e130810a52}{
+\index{BoidMath@{BoidMath}!distance@{distance}}
+\index{distance@{distance}!BoidMath@{BoidMath}}
+\subsubsection[{distance}]{\setlength{\rightskip}{0pt plus 5cm}static float BoidMath::distance (ngl::Vec2 {\em a}, \/  ngl::Vec2 {\em b})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_aa3410e24db5ea38c42b509e130810a52}
+
+
+overlaoded function to calculate the distance between two 2d points 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em a}]a 2d point \item[\mbox{$\leftarrow$} {\em b}]the 2d point whos distance from a is to be calculated \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns the distance of b from a 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_a85211e5039504d81a63ce05bfba4ba87}{
+\index{BoidMath@{BoidMath}!distance@{distance}}
+\index{distance@{distance}!BoidMath@{BoidMath}}
+\subsubsection[{distance}]{\setlength{\rightskip}{0pt plus 5cm}static float BoidMath::distance (ngl::Vec3 {\em a}, \/  ngl::Vec3 {\em b})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_a85211e5039504d81a63ce05bfba4ba87}
+
+
+method to calculate the distance between two 3d points 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em a}]a 3d point \item[\mbox{$\leftarrow$} {\em b}]the 3d point whos distance from a is to be calculated \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns the distance of b from a 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_aeaef9db8eb5da71f8f10c4892ff044ae}{
+\index{BoidMath@{BoidMath}!hornPoint@{hornPoint}}
+\index{hornPoint@{hornPoint}!BoidMath@{BoidMath}}
+\subsubsection[{hornPoint}]{\setlength{\rightskip}{0pt plus 5cm}static ngl::Vec3 BoidMath::hornPoint (float {\em u}, \/  float {\em v})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_aeaef9db8eb5da71f8f10c4892ff044ae}
+
+
+method to calculate points on a horn formation. Paule Bourke (2002) Available at: $<$\href{http://paulbourke.net/geometry/horn/}{\tt http://paulbourke.net/geometry/horn/}$>$. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em u}]angle in radians 0$<$=u$<$=1. \item[\mbox{$\leftarrow$} {\em v}]angle in radians 0$<$=v$<$=1. \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns a point on the horn with the input u and v values. 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_aca4c74ae6d21b75541ccaf8007af4d2d}{
+\index{BoidMath@{BoidMath}!lerp@{lerp}}
+\index{lerp@{lerp}!BoidMath@{BoidMath}}
+\subsubsection[{lerp}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ static T BoidMath::lerp (T {\em a}, \/  T {\em b}, \/  float {\em t})\hspace{0.3cm}{\ttfamily  \mbox{[}inline, static\mbox{]}}}}
+\label{classBoidMath_aca4c74ae6d21b75541ccaf8007af4d2d}
+
+
+method to linearly interpolate between 2 points 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em a}]the start point \item[\mbox{$\leftarrow$} {\em b}]the end point \item[\mbox{$\leftarrow$} {\em t}]parameter to set how far along the interpolation (between 0 and 1) \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns a point at distance t between points a and b 
+\end{DoxyReturn}
+\hypertarget{classBoidMath_a088202ca86b463ad5573870bd705cd87}{
+\index{BoidMath@{BoidMath}!pointToPlane@{pointToPlane}}
+\index{pointToPlane@{pointToPlane}!BoidMath@{BoidMath}}
+\subsubsection[{pointToPlane}]{\setlength{\rightskip}{0pt plus 5cm}static float BoidMath::pointToPlane (ngl::Vec3 {\em a}, \/  ngl::Vec3 {\em b}, \/  ngl::Vec3 {\em c}, \/  ngl::Vec3 {\em d})\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classBoidMath_a088202ca86b463ad5573870bd705cd87}
+
+
+method to check whether a point is on, bellow or above a plane 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em a}]a 3d point used to define a plane \item[\mbox{$\leftarrow$} {\em b}]a 3d point used to define a plane \item[\mbox{$\leftarrow$} {\em c}]a 3d point used to define a plane \item[\mbox{$\leftarrow$} {\em d}]the 3d point to check against plane formed by a,b,c \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns a float, if $<$ 0 then the point is bellow the plane, $>$ 0 then it is above the plane if = 0 then the point lies on the plane 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{BoidMath_8h}{BoidMath.h}\end{DoxyCompactItemize}

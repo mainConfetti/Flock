@@ -1,0 +1,95 @@
+\hypertarget{classObstacle}{
+\section{Obstacle Class Reference}
+\label{classObstacle}\index{Obstacle@{Obstacle}}
+}
+
+
+A class to contain all relevant data and methods for an obstacle in a flocking system. The class contains data such as position, radius and colour as well as some simple accessor methods.  
+
+
+{\ttfamily \#include $<$Obstacle.h$>$}\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classObstacle_a82fdea9766df325ecf133cd3f558db7c}{Obstacle} (float \_\-radius, ngl::Vec3 \_\-position)
+\begin{DoxyCompactList}\small\item\em ctor \item\end{DoxyCompactList}\item 
+\hyperlink{classObstacle_af2f9cc9c6cff75dca0974fd5ac4f71a9}{$\sim$Obstacle} ()
+\begin{DoxyCompactList}\small\item\em dtor \item\end{DoxyCompactList}\item 
+ngl::Vec3 \hyperlink{classObstacle_a9454af032c08064469f0c4a63dbcf860}{getPosition} ()
+\begin{DoxyCompactList}\small\item\em accessor method to get the obstacle's position \item\end{DoxyCompactList}\item 
+float \hyperlink{classObstacle_a6b6bb129cfe0a8434bb4231f34aebf82}{getRadius} ()
+\begin{DoxyCompactList}\small\item\em accessor method to get the obstacle's radius \item\end{DoxyCompactList}\item 
+ngl::Vec3 \hyperlink{classObstacle_adfb1ad56541f71efff0c701d7b2bbd0b}{getColour} ()
+\begin{DoxyCompactList}\small\item\em accessor method to get the obstacle's colour \item\end{DoxyCompactList}\item 
+void \hyperlink{classObstacle_ab041ef36674a8c2df9119fc5a3f9b89b}{setColour} (ngl::Vec3 \_\-colour)
+\begin{DoxyCompactList}\small\item\em method to set the obstacle's colour \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class to contain all relevant data and methods for an obstacle in a flocking system. The class contains data such as position, radius and colour as well as some simple accessor methods. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classObstacle_a82fdea9766df325ecf133cd3f558db7c}{
+\index{Obstacle@{Obstacle}!Obstacle@{Obstacle}}
+\index{Obstacle@{Obstacle}!Obstacle@{Obstacle}}
+\subsubsection[{Obstacle}]{\setlength{\rightskip}{0pt plus 5cm}Obstacle::Obstacle (float {\em \_\-radius}, \/  ngl::Vec3 {\em \_\-position})}}
+\label{classObstacle_a82fdea9766df325ecf133cd3f558db7c}
+
+
+ctor 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-radius}]the radius of the obstacle \item[\mbox{$\leftarrow$} {\em \_\-position}]the position of the obstacle \end{DoxyParams}
+\hypertarget{classObstacle_af2f9cc9c6cff75dca0974fd5ac4f71a9}{
+\index{Obstacle@{Obstacle}!$\sim$Obstacle@{$\sim$Obstacle}}
+\index{$\sim$Obstacle@{$\sim$Obstacle}!Obstacle@{Obstacle}}
+\subsubsection[{$\sim$Obstacle}]{\setlength{\rightskip}{0pt plus 5cm}Obstacle::$\sim$Obstacle ()}}
+\label{classObstacle_af2f9cc9c6cff75dca0974fd5ac4f71a9}
+
+
+dtor 
+
+\subsection{Member Function Documentation}
+\hypertarget{classObstacle_adfb1ad56541f71efff0c701d7b2bbd0b}{
+\index{Obstacle@{Obstacle}!getColour@{getColour}}
+\index{getColour@{getColour}!Obstacle@{Obstacle}}
+\subsubsection[{getColour}]{\setlength{\rightskip}{0pt plus 5cm}ngl::Vec3 Obstacle::getColour ()\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classObstacle_adfb1ad56541f71efff0c701d7b2bbd0b}
+
+
+accessor method to get the obstacle's colour \begin{DoxyReturn}{Returns}
+returns m\_\-colour 
+\end{DoxyReturn}
+\hypertarget{classObstacle_a9454af032c08064469f0c4a63dbcf860}{
+\index{Obstacle@{Obstacle}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!Obstacle@{Obstacle}}
+\subsubsection[{getPosition}]{\setlength{\rightskip}{0pt plus 5cm}ngl::Vec3 Obstacle::getPosition ()\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classObstacle_a9454af032c08064469f0c4a63dbcf860}
+
+
+accessor method to get the obstacle's position \begin{DoxyReturn}{Returns}
+returns m\_\-position 
+\end{DoxyReturn}
+\hypertarget{classObstacle_a6b6bb129cfe0a8434bb4231f34aebf82}{
+\index{Obstacle@{Obstacle}!getRadius@{getRadius}}
+\index{getRadius@{getRadius}!Obstacle@{Obstacle}}
+\subsubsection[{getRadius}]{\setlength{\rightskip}{0pt plus 5cm}float Obstacle::getRadius ()\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classObstacle_a6b6bb129cfe0a8434bb4231f34aebf82}
+
+
+accessor method to get the obstacle's radius \begin{DoxyReturn}{Returns}
+returns m\_\-radius 
+\end{DoxyReturn}
+\hypertarget{classObstacle_ab041ef36674a8c2df9119fc5a3f9b89b}{
+\index{Obstacle@{Obstacle}!setColour@{setColour}}
+\index{setColour@{setColour}!Obstacle@{Obstacle}}
+\subsubsection[{setColour}]{\setlength{\rightskip}{0pt plus 5cm}void Obstacle::setColour (ngl::Vec3 {\em \_\-colour})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classObstacle_ab041ef36674a8c2df9119fc5a3f9b89b}
+
+
+method to set the obstacle's colour 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-colour}]the RGB colour values to be set \end{DoxyParams}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Obstacle_8h}{Obstacle.h}\end{DoxyCompactItemize}

@@ -469,6 +469,7 @@ void Boid::move()
   {
     manageTail();
   }
+  std::cout<<m_separationDistance<<std::endl;
 }
 
 void Boid::findObstacle(ngl::Vec3 _pos, float _rad)

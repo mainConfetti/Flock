@@ -38,6 +38,7 @@ private slots :
   void selectObstacle(int _id);
   void removeCustomObstaclePressed();
   void clearObstaclePressed();
+  void resetPressed();
 
 };
 

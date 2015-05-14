@@ -1,0 +1,402 @@
+\hypertarget{classGLWindow}{
+\section{GLWindow Class Reference}
+\label{classGLWindow}\index{GLWindow@{GLWindow}}
+}
+
+
+our main glwindow widget for the flocking system all drawing elements are put in this file  
+
+
+{\ttfamily \#include $<$GLWindow.h$>$}\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classGLWindow_a092b2f8ed729523621fa725c77ce7ac7}{removeBoid} ()
+\begin{DoxyCompactList}\small\item\em A slot to remove a boid. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a0bc4363f3a83e156cc66a7333f86abfc}{toggleLeader} (bool \_\-leaderState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle Leader. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_abdb002d0a22ee91d2d8d9f2f35d00103}{togglePredator} (bool \_\-predatorState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle \hyperlink{classPredator}{Predator}. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a49dd1428dd40fd7862dbebe503f71e8d}{toggleSteer} (bool \_\-steerState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle steerable leader. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a9f73aec1a8fafb7511eb692fd8a5b534}{toggleFOV} (bool \_\-fovState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle boid field of view. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_aec80ba5f39a1ec536c07f092b070917e}{toggleOctree} (bool \_\-octreeState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle octree visualisation. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a447a172182f361c2965bf25b21434441}{toggleTails} (bool \_\-tailState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle tails. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a46e729b49bf86b01acb2d9f00e992195}{togglePOV} (bool \_\-povState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle point of view camera. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a8e20f37b51be6b0d847444578c6ced2c}{toggleDrawPoints} (bool \_\-drawPointsState)
+\begin{DoxyCompactList}\small\item\em A slot to toggle drawing of control vertices of custom obstacles. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a78fd529f5072ec167c68417d5c2359cc}{addObstacle} ()
+\begin{DoxyCompactList}\small\item\em A slot to add an obstacle. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a4052a6aa46a2d66944e4d5192e089ddf}{removeObstacle} ()
+\begin{DoxyCompactList}\small\item\em A slot to remove an obstacle. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a4fce0250c1cb58ebcc22b8764f38aa08}{clearObstacle} ()
+\begin{DoxyCompactList}\small\item\em A slot to clear all obstacles. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a8501a6203119572cbdfcb11c1c9098ab}{removeCustomObstacle} ()
+\begin{DoxyCompactList}\small\item\em A slot to remove the last created custom obstacle. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_ad576b8165add39f4269afa6219ee70be}{setFOVAngle} (int \_\-angle)
+\begin{DoxyCompactList}\small\item\em A slot to set boid field of view angle. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a6ac328520cd7812b3824d4bd3b2961ff}{setObstacle} (int \_\-index)
+\begin{DoxyCompactList}\small\item\em A slot to create preset obstacle courses. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a66839b65997f0e7d52e47714b76199d6}{setCohesion} (int \_\-cohesion)
+\begin{DoxyCompactList}\small\item\em A slot to set cohesion weight. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a638feb645e9c15dc4c2201d8d91d2eed}{setseparation} (int \_\-separation)
+\begin{DoxyCompactList}\small\item\em A slot to set separation. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_ad5015ebb615b203f870c293b116e842a}{setAlign} (int \_\-align)
+\begin{DoxyCompactList}\small\item\em A slot to set alignment. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a151fe727550b818c321dfe1f6cbde599}{setSpeed} (int \_\-speed)
+\begin{DoxyCompactList}\small\item\em A slot to set speed. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a25f60ebc4d0f4de2bddd3940f8b4ae13}{setMass} (int \_\-mass)
+\begin{DoxyCompactList}\small\item\em A slot to set mass. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a646290808ab2b7f93e2c4f28b75ed96e}{setTrailLength} (int \_\-trailLength)
+\begin{DoxyCompactList}\small\item\em A slot to set the length of boid trails. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a27a12ceab95f009008fb994c7d38309d}{setSepDist} (int \_\-sepDist)
+\begin{DoxyCompactList}\small\item\em A slot to set the separation distance of boids. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a708df5c32f6cd62713dfb480d57d25e4}{reset} ()
+\begin{DoxyCompactList}\small\item\em A slot to reset the steering behaviour values to the default. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classGLWindow_a8dfc33113be0a86a53ddbea054f75292}{GLWindow} (QWidget $\ast$\_\-parent)
+\begin{DoxyCompactList}\small\item\em Constructor for \hyperlink{classGLWindow}{GLWindow}. \item\end{DoxyCompactList}\item 
+\hyperlink{classGLWindow_a2eeaea2148f4f72344edd6d1bac9759b}{$\sim$GLWindow} ()
+\begin{DoxyCompactList}\small\item\em dtor \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_aad7322148b1231ff62f918d70c1097ac}{newFlock} (int \_\-numBoids, int \_\-cohesion, int \_\-separation, int \_\-alignment, float \_\-speed, int \_\-mass)
+\begin{DoxyCompactList}\small\item\em This method is called to create a new flock. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a73b0e5d5c2f1736259cf40e3eccf7036}{addBoid} (int \_\-cohesion, int \_\-separation, int \_\-alignment, float \_\-speed, int \_\-mass)
+\begin{DoxyCompactList}\small\item\em A method to add a boid. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a90ba0ee1334aa3d5ed555e9c21c2861d}{setNewCustomObstacle} ()
+\begin{DoxyCompactList}\small\item\em A method to set a new custom obstacle from a bezier curve. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_ad611fcce0ca43aed0b6fd41df781293f}{updateObstacle} (int \_\-id, ngl::Vec3 \_\-newStart, ngl::Vec3 \_\-newEnd, ngl::Vec3 \_\-newCtrl, int \_\-newRad)
+\begin{DoxyCompactList}\small\item\em A method update a custom obstacle form the user imput. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std::vector$<$ std::vector$<$ ngl::Vec3 $>$ $>$ \hyperlink{classGLWindow_ab33c3b96320802b33660ebcc16ca302d}{m\_\-customPoints}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classGLWindow_a39e39761cd7323806917a217cc7caea5}{initializeGL} ()
+\begin{DoxyCompactList}\small\item\em The following methods must be implimented in the sub class this is called when the window is created. \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_abe57c0f40e59cba4c98759121e22eb47}{resizeGL} (const int \_\-w, const int \_\-h)
+\begin{DoxyCompactList}\small\item\em this is called whenever the window is re-\/sized \item\end{DoxyCompactList}\item 
+void \hyperlink{classGLWindow_a9bd2503dd5f812c10a9481f22ecd3403}{paintGL} ()
+\begin{DoxyCompactList}\small\item\em this is the main gl drawing routine which is called whenever the window needs to \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+our main glwindow widget for the flocking system all drawing elements are put in this file 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classGLWindow_a8dfc33113be0a86a53ddbea054f75292}{
+\index{GLWindow@{GLWindow}!GLWindow@{GLWindow}}
+\index{GLWindow@{GLWindow}!GLWindow@{GLWindow}}
+\subsubsection[{GLWindow}]{\setlength{\rightskip}{0pt plus 5cm}GLWindow::GLWindow (QWidget $\ast$ {\em \_\-parent})}}
+\label{classGLWindow_a8dfc33113be0a86a53ddbea054f75292}
+
+
+Constructor for \hyperlink{classGLWindow}{GLWindow}. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-parent}]the parent window to create the GL context in \end{DoxyParams}
+\hypertarget{classGLWindow_a2eeaea2148f4f72344edd6d1bac9759b}{
+\index{GLWindow@{GLWindow}!$\sim$GLWindow@{$\sim$GLWindow}}
+\index{$\sim$GLWindow@{$\sim$GLWindow}!GLWindow@{GLWindow}}
+\subsubsection[{$\sim$GLWindow}]{\setlength{\rightskip}{0pt plus 5cm}GLWindow::$\sim$GLWindow ()}}
+\label{classGLWindow_a2eeaea2148f4f72344edd6d1bac9759b}
+
+
+dtor 
+
+\subsection{Member Function Documentation}
+\hypertarget{classGLWindow_a73b0e5d5c2f1736259cf40e3eccf7036}{
+\index{GLWindow@{GLWindow}!addBoid@{addBoid}}
+\index{addBoid@{addBoid}!GLWindow@{GLWindow}}
+\subsubsection[{addBoid}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::addBoid (int {\em \_\-cohesion}, \/  int {\em \_\-separation}, \/  int {\em \_\-alignment}, \/  float {\em \_\-speed}, \/  int {\em \_\-mass})}}
+\label{classGLWindow_a73b0e5d5c2f1736259cf40e3eccf7036}
+
+
+A method to add a boid. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-cohesion}]the cohesion weight to set \item[\mbox{$\leftarrow$} {\em \_\-separation}]the separation weight to set \item[\mbox{$\leftarrow$} {\em \_\-alignment}]the alignment weight to set \item[\mbox{$\leftarrow$} {\em \_\-speed}]the speed value to set \item[\mbox{$\leftarrow$} {\em \_\-mass}]the mass value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a78fd529f5072ec167c68417d5c2359cc}{
+\index{GLWindow@{GLWindow}!addObstacle@{addObstacle}}
+\index{addObstacle@{addObstacle}!GLWindow@{GLWindow}}
+\subsubsection[{addObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::addObstacle ()\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a78fd529f5072ec167c68417d5c2359cc}
+
+
+A slot to add an obstacle. \hypertarget{classGLWindow_a4fce0250c1cb58ebcc22b8764f38aa08}{
+\index{GLWindow@{GLWindow}!clearObstacle@{clearObstacle}}
+\index{clearObstacle@{clearObstacle}!GLWindow@{GLWindow}}
+\subsubsection[{clearObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::clearObstacle ()\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a4fce0250c1cb58ebcc22b8764f38aa08}
+
+
+A slot to clear all obstacles. \hypertarget{classGLWindow_a39e39761cd7323806917a217cc7caea5}{
+\index{GLWindow@{GLWindow}!initializeGL@{initializeGL}}
+\index{initializeGL@{initializeGL}!GLWindow@{GLWindow}}
+\subsubsection[{initializeGL}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::initializeGL ()\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classGLWindow_a39e39761cd7323806917a217cc7caea5}
+
+
+The following methods must be implimented in the sub class this is called when the window is created. \hypertarget{classGLWindow_aad7322148b1231ff62f918d70c1097ac}{
+\index{GLWindow@{GLWindow}!newFlock@{newFlock}}
+\index{newFlock@{newFlock}!GLWindow@{GLWindow}}
+\subsubsection[{newFlock}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::newFlock (int {\em \_\-numBoids}, \/  int {\em \_\-cohesion}, \/  int {\em \_\-separation}, \/  int {\em \_\-alignment}, \/  float {\em \_\-speed}, \/  int {\em \_\-mass})}}
+\label{classGLWindow_aad7322148b1231ff62f918d70c1097ac}
+
+
+This method is called to create a new flock. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-numBoids}]the numder of boinds in the new flock \item[\mbox{$\leftarrow$} {\em \_\-cohesion}]the cohesion weight to set to each boid \item[\mbox{$\leftarrow$} {\em \_\-separation}]the separation weight to set to each boid \item[\mbox{$\leftarrow$} {\em \_\-alignment}]the alignment weight to set to each boid \item[\mbox{$\leftarrow$} {\em \_\-speed}]the speed value to set to each boid \item[\mbox{$\leftarrow$} {\em \_\-mass}]the mass value to set to each boid \end{DoxyParams}
+\hypertarget{classGLWindow_a9bd2503dd5f812c10a9481f22ecd3403}{
+\index{GLWindow@{GLWindow}!paintGL@{paintGL}}
+\index{paintGL@{paintGL}!GLWindow@{GLWindow}}
+\subsubsection[{paintGL}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::paintGL ()\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classGLWindow_a9bd2503dd5f812c10a9481f22ecd3403}
+
+
+this is the main gl drawing routine which is called whenever the window needs to \hypertarget{classGLWindow_a092b2f8ed729523621fa725c77ce7ac7}{
+\index{GLWindow@{GLWindow}!removeBoid@{removeBoid}}
+\index{removeBoid@{removeBoid}!GLWindow@{GLWindow}}
+\subsubsection[{removeBoid}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::removeBoid ()\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a092b2f8ed729523621fa725c77ce7ac7}
+
+
+A slot to remove a boid. \hypertarget{classGLWindow_a8501a6203119572cbdfcb11c1c9098ab}{
+\index{GLWindow@{GLWindow}!removeCustomObstacle@{removeCustomObstacle}}
+\index{removeCustomObstacle@{removeCustomObstacle}!GLWindow@{GLWindow}}
+\subsubsection[{removeCustomObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::removeCustomObstacle ()\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a8501a6203119572cbdfcb11c1c9098ab}
+
+
+A slot to remove the last created custom obstacle. \hypertarget{classGLWindow_a4052a6aa46a2d66944e4d5192e089ddf}{
+\index{GLWindow@{GLWindow}!removeObstacle@{removeObstacle}}
+\index{removeObstacle@{removeObstacle}!GLWindow@{GLWindow}}
+\subsubsection[{removeObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::removeObstacle ()\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a4052a6aa46a2d66944e4d5192e089ddf}
+
+
+A slot to remove an obstacle. \hypertarget{classGLWindow_a708df5c32f6cd62713dfb480d57d25e4}{
+\index{GLWindow@{GLWindow}!reset@{reset}}
+\index{reset@{reset}!GLWindow@{GLWindow}}
+\subsubsection[{reset}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::reset ()\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a708df5c32f6cd62713dfb480d57d25e4}
+
+
+A slot to reset the steering behaviour values to the default. \hypertarget{classGLWindow_abe57c0f40e59cba4c98759121e22eb47}{
+\index{GLWindow@{GLWindow}!resizeGL@{resizeGL}}
+\index{resizeGL@{resizeGL}!GLWindow@{GLWindow}}
+\subsubsection[{resizeGL}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::resizeGL (const int {\em \_\-w}, \/  const int {\em \_\-h})\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classGLWindow_abe57c0f40e59cba4c98759121e22eb47}
+
+
+this is called whenever the window is re-\/sized 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-w}]the width of the resized window \item[\mbox{$\leftarrow$} {\em \_\-h}]the height of the resized window \end{DoxyParams}
+\hypertarget{classGLWindow_ad5015ebb615b203f870c293b116e842a}{
+\index{GLWindow@{GLWindow}!setAlign@{setAlign}}
+\index{setAlign@{setAlign}!GLWindow@{GLWindow}}
+\subsubsection[{setAlign}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setAlign (int {\em \_\-align})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_ad5015ebb615b203f870c293b116e842a}
+
+
+A slot to set alignment. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-align}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a66839b65997f0e7d52e47714b76199d6}{
+\index{GLWindow@{GLWindow}!setCohesion@{setCohesion}}
+\index{setCohesion@{setCohesion}!GLWindow@{GLWindow}}
+\subsubsection[{setCohesion}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setCohesion (int {\em \_\-cohesion})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a66839b65997f0e7d52e47714b76199d6}
+
+
+A slot to set cohesion weight. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-cohesion}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_ad576b8165add39f4269afa6219ee70be}{
+\index{GLWindow@{GLWindow}!setFOVAngle@{setFOVAngle}}
+\index{setFOVAngle@{setFOVAngle}!GLWindow@{GLWindow}}
+\subsubsection[{setFOVAngle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setFOVAngle (int {\em \_\-angle})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_ad576b8165add39f4269afa6219ee70be}
+
+
+A slot to set boid field of view angle. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-angle}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a25f60ebc4d0f4de2bddd3940f8b4ae13}{
+\index{GLWindow@{GLWindow}!setMass@{setMass}}
+\index{setMass@{setMass}!GLWindow@{GLWindow}}
+\subsubsection[{setMass}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setMass (int {\em \_\-mass})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a25f60ebc4d0f4de2bddd3940f8b4ae13}
+
+
+A slot to set mass. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-mass}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a90ba0ee1334aa3d5ed555e9c21c2861d}{
+\index{GLWindow@{GLWindow}!setNewCustomObstacle@{setNewCustomObstacle}}
+\index{setNewCustomObstacle@{setNewCustomObstacle}!GLWindow@{GLWindow}}
+\subsubsection[{setNewCustomObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setNewCustomObstacle ()}}
+\label{classGLWindow_a90ba0ee1334aa3d5ed555e9c21c2861d}
+
+
+A method to set a new custom obstacle from a bezier curve. \begin{DoxyReturn}{Returns}
+sets default values for the bezier curve start, end and control vertices to m\_\-customPoints 
+\end{DoxyReturn}
+\hypertarget{classGLWindow_a6ac328520cd7812b3824d4bd3b2961ff}{
+\index{GLWindow@{GLWindow}!setObstacle@{setObstacle}}
+\index{setObstacle@{setObstacle}!GLWindow@{GLWindow}}
+\subsubsection[{setObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setObstacle (int {\em \_\-index})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a6ac328520cd7812b3824d4bd3b2961ff}
+
+
+A slot to create preset obstacle courses. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-index}]the index of the preset course \end{DoxyParams}
+\hypertarget{classGLWindow_a638feb645e9c15dc4c2201d8d91d2eed}{
+\index{GLWindow@{GLWindow}!setseparation@{setseparation}}
+\index{setseparation@{setseparation}!GLWindow@{GLWindow}}
+\subsubsection[{setseparation}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setseparation (int {\em \_\-separation})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a638feb645e9c15dc4c2201d8d91d2eed}
+
+
+A slot to set separation. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-separation}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a27a12ceab95f009008fb994c7d38309d}{
+\index{GLWindow@{GLWindow}!setSepDist@{setSepDist}}
+\index{setSepDist@{setSepDist}!GLWindow@{GLWindow}}
+\subsubsection[{setSepDist}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setSepDist (int {\em \_\-sepDist})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a27a12ceab95f009008fb994c7d38309d}
+
+
+A slot to set the separation distance of boids. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-sepDist}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a151fe727550b818c321dfe1f6cbde599}{
+\index{GLWindow@{GLWindow}!setSpeed@{setSpeed}}
+\index{setSpeed@{setSpeed}!GLWindow@{GLWindow}}
+\subsubsection[{setSpeed}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setSpeed (int {\em \_\-speed})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a151fe727550b818c321dfe1f6cbde599}
+
+
+A slot to set speed. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-speed}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a646290808ab2b7f93e2c4f28b75ed96e}{
+\index{GLWindow@{GLWindow}!setTrailLength@{setTrailLength}}
+\index{setTrailLength@{setTrailLength}!GLWindow@{GLWindow}}
+\subsubsection[{setTrailLength}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::setTrailLength (int {\em \_\-trailLength})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a646290808ab2b7f93e2c4f28b75ed96e}
+
+
+A slot to set the length of boid trails. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-trailLength}]the value to set \end{DoxyParams}
+\hypertarget{classGLWindow_a8e20f37b51be6b0d847444578c6ced2c}{
+\index{GLWindow@{GLWindow}!toggleDrawPoints@{toggleDrawPoints}}
+\index{toggleDrawPoints@{toggleDrawPoints}!GLWindow@{GLWindow}}
+\subsubsection[{toggleDrawPoints}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::toggleDrawPoints (bool {\em \_\-drawPointsState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a8e20f37b51be6b0d847444578c6ced2c}
+
+
+A slot to toggle drawing of control vertices of custom obstacles. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-drawPointsState}]the draw points state (on or off) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_a9f73aec1a8fafb7511eb692fd8a5b534}{
+\index{GLWindow@{GLWindow}!toggleFOV@{toggleFOV}}
+\index{toggleFOV@{toggleFOV}!GLWindow@{GLWindow}}
+\subsubsection[{toggleFOV}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::toggleFOV (bool {\em \_\-fovState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a9f73aec1a8fafb7511eb692fd8a5b534}
+
+
+A slot to toggle boid field of view. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-fovState}]the field of view state (on or off) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_a0bc4363f3a83e156cc66a7333f86abfc}{
+\index{GLWindow@{GLWindow}!toggleLeader@{toggleLeader}}
+\index{toggleLeader@{toggleLeader}!GLWindow@{GLWindow}}
+\subsubsection[{toggleLeader}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::toggleLeader (bool {\em \_\-leaderState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a0bc4363f3a83e156cc66a7333f86abfc}
+
+
+A slot to toggle Leader. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-leaderState}]the leader state (leader or no leader) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_aec80ba5f39a1ec536c07f092b070917e}{
+\index{GLWindow@{GLWindow}!toggleOctree@{toggleOctree}}
+\index{toggleOctree@{toggleOctree}!GLWindow@{GLWindow}}
+\subsubsection[{toggleOctree}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::toggleOctree (bool {\em \_\-octreeState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_aec80ba5f39a1ec536c07f092b070917e}
+
+
+A slot to toggle octree visualisation. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-octreeState}]the visualisation state (on or off) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_a46e729b49bf86b01acb2d9f00e992195}{
+\index{GLWindow@{GLWindow}!togglePOV@{togglePOV}}
+\index{togglePOV@{togglePOV}!GLWindow@{GLWindow}}
+\subsubsection[{togglePOV}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::togglePOV (bool {\em \_\-povState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a46e729b49bf86b01acb2d9f00e992195}
+
+
+A slot to toggle point of view camera. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-povState}]the point of view state (on or off) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_abdb002d0a22ee91d2d8d9f2f35d00103}{
+\index{GLWindow@{GLWindow}!togglePredator@{togglePredator}}
+\index{togglePredator@{togglePredator}!GLWindow@{GLWindow}}
+\subsubsection[{togglePredator}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::togglePredator (bool {\em \_\-predatorState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_abdb002d0a22ee91d2d8d9f2f35d00103}
+
+
+A slot to toggle \hyperlink{classPredator}{Predator}. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-predatorState}]the predator state (predator or no predator) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_a49dd1428dd40fd7862dbebe503f71e8d}{
+\index{GLWindow@{GLWindow}!toggleSteer@{toggleSteer}}
+\index{toggleSteer@{toggleSteer}!GLWindow@{GLWindow}}
+\subsubsection[{toggleSteer}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::toggleSteer (bool {\em \_\-steerState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a49dd1428dd40fd7862dbebe503f71e8d}
+
+
+A slot to toggle steerable leader. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-steerState}]the steer state (on or off) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_a447a172182f361c2965bf25b21434441}{
+\index{GLWindow@{GLWindow}!toggleTails@{toggleTails}}
+\index{toggleTails@{toggleTails}!GLWindow@{GLWindow}}
+\subsubsection[{toggleTails}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::toggleTails (bool {\em \_\-tailState})\hspace{0.3cm}{\ttfamily  \mbox{[}slot\mbox{]}}}}
+\label{classGLWindow_a447a172182f361c2965bf25b21434441}
+
+
+A slot to toggle tails. 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-tailState}]the tail state (on or off) passed from the toggle button \end{DoxyParams}
+\hypertarget{classGLWindow_ad611fcce0ca43aed0b6fd41df781293f}{
+\index{GLWindow@{GLWindow}!updateObstacle@{updateObstacle}}
+\index{updateObstacle@{updateObstacle}!GLWindow@{GLWindow}}
+\subsubsection[{updateObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void GLWindow::updateObstacle (int {\em \_\-id}, \/  ngl::Vec3 {\em \_\-newStart}, \/  ngl::Vec3 {\em \_\-newEnd}, \/  ngl::Vec3 {\em \_\-newCtrl}, \/  int {\em \_\-newRad})}}
+\label{classGLWindow_ad611fcce0ca43aed0b6fd41df781293f}
+
+
+A method update a custom obstacle form the user imput. \begin{DoxyReturn}{Returns}
+updates the obstacle positions and radii by calling updateCustomObstacle from \hyperlink{classWorld}{World} class also updates the relevent ngl::vec3 values in m\_\-customPoints 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classGLWindow_ab33c3b96320802b33660ebcc16ca302d}{
+\index{GLWindow@{GLWindow}!m\_\-customPoints@{m\_\-customPoints}}
+\index{m\_\-customPoints@{m\_\-customPoints}!GLWindow@{GLWindow}}
+\subsubsection[{m\_\-customPoints}]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$std::vector$<$ngl::Vec3$>$ $>$ {\bf GLWindow::m\_\-customPoints}}}
+\label{classGLWindow_ab33c3b96320802b33660ebcc16ca302d}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{GLWindow_8h}{GLWindow.h}\end{DoxyCompactItemize}

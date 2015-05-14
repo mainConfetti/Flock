@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :  QMainWindow(parent), m_ui(new Ui::Mai
   connect(m_ui->m_sepDist,SIGNAL(sliderMoved(int)),m_gl,SLOT(setSepDist(int)));
   connect(m_ui->m_fov,SIGNAL(toggled(bool)),m_gl,SLOT(toggleFOV(bool)));
   connect(m_ui->m_fovAngle,SIGNAL(valueChanged(int)),m_gl,SLOT(setFOVAngle(int)));
+  connect(m_ui->m_reset,SIGNAL(pressed()),this,SLOT(resetPressed()));
 
   connect(m_ui->m_addObstacle,SIGNAL(pressed()),m_gl,SLOT(addObstacle()));
   connect(m_ui->m_removeObstacle,SIGNAL(pressed()),m_gl,SLOT(removeObstacle()));
@@ -138,4 +139,17 @@ void MainWindow::clearObstaclePressed()
     m_ui->m_customObstacle->removeItem(i);
   }
   m_gl->clearObstacle();
+}
+
+void MainWindow::resetPressed()
+{
+  m_ui->m_cohesion->setValue(200);
+  m_ui->m_separation->setValue(100);
+  m_ui->m_alignment->setValue(50);
+  m_ui->m_sepDist->setValue(10);
+  m_ui->m_speed->setValue(0.5);
+  m_ui->m_mass->setValue(15);
+  m_ui->m_fov->setCheckState(Qt::Unchecked);
+  m_ui->m_fovAngle->setValue(100);
+  m_gl->reset();
 }

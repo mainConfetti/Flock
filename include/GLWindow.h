@@ -160,6 +160,9 @@ public slots :
   /// @brief A slot to set the separation distance of boids
   /// @param[in] _sepDist the value to set
   void setSepDist(int _sepDist);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief A slot to reset the steering behaviour values to the default
+  void reset();
 
 protected :
 

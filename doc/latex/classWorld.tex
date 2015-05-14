@@ -1,0 +1,287 @@
+\hypertarget{classWorld}{
+\section{World Class Reference}
+\label{classWorld}\index{World@{World}}
+}
+
+
+A class to contain and manage all the elements of a flocking system. The class is responsible for managing the neighbours of boids, obstacles and to pass messages from the predator to the prey and visa versa. The class also contains functions to preduce preset obstacle courses.  
+
+
+{\ttfamily \#include $<$World.h$>$}\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classWorld_a32b0ef05df703ff5fa85fe1a1f76d448}{World} (int \_\-numBoids)
+\begin{DoxyCompactList}\small\item\em ctor \item\end{DoxyCompactList}\item 
+\hyperlink{classWorld_a514d5dbba0e367784e1c36dd153f1e73}{World} (int \_\-numBoids, int \_\-cohesion, int \_\-separation, int \_\-alignment, float \_\-speed, int \_\-mass)
+\begin{DoxyCompactList}\small\item\em ctor to set custom steering force weights, speed and mass as well as the number of boids \item\end{DoxyCompactList}\item 
+\hyperlink{classWorld_a8c73fba541a5817fff65147ba47cd827}{$\sim$World} ()
+\begin{DoxyCompactList}\small\item\em dtor \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_acb5c55c5acba136955f16bc43c8abc97}{addBoid} (int \_\-cohesion, int \_\-separation, int \_\-alignment, float \_\-speed, int \_\-mass)
+\begin{DoxyCompactList}\small\item\em method to add a boid to the flock \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a7269569ed79ac31185a04d817c6cb597}{removeBoid} ()
+\begin{DoxyCompactList}\small\item\em method to remove a boid from the flock \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_ab122dcc42d0f92282674ba5decb749bc}{setNeighbours} (int \_\-id)
+\begin{DoxyCompactList}\small\item\em method to st the boid position \item\end{DoxyCompactList}\item 
+int \hyperlink{classWorld_a1951be71ff041b9857bce6c4fe47a31c}{getSize} ()
+\begin{DoxyCompactList}\small\item\em method to retuirn the size of the flock \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_ab65a3578f670b25f7805c87f0d5cf4df}{setCentroid} ()
+\begin{DoxyCompactList}\small\item\em method to calculate the centroid of the flock \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_aea055bac16c4cb8886e70f670f46f044}{updateWorld} ()
+\begin{DoxyCompactList}\small\item\em method to update the flock and predators, updates the neighbours, collision positions, positions of the boids and predators and creates a new octree based on these new positions. \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a8b784b631e2e635837ab9d8877881771}{addPredator} ()
+\begin{DoxyCompactList}\small\item\em method to add a predator to the system \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a391e6a075dc5c22201a1a9d73d270af2}{removePredator} ()
+\begin{DoxyCompactList}\small\item\em method to remove a predator from the system \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_aa18cf24d003115671d485ad986aeb218}{setPrey} ()
+\begin{DoxyCompactList}\small\item\em method to set the predator's prey \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a2b306b8c1cc417a1d3d6ea9cde21b3a8}{setLeader} (int \_\-id)
+\begin{DoxyCompactList}\small\item\em method to set the leader of the flock \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a3da235a0341b5a0b614f2321c689f3ad}{clearLeader} ()
+\begin{DoxyCompactList}\small\item\em method to clear the leader from the flock \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a03ab08f45d5c960736fe00cc58f9d304}{addObstacle} ()
+\begin{DoxyCompactList}\small\item\em method to add an obstacle to the system \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a167f5e799706553e9b75ae7f7f28a665}{removeObstacle} ()
+\begin{DoxyCompactList}\small\item\em method to remove the last obstacle that was created from the system \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_aa1f1e0468ad1490b2e4fa72852ac1eac}{clearObstacles} ()
+\begin{DoxyCompactList}\small\item\em method to remove all obstacles from the system \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_ac875e2437e2493c3f5c5ca7c0a2949ae}{createObstacles} (int \_\-x)
+\begin{DoxyCompactList}\small\item\em method to create a custom obstacle course \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a39304ac5c19557a9bea6be92c2f643d2}{createCustomObstacle} (ngl::Vec3 \_\-start, ngl::Vec3 \_\-end, ngl::Vec3 \_\-ctrl, int \_\-rad)
+\begin{DoxyCompactList}\small\item\em method to create a custom obstacle from a bezier curve \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a7123d3ffafa97f55950368dca30953a6}{drawOctree} ()
+\begin{DoxyCompactList}\small\item\em method to draw the octree \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a0eacd7939c104da33aa14bed6667a193}{updateCustomObstacle} (int \_\-id, ngl::Vec3 \_\-newStart, ngl::Vec3 \_\-newEnd, ngl::Vec3 \_\-newCtrl, int \_\-newRad)
+\begin{DoxyCompactList}\small\item\em method to update a custom obstacle from a bezier curve \item\end{DoxyCompactList}\item 
+void \hyperlink{classWorld_a678be12ee2c2754abb91639610115fa2}{removeCustomObstacle} ()
+\begin{DoxyCompactList}\small\item\em method to remove the last created custom obstacle from the system \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classPredator}{Predator} $\ast$ \hyperlink{classWorld_aa117082f4805bdfe15b35a1b36df35e5}{m\_\-predator}
+\begin{DoxyCompactList}\small\item\em the predator in the system \item\end{DoxyCompactList}\item 
+std::vector$<$ \hyperlink{classBoid}{Boid} $>$ \hyperlink{classWorld_ad2a6ae0d79431a2585aabf1f0d76cea1}{m\_\-flock}
+\begin{DoxyCompactList}\small\item\em vecotr containing all the boids in the flock \item\end{DoxyCompactList}\item 
+std::vector$<$ \hyperlink{classObstacle}{Obstacle} $>$ \hyperlink{classWorld_aaf8500551c6ba9775986708130e24ec6}{m\_\-obstacles}
+\begin{DoxyCompactList}\small\item\em vector containing all the default and preset obstacles in the system \item\end{DoxyCompactList}\item 
+std::vector$<$ std::vector$<$ \hyperlink{classObstacle}{Obstacle} $>$ $>$ \hyperlink{classWorld_ab22ebe01284816caec0162158e5ddfdb}{m\_\-customObs}
+\begin{DoxyCompactList}\small\item\em vector containing all the custom obstacles (there is a maximum of 10) \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class to contain and manage all the elements of a flocking system. The class is responsible for managing the neighbours of boids, obstacles and to pass messages from the predator to the prey and visa versa. The class also contains functions to preduce preset obstacle courses. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classWorld_a32b0ef05df703ff5fa85fe1a1f76d448}{
+\index{World@{World}!World@{World}}
+\index{World@{World}!World@{World}}
+\subsubsection[{World}]{\setlength{\rightskip}{0pt plus 5cm}World::World (int {\em \_\-numBoids})}}
+\label{classWorld_a32b0ef05df703ff5fa85fe1a1f76d448}
+
+
+ctor 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-numBoids}]the number of boids in the flock \end{DoxyParams}
+\hypertarget{classWorld_a514d5dbba0e367784e1c36dd153f1e73}{
+\index{World@{World}!World@{World}}
+\index{World@{World}!World@{World}}
+\subsubsection[{World}]{\setlength{\rightskip}{0pt plus 5cm}World::World (int {\em \_\-numBoids}, \/  int {\em \_\-cohesion}, \/  int {\em \_\-separation}, \/  int {\em \_\-alignment}, \/  float {\em \_\-speed}, \/  int {\em \_\-mass})}}
+\label{classWorld_a514d5dbba0e367784e1c36dd153f1e73}
+
+
+ctor to set custom steering force weights, speed and mass as well as the number of boids 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-numBoids}]the number of boids in the flock \item[\mbox{$\leftarrow$} {\em \_\-cohesion}]the custom cohesion force weight to set \item[\mbox{$\leftarrow$} {\em \_\-separation}]the custom spearation force weight to set \item[\mbox{$\leftarrow$} {\em \_\-alignment}]the custom alignment force weight to set \item[\mbox{$\leftarrow$} {\em \_\-speed}]the custom speed value to be set \item[\mbox{$\leftarrow$} {\em \_\-mass}]the custom mass value to be set \end{DoxyParams}
+\hypertarget{classWorld_a8c73fba541a5817fff65147ba47cd827}{
+\index{World@{World}!$\sim$World@{$\sim$World}}
+\index{$\sim$World@{$\sim$World}!World@{World}}
+\subsubsection[{$\sim$World}]{\setlength{\rightskip}{0pt plus 5cm}World::$\sim$World ()}}
+\label{classWorld_a8c73fba541a5817fff65147ba47cd827}
+
+
+dtor 
+
+\subsection{Member Function Documentation}
+\hypertarget{classWorld_acb5c55c5acba136955f16bc43c8abc97}{
+\index{World@{World}!addBoid@{addBoid}}
+\index{addBoid@{addBoid}!World@{World}}
+\subsubsection[{addBoid}]{\setlength{\rightskip}{0pt plus 5cm}void World::addBoid (int {\em \_\-cohesion}, \/  int {\em \_\-separation}, \/  int {\em \_\-alignment}, \/  float {\em \_\-speed}, \/  int {\em \_\-mass})}}
+\label{classWorld_acb5c55c5acba136955f16bc43c8abc97}
+
+
+method to add a boid to the flock 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-cohesion}]the cohesion force weight to set to the boid \item[\mbox{$\leftarrow$} {\em \_\-separation}]the spearation force weight to set to the boid \item[\mbox{$\leftarrow$} {\em \_\-alignment}]the alignment force weight to set to the boid \item[\mbox{$\leftarrow$} {\em \_\-speed}]the speed value to set to the boid \item[\mbox{$\leftarrow$} {\em \_\-mass}]the mass value to set to the boid \end{DoxyParams}
+\hypertarget{classWorld_a03ab08f45d5c960736fe00cc58f9d304}{
+\index{World@{World}!addObstacle@{addObstacle}}
+\index{addObstacle@{addObstacle}!World@{World}}
+\subsubsection[{addObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void World::addObstacle ()}}
+\label{classWorld_a03ab08f45d5c960736fe00cc58f9d304}
+
+
+method to add an obstacle to the system \hypertarget{classWorld_a8b784b631e2e635837ab9d8877881771}{
+\index{World@{World}!addPredator@{addPredator}}
+\index{addPredator@{addPredator}!World@{World}}
+\subsubsection[{addPredator}]{\setlength{\rightskip}{0pt plus 5cm}void World::addPredator ()}}
+\label{classWorld_a8b784b631e2e635837ab9d8877881771}
+
+
+method to add a predator to the system \hypertarget{classWorld_a3da235a0341b5a0b614f2321c689f3ad}{
+\index{World@{World}!clearLeader@{clearLeader}}
+\index{clearLeader@{clearLeader}!World@{World}}
+\subsubsection[{clearLeader}]{\setlength{\rightskip}{0pt plus 5cm}void World::clearLeader ()}}
+\label{classWorld_a3da235a0341b5a0b614f2321c689f3ad}
+
+
+method to clear the leader from the flock \hypertarget{classWorld_aa1f1e0468ad1490b2e4fa72852ac1eac}{
+\index{World@{World}!clearObstacles@{clearObstacles}}
+\index{clearObstacles@{clearObstacles}!World@{World}}
+\subsubsection[{clearObstacles}]{\setlength{\rightskip}{0pt plus 5cm}void World::clearObstacles ()}}
+\label{classWorld_aa1f1e0468ad1490b2e4fa72852ac1eac}
+
+
+method to remove all obstacles from the system \hypertarget{classWorld_a39304ac5c19557a9bea6be92c2f643d2}{
+\index{World@{World}!createCustomObstacle@{createCustomObstacle}}
+\index{createCustomObstacle@{createCustomObstacle}!World@{World}}
+\subsubsection[{createCustomObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void World::createCustomObstacle (ngl::Vec3 {\em \_\-start}, \/  ngl::Vec3 {\em \_\-end}, \/  ngl::Vec3 {\em \_\-ctrl}, \/  int {\em \_\-rad})}}
+\label{classWorld_a39304ac5c19557a9bea6be92c2f643d2}
+
+
+method to create a custom obstacle from a bezier curve 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-start}]the bezier curve start point \item[\mbox{$\leftarrow$} {\em \_\-end}]the bezier curve end point \item[\mbox{$\leftarrow$} {\em \_\-ctrl}]the bezier curve control point \item[\mbox{$\leftarrow$} {\em \_\-rad}]the obstacle radius \end{DoxyParams}
+\hypertarget{classWorld_ac875e2437e2493c3f5c5ca7c0a2949ae}{
+\index{World@{World}!createObstacles@{createObstacles}}
+\index{createObstacles@{createObstacles}!World@{World}}
+\subsubsection[{createObstacles}]{\setlength{\rightskip}{0pt plus 5cm}void World::createObstacles (int {\em \_\-x})}}
+\label{classWorld_ac875e2437e2493c3f5c5ca7c0a2949ae}
+
+
+method to create a custom obstacle course 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-x}]a flag to decide which preset to create x = 0: clears all the obstacles x = 1: creates a course based on Paul Bourke's cresent equation x = 2: creates a course based on Paul Bourke's horn equation x = 3: creates a course based on Paul bourke's eliptical borromean rings equation x = 4: creates a wavey tunnel course made up of a series of undulating bezier curves \end{DoxyParams}
+\hypertarget{classWorld_a7123d3ffafa97f55950368dca30953a6}{
+\index{World@{World}!drawOctree@{drawOctree}}
+\index{drawOctree@{drawOctree}!World@{World}}
+\subsubsection[{drawOctree}]{\setlength{\rightskip}{0pt plus 5cm}void World::drawOctree ()}}
+\label{classWorld_a7123d3ffafa97f55950368dca30953a6}
+
+
+method to draw the octree \hypertarget{classWorld_a1951be71ff041b9857bce6c4fe47a31c}{
+\index{World@{World}!getSize@{getSize}}
+\index{getSize@{getSize}!World@{World}}
+\subsubsection[{getSize}]{\setlength{\rightskip}{0pt plus 5cm}int World::getSize ()}}
+\label{classWorld_a1951be71ff041b9857bce6c4fe47a31c}
+
+
+method to retuirn the size of the flock \hypertarget{classWorld_a7269569ed79ac31185a04d817c6cb597}{
+\index{World@{World}!removeBoid@{removeBoid}}
+\index{removeBoid@{removeBoid}!World@{World}}
+\subsubsection[{removeBoid}]{\setlength{\rightskip}{0pt plus 5cm}void World::removeBoid ()}}
+\label{classWorld_a7269569ed79ac31185a04d817c6cb597}
+
+
+method to remove a boid from the flock \hypertarget{classWorld_a678be12ee2c2754abb91639610115fa2}{
+\index{World@{World}!removeCustomObstacle@{removeCustomObstacle}}
+\index{removeCustomObstacle@{removeCustomObstacle}!World@{World}}
+\subsubsection[{removeCustomObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void World::removeCustomObstacle ()}}
+\label{classWorld_a678be12ee2c2754abb91639610115fa2}
+
+
+method to remove the last created custom obstacle from the system \hypertarget{classWorld_a167f5e799706553e9b75ae7f7f28a665}{
+\index{World@{World}!removeObstacle@{removeObstacle}}
+\index{removeObstacle@{removeObstacle}!World@{World}}
+\subsubsection[{removeObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void World::removeObstacle ()}}
+\label{classWorld_a167f5e799706553e9b75ae7f7f28a665}
+
+
+method to remove the last obstacle that was created from the system \hypertarget{classWorld_a391e6a075dc5c22201a1a9d73d270af2}{
+\index{World@{World}!removePredator@{removePredator}}
+\index{removePredator@{removePredator}!World@{World}}
+\subsubsection[{removePredator}]{\setlength{\rightskip}{0pt plus 5cm}void World::removePredator ()}}
+\label{classWorld_a391e6a075dc5c22201a1a9d73d270af2}
+
+
+method to remove a predator from the system \hypertarget{classWorld_ab65a3578f670b25f7805c87f0d5cf4df}{
+\index{World@{World}!setCentroid@{setCentroid}}
+\index{setCentroid@{setCentroid}!World@{World}}
+\subsubsection[{setCentroid}]{\setlength{\rightskip}{0pt plus 5cm}void World::setCentroid ()}}
+\label{classWorld_ab65a3578f670b25f7805c87f0d5cf4df}
+
+
+method to calculate the centroid of the flock \hypertarget{classWorld_a2b306b8c1cc417a1d3d6ea9cde21b3a8}{
+\index{World@{World}!setLeader@{setLeader}}
+\index{setLeader@{setLeader}!World@{World}}
+\subsubsection[{setLeader}]{\setlength{\rightskip}{0pt plus 5cm}void World::setLeader (int {\em \_\-id})}}
+\label{classWorld_a2b306b8c1cc417a1d3d6ea9cde21b3a8}
+
+
+method to set the leader of the flock \hypertarget{classWorld_ab122dcc42d0f92282674ba5decb749bc}{
+\index{World@{World}!setNeighbours@{setNeighbours}}
+\index{setNeighbours@{setNeighbours}!World@{World}}
+\subsubsection[{setNeighbours}]{\setlength{\rightskip}{0pt plus 5cm}void World::setNeighbours (int {\em \_\-id})}}
+\label{classWorld_ab122dcc42d0f92282674ba5decb749bc}
+
+
+method to st the boid position 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-id}]the id of the boid to set neighbours to \end{DoxyParams}
+\hypertarget{classWorld_aa18cf24d003115671d485ad986aeb218}{
+\index{World@{World}!setPrey@{setPrey}}
+\index{setPrey@{setPrey}!World@{World}}
+\subsubsection[{setPrey}]{\setlength{\rightskip}{0pt plus 5cm}void World::setPrey ()}}
+\label{classWorld_aa18cf24d003115671d485ad986aeb218}
+
+
+method to set the predator's prey \hypertarget{classWorld_a0eacd7939c104da33aa14bed6667a193}{
+\index{World@{World}!updateCustomObstacle@{updateCustomObstacle}}
+\index{updateCustomObstacle@{updateCustomObstacle}!World@{World}}
+\subsubsection[{updateCustomObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void World::updateCustomObstacle (int {\em \_\-id}, \/  ngl::Vec3 {\em \_\-newStart}, \/  ngl::Vec3 {\em \_\-newEnd}, \/  ngl::Vec3 {\em \_\-newCtrl}, \/  int {\em \_\-newRad})}}
+\label{classWorld_a0eacd7939c104da33aa14bed6667a193}
+
+
+method to update a custom obstacle from a bezier curve 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-id}]the id of the obstacle to update \item[\mbox{$\leftarrow$} {\em \_\-newStart}]the bezier curve;s new start point \item[\mbox{$\leftarrow$} {\em \_\-newEnd}]the bezier curve's new end point \item[\mbox{$\leftarrow$} {\em \_\-newCtrl}]the bezier curve's new control point \item[\mbox{$\leftarrow$} {\em \_\-newRad}]the obstacle's new radius \end{DoxyParams}
+\hypertarget{classWorld_aea055bac16c4cb8886e70f670f46f044}{
+\index{World@{World}!updateWorld@{updateWorld}}
+\index{updateWorld@{updateWorld}!World@{World}}
+\subsubsection[{updateWorld}]{\setlength{\rightskip}{0pt plus 5cm}void World::updateWorld ()}}
+\label{classWorld_aea055bac16c4cb8886e70f670f46f044}
+
+
+method to update the flock and predators, updates the neighbours, collision positions, positions of the boids and predators and creates a new octree based on these new positions. 
+
+\subsection{Member Data Documentation}
+\hypertarget{classWorld_ab22ebe01284816caec0162158e5ddfdb}{
+\index{World@{World}!m\_\-customObs@{m\_\-customObs}}
+\index{m\_\-customObs@{m\_\-customObs}!World@{World}}
+\subsubsection[{m\_\-customObs}]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<$std::vector$<${\bf Obstacle}$>$ $>$ {\bf World::m\_\-customObs}}}
+\label{classWorld_ab22ebe01284816caec0162158e5ddfdb}
+
+
+vector containing all the custom obstacles (there is a maximum of 10) \hypertarget{classWorld_ad2a6ae0d79431a2585aabf1f0d76cea1}{
+\index{World@{World}!m\_\-flock@{m\_\-flock}}
+\index{m\_\-flock@{m\_\-flock}!World@{World}}
+\subsubsection[{m\_\-flock}]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<${\bf Boid}$>$ {\bf World::m\_\-flock}}}
+\label{classWorld_ad2a6ae0d79431a2585aabf1f0d76cea1}
+
+
+vecotr containing all the boids in the flock \hypertarget{classWorld_aaf8500551c6ba9775986708130e24ec6}{
+\index{World@{World}!m\_\-obstacles@{m\_\-obstacles}}
+\index{m\_\-obstacles@{m\_\-obstacles}!World@{World}}
+\subsubsection[{m\_\-obstacles}]{\setlength{\rightskip}{0pt plus 5cm}std::vector$<${\bf Obstacle}$>$ {\bf World::m\_\-obstacles}}}
+\label{classWorld_aaf8500551c6ba9775986708130e24ec6}
+
+
+vector containing all the default and preset obstacles in the system \hypertarget{classWorld_aa117082f4805bdfe15b35a1b36df35e5}{
+\index{World@{World}!m\_\-predator@{m\_\-predator}}
+\index{m\_\-predator@{m\_\-predator}!World@{World}}
+\subsubsection[{m\_\-predator}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Predator}$\ast$ {\bf World::m\_\-predator}}}
+\label{classWorld_aa117082f4805bdfe15b35a1b36df35e5}
+
+
+the predator in the system 
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{World_8h}{World.h}\end{DoxyCompactItemize}

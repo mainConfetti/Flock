@@ -1,0 +1,191 @@
+\hypertarget{classPredator}{
+\section{Predator Class Reference}
+\label{classPredator}\index{Predator@{Predator}}
+}
+
+
+A class to contain all relevant data and methods for a predator in a flocking system. The class contains data such as position, velocity and prey and methods that manipulate this data such as \hyperlink{classPredator_a2e5d5f04490a8c579c1fc7e4b9886828}{setPursiut()}, \hyperlink{classPredator_a8f2a2bec2b92689dbd78a6081269e7cb}{setSteering()} and \hyperlink{classPredator_ac387f969b16cf3651b097f4470368683}{move()}. The predator focuses on one boid in the flock at a time.  
+
+
+{\ttfamily \#include $<$Predator.h$>$}\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classPredator_ae3a98f1fcce9212de86d15883c501505}{Predator} (ngl::Vec3 \_\-pos, float \_\-mass)
+\begin{DoxyCompactList}\small\item\em cotr \item\end{DoxyCompactList}\item 
+\hyperlink{classPredator_a9ef1a4a3a5988d1d1e5844a235b36b8b}{$\sim$Predator} ()
+\begin{DoxyCompactList}\small\item\em dtor \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a076ed210d3facc11144e4d4d02d916cb}{setPrey} (\hyperlink{classBoid}{Boid} $\ast$\_\-prey)
+\begin{DoxyCompactList}\small\item\em method to set the prey target for the predator \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a2e5d5f04490a8c579c1fc7e4b9886828}{setPursiut} (ngl::Vec3 \_\-pos, float \_\-targetSpeed)
+\begin{DoxyCompactList}\small\item\em method to set the pursiut force vector \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a54ad9e14349cb678e2a8bef745c77ffb}{setAvoid} ()
+\begin{DoxyCompactList}\small\item\em method to set the avoid force vector \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a8bfb4bcdf2a341ff8a4602a316c8b842}{clearPrey} ()
+\begin{DoxyCompactList}\small\item\em method to clear the prey selection \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a1ab812d7b3fc4720eac4b106b40d8800}{fleeWalls} ()
+\begin{DoxyCompactList}\small\item\em method to calculate and set the flee force vector away from the walls of the world \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a0c4314fa80d722c9ab993f9503e78c97}{setTarget} ()
+\begin{DoxyCompactList}\small\item\em method to calculate and set the target vector based on all the steering forces: pursiut flee, goal, avoid. \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a8f2a2bec2b92689dbd78a6081269e7cb}{setSteering} ()
+\begin{DoxyCompactList}\small\item\em method to calculate and set the steering vector towards the target \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a2383f6147e78a4b6f632144466758fbb}{setSpeed} (float \_\-speed)
+\begin{DoxyCompactList}\small\item\em method to set predator's speed \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a6bafa78814bd9b01178afb95aec24359}{updatePosition} ()
+\begin{DoxyCompactList}\small\item\em method to calculate and set the new position based on the current steering vector, current velocity and speed \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_a89c3ac6389663d791050734cd3a62e32}{setRotation} ()
+\begin{DoxyCompactList}\small\item\em method to calculate and set the boid's rotation based on its velocity \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_ac387f969b16cf3651b097f4470368683}{move} ()
+\begin{DoxyCompactList}\small\item\em method to move the boid by combining all the steering methods and updatePosition \item\end{DoxyCompactList}\item 
+void \hyperlink{classPredator_ac64cea17ca069465ffdc6e70161afe84}{findObstacle} (ngl::Vec3 \_\-pos, float \_\-rad)
+\begin{DoxyCompactList}\small\item\em method to calculate the position of a future or current collision \item\end{DoxyCompactList}\item 
+ngl::Vec3 \hyperlink{classPredator_ac121a9634fefa30e33b13468bbbd61c2}{getRotation} ()
+\begin{DoxyCompactList}\small\item\em method to get the x and y rotations of a boid \item\end{DoxyCompactList}\item 
+ngl::Vec3 \hyperlink{classPredator_a55f8b25f098668a89fb65aab55e48313}{getPosition} ()
+\begin{DoxyCompactList}\small\item\em method to get the position of the boid \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class to contain all relevant data and methods for a predator in a flocking system. The class contains data such as position, velocity and prey and methods that manipulate this data such as \hyperlink{classPredator_a2e5d5f04490a8c579c1fc7e4b9886828}{setPursiut()}, \hyperlink{classPredator_a8f2a2bec2b92689dbd78a6081269e7cb}{setSteering()} and \hyperlink{classPredator_ac387f969b16cf3651b097f4470368683}{move()}. The predator focuses on one boid in the flock at a time. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classPredator_ae3a98f1fcce9212de86d15883c501505}{
+\index{Predator@{Predator}!Predator@{Predator}}
+\index{Predator@{Predator}!Predator@{Predator}}
+\subsubsection[{Predator}]{\setlength{\rightskip}{0pt plus 5cm}Predator::Predator (ngl::Vec3 {\em \_\-pos}, \/  float {\em \_\-mass})}}
+\label{classPredator_ae3a98f1fcce9212de86d15883c501505}
+
+
+cotr 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-pos}]the initial position \item[\mbox{$\leftarrow$} {\em \_\-mass}]the mass of the predator \end{DoxyParams}
+\hypertarget{classPredator_a9ef1a4a3a5988d1d1e5844a235b36b8b}{
+\index{Predator@{Predator}!$\sim$Predator@{$\sim$Predator}}
+\index{$\sim$Predator@{$\sim$Predator}!Predator@{Predator}}
+\subsubsection[{$\sim$Predator}]{\setlength{\rightskip}{0pt plus 5cm}Predator::$\sim$Predator ()}}
+\label{classPredator_a9ef1a4a3a5988d1d1e5844a235b36b8b}
+
+
+dtor 
+
+\subsection{Member Function Documentation}
+\hypertarget{classPredator_a8bfb4bcdf2a341ff8a4602a316c8b842}{
+\index{Predator@{Predator}!clearPrey@{clearPrey}}
+\index{clearPrey@{clearPrey}!Predator@{Predator}}
+\subsubsection[{clearPrey}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::clearPrey ()}}
+\label{classPredator_a8bfb4bcdf2a341ff8a4602a316c8b842}
+
+
+method to clear the prey selection \hypertarget{classPredator_ac64cea17ca069465ffdc6e70161afe84}{
+\index{Predator@{Predator}!findObstacle@{findObstacle}}
+\index{findObstacle@{findObstacle}!Predator@{Predator}}
+\subsubsection[{findObstacle}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::findObstacle (ngl::Vec3 {\em \_\-pos}, \/  float {\em \_\-rad})}}
+\label{classPredator_ac64cea17ca069465ffdc6e70161afe84}
+
+
+method to calculate the position of a future or current collision 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-pos}]the position of the obstacle to check \item[\mbox{$\leftarrow$} {\em \_\-rad}]the radius of th eobstacle to check \end{DoxyParams}
+\hypertarget{classPredator_a1ab812d7b3fc4720eac4b106b40d8800}{
+\index{Predator@{Predator}!fleeWalls@{fleeWalls}}
+\index{fleeWalls@{fleeWalls}!Predator@{Predator}}
+\subsubsection[{fleeWalls}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::fleeWalls ()}}
+\label{classPredator_a1ab812d7b3fc4720eac4b106b40d8800}
+
+
+method to calculate and set the flee force vector away from the walls of the world \hypertarget{classPredator_a55f8b25f098668a89fb65aab55e48313}{
+\index{Predator@{Predator}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!Predator@{Predator}}
+\subsubsection[{getPosition}]{\setlength{\rightskip}{0pt plus 5cm}ngl::Vec3 Predator::getPosition ()\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classPredator_a55f8b25f098668a89fb65aab55e48313}
+
+
+method to get the position of the boid \begin{DoxyReturn}{Returns}
+returns m\_\-position 
+\end{DoxyReturn}
+\hypertarget{classPredator_ac121a9634fefa30e33b13468bbbd61c2}{
+\index{Predator@{Predator}!getRotation@{getRotation}}
+\index{getRotation@{getRotation}!Predator@{Predator}}
+\subsubsection[{getRotation}]{\setlength{\rightskip}{0pt plus 5cm}ngl::Vec3 Predator::getRotation ()\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classPredator_ac121a9634fefa30e33b13468bbbd61c2}
+
+
+method to get the x and y rotations of a boid \begin{DoxyReturn}{Returns}
+returns a Vec3 of (m\_\-pitch, m\_\-yaw, 0) 
+\end{DoxyReturn}
+\hypertarget{classPredator_ac387f969b16cf3651b097f4470368683}{
+\index{Predator@{Predator}!move@{move}}
+\index{move@{move}!Predator@{Predator}}
+\subsubsection[{move}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::move ()}}
+\label{classPredator_ac387f969b16cf3651b097f4470368683}
+
+
+method to move the boid by combining all the steering methods and updatePosition \hypertarget{classPredator_a54ad9e14349cb678e2a8bef745c77ffb}{
+\index{Predator@{Predator}!setAvoid@{setAvoid}}
+\index{setAvoid@{setAvoid}!Predator@{Predator}}
+\subsubsection[{setAvoid}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::setAvoid ()}}
+\label{classPredator_a54ad9e14349cb678e2a8bef745c77ffb}
+
+
+method to set the avoid force vector \hypertarget{classPredator_a076ed210d3facc11144e4d4d02d916cb}{
+\index{Predator@{Predator}!setPrey@{setPrey}}
+\index{setPrey@{setPrey}!Predator@{Predator}}
+\subsubsection[{setPrey}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::setPrey ({\bf Boid} $\ast$ {\em \_\-prey})}}
+\label{classPredator_a076ed210d3facc11144e4d4d02d916cb}
+
+
+method to set the prey target for the predator 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-prey}]the boid that will be set to be the prey \end{DoxyParams}
+\hypertarget{classPredator_a2e5d5f04490a8c579c1fc7e4b9886828}{
+\index{Predator@{Predator}!setPursiut@{setPursiut}}
+\index{setPursiut@{setPursiut}!Predator@{Predator}}
+\subsubsection[{setPursiut}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::setPursiut (ngl::Vec3 {\em \_\-pos}, \/  float {\em \_\-targetSpeed})}}
+\label{classPredator_a2e5d5f04490a8c579c1fc7e4b9886828}
+
+
+method to set the pursiut force vector 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-pos}]the position of the prey \item[\mbox{$\leftarrow$} {\em \_\-targetSpeed}]the speed of the prey used to predict furture positions \end{DoxyParams}
+\hypertarget{classPredator_a89c3ac6389663d791050734cd3a62e32}{
+\index{Predator@{Predator}!setRotation@{setRotation}}
+\index{setRotation@{setRotation}!Predator@{Predator}}
+\subsubsection[{setRotation}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::setRotation ()}}
+\label{classPredator_a89c3ac6389663d791050734cd3a62e32}
+
+
+method to calculate and set the boid's rotation based on its velocity \hypertarget{classPredator_a2383f6147e78a4b6f632144466758fbb}{
+\index{Predator@{Predator}!setSpeed@{setSpeed}}
+\index{setSpeed@{setSpeed}!Predator@{Predator}}
+\subsubsection[{setSpeed}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::setSpeed (float {\em \_\-speed})\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}
+\label{classPredator_a2383f6147e78a4b6f632144466758fbb}
+
+
+method to set predator's speed 
+\begin{DoxyParams}{Parameters}
+\item[\mbox{$\leftarrow$} {\em \_\-speed}]the speed value to be set \end{DoxyParams}
+\hypertarget{classPredator_a8f2a2bec2b92689dbd78a6081269e7cb}{
+\index{Predator@{Predator}!setSteering@{setSteering}}
+\index{setSteering@{setSteering}!Predator@{Predator}}
+\subsubsection[{setSteering}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::setSteering ()}}
+\label{classPredator_a8f2a2bec2b92689dbd78a6081269e7cb}
+
+
+method to calculate and set the steering vector towards the target \hypertarget{classPredator_a0c4314fa80d722c9ab993f9503e78c97}{
+\index{Predator@{Predator}!setTarget@{setTarget}}
+\index{setTarget@{setTarget}!Predator@{Predator}}
+\subsubsection[{setTarget}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::setTarget ()}}
+\label{classPredator_a0c4314fa80d722c9ab993f9503e78c97}
+
+
+method to calculate and set the target vector based on all the steering forces: pursiut flee, goal, avoid. \hypertarget{classPredator_a6bafa78814bd9b01178afb95aec24359}{
+\index{Predator@{Predator}!updatePosition@{updatePosition}}
+\index{updatePosition@{updatePosition}!Predator@{Predator}}
+\subsubsection[{updatePosition}]{\setlength{\rightskip}{0pt plus 5cm}void Predator::updatePosition ()}}
+\label{classPredator_a6bafa78814bd9b01178afb95aec24359}
+
+
+method to calculate and set the new position based on the current steering vector, current velocity and speed 
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{Predator_8h}{Predator.h}\end{DoxyCompactItemize}

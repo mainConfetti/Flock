@@ -39,7 +39,7 @@ public:
   /// @param [in] _targetSpeed the speed of the prey used to predict
   /// furture positions
   //----------------------------------------------------------------------------------------------------------------------
-  void setPursiut(ngl::Vec3 _pos, float targetSpeed);
+  void setPursiut(ngl::Vec3 _pos, float _targetSpeed);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to set the avoid force vector
   //----------------------------------------------------------------------------------------------------------------------

@@ -46,14 +46,14 @@ public:
   /// @param [in] ahead vector pointing ahead of the object we are checking for collisions, used for prediction
   /// @param [in] a the position of the object we are checking
   /// @param [in] b the position of the potential obstacle
-  /// @param [in] the radius of th epotential obstacle
+  /// @param [in] radius the radius of th epotential obstacle
   /// @return returns true of there will be or is a collision between a and b or flase if there is not.
   //----------------------------------------------------------------------------------------------------------------------
   static bool collisionDetect(ngl::Vec3 ahead, ngl::Vec3 a, ngl::Vec3 b, float radius);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief query if a box intersects with a sphere
-  /// @param [in] Bmin the minimum corner of the box
-  /// @param [in] Bmax the maximum corner of the box
+  /// @param [in] bMin the minimum corner of the box
+  /// @param [in] bMax the maximum corner of the box
   /// @param [in] C the centre of the sphere
   /// @param [in] r the radius of the circle
   /// @return true if box intersects with sphere, false if not
